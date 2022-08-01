@@ -1,0 +1,407 @@
+{
+  "resort": "Saratoga Springs",
+  "year": 2022,
+  "roomTypes": [
+    {
+      "name": "Deluxe Studio (Standard)",
+      "sleeps": 4,
+      "bedrooms": 0
+    },
+    {
+      "name": "Deluxe Studio (Preferred)",
+      "sleeps": 4,
+      "bedrooms": 0
+    },
+    {
+      "name": "One Bedroom Villa (Standard)",
+      "sleeps": 5,
+      "bedrooms": 1
+    },
+    {
+      "name": "One Bedroom Villa (Preferred)",
+      "sleeps": 5,
+      "bedrooms": 1
+    },
+    {
+      "name": "Two Bedroom Villa (Standard)",
+      "sleeps": 9,
+      "bedrooms": 2
+    },
+    {
+      "name": "Two Bedroom Villa (Preferred)",
+      "sleeps": 9,
+      "bedrooms": 2
+    },
+    {
+      "name": "Three Bedroom Grand Villa (Standard)",
+      "sleeps": 12,
+      "bedrooms": 3
+    },
+    {
+      "name": "Three Bedroom Grand Villa (Preferred)",
+      "sleeps": 12,
+      "bedrooms": 3
+    },
+    {
+      "name": "Three Bedroom Treehouse Villa",
+      "sleeps": 9,
+      "bedrooms": 3
+    }
+  ],
+  "tiers": [
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-09-01T00:00:00Z",
+          "endDate": "2022-09-30T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "Deluxe Studio (Standard)": {
+          "weekday": 10,
+          "weekend": 14
+        },
+        "Deluxe Studio (Preferred)": {
+          "weekday": 12,
+          "weekend": 16
+        },
+        "One Bedroom Villa (Standard)": {
+          "weekday": 20,
+          "weekend": 27
+        },
+        "One Bedroom Villa (Preferred)": {
+          "weekday": 24,
+          "weekend": 30
+        },
+        "Two Bedroom Villa (Standard)": {
+          "weekday": 27,
+          "weekend": 34
+        },
+        "Two Bedroom Villa (Preferred)": {
+          "weekday": 35,
+          "weekend": 40
+        },
+        "Three Bedroom Grand Villa (Standard)": {
+          "weekday": 63,
+          "weekend": 72
+        },
+        "Three Bedroom Grand Villa (Preferred)": {
+          "weekday": 74,
+          "weekend": 84
+        },
+        "Three Bedroom Treehouse Villa": {
+          "weekday": 38,
+          "weekend": 43
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-01-01T00:00:00Z",
+          "endDate": "2022-01-31T00:00:00Z"
+        },
+        {
+          "startDate": "2022-12-01T00:00:00Z",
+          "endDate": "2022-12-14T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "Deluxe Studio (Standard)": {
+          "weekday": 12,
+          "weekend": 15
+        },
+        "Deluxe Studio (Preferred)": {
+          "weekday": 14,
+          "weekend": 17
+        },
+        "One Bedroom Villa (Standard)": {
+          "weekday": 24,
+          "weekend": 29
+        },
+        "One Bedroom Villa (Preferred)": {
+          "weekday": 28,
+          "weekend": 34
+        },
+        "Two Bedroom Villa (Standard)": {
+          "weekday": 32,
+          "weekend": 36
+        },
+        "Two Bedroom Villa (Preferred)": {
+          "weekday": 38,
+          "weekend": 42
+        },
+        "Three Bedroom Grand Villa (Standard)": {
+          "weekday": 68,
+          "weekend": 78
+        },
+        "Three Bedroom Grand Villa (Preferred)": {
+          "weekday": 77,
+          "weekend": 89
+        },
+        "Three Bedroom Treehouse Villa": {
+          "weekday": 41,
+          "weekend": 45
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-05-01T00:00:00Z",
+          "endDate": "2022-06-10T00:00:00Z"
+        },
+        {
+          "startDate": "2022-12-15T00:00:00Z",
+          "endDate": "2022-12-23T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "Deluxe Studio (Standard)": {
+          "weekday": 13,
+          "weekend": 15
+        },
+        "Deluxe Studio (Preferred)": {
+          "weekday": 15,
+          "weekend": 18
+        },
+        "One Bedroom Villa (Standard)": {
+          "weekday": 26,
+          "weekend": 31
+        },
+        "One Bedroom Villa (Preferred)": {
+          "weekday": 30,
+          "weekend": 35
+        },
+        "Two Bedroom Villa (Standard)": {
+          "weekday": 35,
+          "weekend": 39
+        },
+        "Two Bedroom Villa (Preferred)": {
+          "weekday": 40,
+          "weekend": 45
+        },
+        "Three Bedroom Grand Villa (Standard)": {
+          "weekday": 74,
+          "weekend": 83
+        },
+        "Three Bedroom Grand Villa (Preferred)": {
+          "weekday": 83,
+          "weekend": 94
+        },
+        "Three Bedroom Treehouse Villa": {
+          "weekday": 43,
+          "weekend": 48
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-02-01T00:00:00Z",
+          "endDate": "2022-02-15T00:00:00Z"
+        },
+        {
+          "startDate": "2022-06-11T00:00:00Z",
+          "endDate": "2022-08-31T00:00:00Z"
+        },
+        {
+          "startDate": "2022-10-01T00:00:00Z",
+          "endDate": "2022-11-22T00:00:00Z"
+        },
+        {
+          "startDate": "2022-11-26T00:00:00Z",
+          "endDate": "2022-11-30T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "Deluxe Studio (Standard)": {
+          "weekday": 14,
+          "weekend": 16
+        },
+        "Deluxe Studio (Preferred)": {
+          "weekday": 15,
+          "weekend": 19
+        },
+        "One Bedroom Villa (Standard)": {
+          "weekday": 29,
+          "weekend": 34
+        },
+        "One Bedroom Villa (Preferred)": {
+          "weekday": 33,
+          "weekend": 38
+        },
+        "Two Bedroom Villa (Standard)": {
+          "weekday": 37,
+          "weekend": 40
+        },
+        "Two Bedroom Villa (Preferred)": {
+          "weekday": 43,
+          "weekend": 51
+        },
+        "Three Bedroom Grand Villa (Standard)": {
+          "weekday": 80,
+          "weekend": 88
+        },
+        "Three Bedroom Grand Villa (Preferred)": {
+          "weekday": 91,
+          "weekend": 101
+        },
+        "Three Bedroom Treehouse Villa": {
+          "weekday": 45,
+          "weekend": 52
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-04-24T00:00:00Z",
+          "endDate": "2022-04-30T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "Deluxe Studio (Standard)": {
+          "weekday": 14,
+          "weekend": 18
+        },
+        "Deluxe Studio (Preferred)": {
+          "weekday": 16,
+          "weekend": 20
+        },
+        "One Bedroom Villa (Standard)": {
+          "weekday": 31,
+          "weekend": 35
+        },
+        "One Bedroom Villa (Preferred)": {
+          "weekday": 35,
+          "weekend": 40
+        },
+        "Two Bedroom Villa (Standard)": {
+          "weekday": 38,
+          "weekend": 45
+        },
+        "Two Bedroom Villa (Preferred)": {
+          "weekday": 47,
+          "weekend": 55
+        },
+        "Three Bedroom Grand Villa (Standard)": {
+          "weekday": 88,
+          "weekend": 99
+        },
+        "Three Bedroom Grand Villa (Preferred)": {
+          "weekday": 101,
+          "weekend": 115
+        },
+        "Three Bedroom Treehouse Villa": {
+          "weekday": 48,
+          "weekend": 54
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-02-16T00:00:00Z",
+          "endDate": "2022-04-09T00:00:00Z"
+        },
+        {
+          "startDate": "2022-04-18T00:00:00Z",
+          "endDate": "2022-04-23T00:00:00Z"
+        },
+        {
+          "startDate": "2022-11-23T00:00:00Z",
+          "endDate": "2022-11-25T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "Deluxe Studio (Standard)": {
+          "weekday": 15,
+          "weekend": 18
+        },
+        "Deluxe Studio (Preferred)": {
+          "weekday": 17,
+          "weekend": 21
+        },
+        "One Bedroom Villa (Standard)": {
+          "weekday": 31,
+          "weekend": 36
+        },
+        "One Bedroom Villa (Preferred)": {
+          "weekday": 38,
+          "weekend": 42
+        },
+        "Two Bedroom Villa (Standard)": {
+          "weekday": 41,
+          "weekend": 47
+        },
+        "Two Bedroom Villa (Preferred)": {
+          "weekday": 49,
+          "weekend": 59
+        },
+        "Three Bedroom Grand Villa (Standard)": {
+          "weekday": 96,
+          "weekend": 108
+        },
+        "Three Bedroom Grand Villa (Preferred)": {
+          "weekday": 109,
+          "weekend": 125
+        },
+        "Three Bedroom Treehouse Villa": {
+          "weekday": 51,
+          "weekend": 58
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-04-10T00:00:00Z",
+          "endDate": "2022-04-17T00:00:00Z"
+        },
+        {
+          "startDate": "2022-12-24T00:00:00Z",
+          "endDate": "2022-12-31T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "Deluxe Studio (Standard)": {
+          "weekday": 21,
+          "weekend": 25
+        },
+        "Deluxe Studio (Preferred)": {
+          "weekday": 23,
+          "weekend": 28
+        },
+        "One Bedroom Villa (Standard)": {
+          "weekday": 43,
+          "weekend": 47
+        },
+        "One Bedroom Villa (Preferred)": {
+          "weekday": 49,
+          "weekend": 53
+        },
+        "Two Bedroom Villa (Standard)": {
+          "weekday": 56,
+          "weekend": 63
+        },
+        "Two Bedroom Villa (Preferred)": {
+          "weekday": 67,
+          "weekend": 75
+        },
+        "Three Bedroom Grand Villa (Standard)": {
+          "weekday": 113,
+          "weekend": 126
+        },
+        "Three Bedroom Grand Villa (Preferred)": {
+          "weekday": 132,
+          "weekend": 139
+        },
+        "Three Bedroom Treehouse Villa": {
+          "weekday": 66,
+          "weekend": 76
+        }
+      }
+    }
+  ]
+}
