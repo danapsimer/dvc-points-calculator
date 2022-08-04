@@ -14,6 +14,7 @@ type Stay struct {
 	From           time.Time `json:"from" uri:"from" binding:"required,ltefield=To" time_format:"2006-01-02" time_utc:"1"`
 	To             time.Time `json:"to" uri:"to" binding:"required" time_format:"2006-01-02" time_utc:"1"`
 	IncludeResorts []string  `json:"includeResorts" form:"incResort"`
+	ExcludeResorts []string  `json:"excludeResorts" form:"exResort"`
 }
 
 type StayResult struct {
@@ -70,14 +71,13 @@ func StayQuery(ctx context.Context, stay *Stay) (*StayResult, error) {
 	} else {
 		resortsToSearch := make([]string, len(Resorts))
 		copy(resortsToSearch, Resorts)
-		if stay.IncludeResorts != nil && len(stay.IncludeResorts) > 0 {
-			for idx := len(resortsToSearch) - 1; idx >= 0; idx-- {
-				if !contains(stay.IncludeResorts, resortsToSearch[idx]) {
-					if idx < len(resortsToSearch)-1 {
-						resortsToSearch = append(resortsToSearch[:idx], resortsToSearch[idx+1:]...)
-					} else {
-						resortsToSearch = resortsToSearch[:idx]
-					}
+		for idx := len(resortsToSearch) - 1; idx >= 0; idx-- {
+			if (stay.IncludeResorts != nil && !contains(stay.IncludeResorts, resortsToSearch[idx])) ||
+				(stay.ExcludeResorts != nil && contains(stay.ExcludeResorts, resortsToSearch[idx])) {
+				if idx < len(resortsToSearch)-1 {
+					resortsToSearch = append(resortsToSearch[:idx], resortsToSearch[idx+1:]...)
+				} else {
+					resortsToSearch = resortsToSearch[:idx]
 				}
 			}
 		}
