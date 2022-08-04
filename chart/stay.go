@@ -11,8 +11,9 @@ var (
 )
 
 type Stay struct {
-	From time.Time `json:"from" uri:"from" binding:"required,ltefield=To" time_format:"2006-01-02" time_utc:"1"`
-	To   time.Time `json:"to" uri:"to" binding:"required" time_format:"2006-01-02" time_utc:"1"`
+	From           time.Time `json:"from" uri:"from" binding:"required,ltefield=To" time_format:"2006-01-02" time_utc:"1"`
+	To             time.Time `json:"to" uri:"to" binding:"required" time_format:"2006-01-02" time_utc:"1"`
+	IncludeResorts []string  `json:"includeResorts" form:"incResort"`
 }
 
 type StayResult struct {
@@ -53,19 +54,34 @@ func StayQuery(ctx context.Context, stay *Stay) (*StayResult, error) {
 	}
 
 	if stay.From.Year() != stay.To.Year() && stay.To.YearDay() > 1 {
-		query1 := &Stay{stay.From, time.Date(stay.To.Year(), 1, 1, 0, 0, 0, 0, time.UTC)}
-		query2 := &Stay{time.Date(stay.To.Year(), 1, 1, 0, 0, 0, 0, time.UTC), stay.To}
-		result1, err := StayQuery(ctx, query1)
+		query1 := *stay
+		query1.To = time.Date(stay.To.Year(), 1, 1, 0, 0, 0, 0, time.UTC)
+		query2 := *stay
+		query2.From = time.Date(stay.To.Year(), 1, 1, 0, 0, 0, 0, time.UTC)
+		result1, err := StayQuery(ctx, &query1)
 		if err != nil {
 			return nil, err
 		}
-		result2, err := StayQuery(ctx, query2)
+		result2, err := StayQuery(ctx, &query2)
 		if err != nil {
 			return nil, err
 		}
 		result.mergeResults(result1, result2)
 	} else {
-		for _, resortCode := range Resorts {
+		resortsToSearch := make([]string, len(Resorts))
+		copy(resortsToSearch, Resorts)
+		if stay.IncludeResorts != nil && len(stay.IncludeResorts) > 0 {
+			for idx := len(resortsToSearch) - 1; idx >= 0; idx-- {
+				if !contains(stay.IncludeResorts, resortsToSearch[idx]) {
+					if idx < len(resortsToSearch)-1 {
+						resortsToSearch = append(resortsToSearch[:idx], resortsToSearch[idx+1:]...)
+					} else {
+						resortsToSearch = resortsToSearch[:idx]
+					}
+				}
+			}
+		}
+		for _, resortCode := range resortsToSearch {
 			chart, err := LoadPointChartByCodeAndYear(ctx, resortCode, stay.From.Year())
 			if err != nil {
 				return nil, err

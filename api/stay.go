@@ -39,6 +39,8 @@ func ReportErrors(err error) gin.H {
 				errors[i] = fmt.Sprintf("stay cannot be longer than 1 year, %s - %s", from.Format("01-02-2006"), to.Format("01-02-2006"))
 			case "ltefield":
 				errors[i] = fmt.Sprintf("'from' date must be before 'to' date")
+			case "len":
+				errors[i] = fmt.Sprintf("%s must have length of %s got %+v", fieldError.Field(), fieldError.Param(), fieldError.Value())
 			default:
 				errors[i] = fmt.Sprintf("validation failed: field=%s, value=%+v, tag=%s, param=%s", fieldError.Field(), fieldError.Value(), fieldError.Tag(), fieldError.Param())
 			}
@@ -55,7 +57,11 @@ func GetStay(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, ReportErrors(err))
 		return
 	}
-
+	if err := context.ShouldBindQuery(&stay); err != nil {
+		context.JSON(http.StatusBadRequest, ReportErrors(err))
+		return
+	}
+	log.Printf("GET /stay %+v", stay)
 	result, err := chart.StayQuery(context, &stay)
 	if err != nil {
 		if strings.HasPrefix(err.Error(), chart.ErrorChartNotFound) {

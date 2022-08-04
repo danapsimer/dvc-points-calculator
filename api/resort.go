@@ -8,8 +8,8 @@ import (
 )
 
 type resortQuery struct {
-	ResortCode string `json:"resortCode" uri:"resortCode"`
-	Year       int    `json:"year" uri:"year"`
+	ResortCode string `json:"resortCode" uri:"resortCode" binding:"required"`
+	Year       int    `json:"year" uri:"year" binding:"required,len=4"`
 }
 
 type resortInfo struct {
@@ -21,15 +21,15 @@ type resortInfo struct {
 func GetResort(context *gin.Context) {
 	rq := &resortQuery{}
 	if err := context.BindUri(rq); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"err": err, "msg": "request is malformed"})
+		context.JSON(http.StatusBadRequest, ReportErrors(err))
 		return
 	}
 	pc, err := chart.LoadPointChartByCodeAndYear(context, rq.ResortCode, rq.Year)
 	if err != nil {
 		if strings.HasPrefix(err.Error(), chart.ErrorChartNotFound) {
-			context.JSON(http.StatusNotFound, gin.H{"err": err, "msg": "chart not found"})
+			context.JSON(http.StatusNotFound, ReportErrors(err))
 		} else {
-			context.JSON(http.StatusInternalServerError, gin.H{"err": err, "msg": "unexpected error"})
+			context.JSON(http.StatusInternalServerError, ReportErrors(err))
 		}
 		return
 	}
