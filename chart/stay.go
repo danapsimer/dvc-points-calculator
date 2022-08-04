@@ -1,18 +1,23 @@
 package chart
 
 import (
+	"context"
 	"fmt"
 	"time"
 )
 
+var (
+	ErrorChartNotFound = "chart not found"
+)
+
 type Stay struct {
-	From time.Time `json:"from" uri:"from" binding:"required"`
-	To   time.Time `json:"to" uri:"to" binding:"required"`
+	From time.Time `json:"from" uri:"from" binding:"required,ltefield=To" time_format:"2006-01-02" time_utc:"1"`
+	To   time.Time `json:"to" uri:"to" binding:"required" time_format:"2006-01-02" time_utc:"1"`
 }
 
 type StayResult struct {
 	Stay
-	Rooms map[string]map[string]int
+	Rooms map[string]map[string]int `json:"rooms"`
 }
 
 func NewStayResult(stay *Stay) *StayResult {
@@ -36,7 +41,7 @@ func (sr *StayResult) mergeResults(results ...*StayResult) {
 	}
 }
 
-func StayQuery(stay *Stay) (*StayResult, error) {
+func StayQuery(ctx context.Context, stay *Stay) (*StayResult, error) {
 	result := NewStayResult(stay)
 	if !stay.To.After(stay.From) {
 		return nil, fmt.Errorf("to date must be strictly after from date: %v - %v is not a valid date range",
@@ -50,22 +55,25 @@ func StayQuery(stay *Stay) (*StayResult, error) {
 	if stay.From.Year() != stay.To.Year() && stay.To.YearDay() > 1 {
 		query1 := &Stay{stay.From, time.Date(stay.To.Year(), 1, 1, 0, 0, 0, 0, time.UTC)}
 		query2 := &Stay{time.Date(stay.To.Year(), 1, 1, 0, 0, 0, 0, time.UTC), stay.To}
-		result1, err := StayQuery(query1)
+		result1, err := StayQuery(ctx, query1)
 		if err != nil {
 			return nil, err
 		}
-		result2, err := StayQuery(query2)
+		result2, err := StayQuery(ctx, query2)
 		if err != nil {
 			return nil, err
 		}
 		result.mergeResults(result1, result2)
 	} else {
-		for resort, charts := range PointCharts {
-			chart := charts[stay.From.Year()]
-			var err error
-			result.Rooms[resort], err = chart.GetPointsForStay(stay)
+		for _, resortCode := range Resorts {
+			chart, err := LoadPointChartByCodeAndYear(ctx, resortCode, stay.From.Year())
 			if err != nil {
 				return nil, err
+			} else {
+				result.Rooms[resortCode], err = chart.GetPointsForStay(stay)
+				if err != nil {
+					return nil, fmt.Errorf("error calculating points for a stay: %+v - %+v", stay, err)
+				}
 			}
 		}
 	}

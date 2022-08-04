@@ -50,7 +50,7 @@ func TestPointChart_GetPointsForDay(t *testing.T) {
 		if assert.NoError(t, err) {
 			for _, s := range GetPointsForDayScenarios {
 				t.Run(fmt.Sprintf("%v - %v", s.Date, s.RoomTypes), func(t *testing.T) {
-					ptmap, err := pc.GetPointsForDay(s.Date, s.RoomTypes)
+					ptmap, err := pc.GetPointsForDay(s.Date, s.RoomTypes...)
 					if assert.NoError(t, err) {
 						assert.Equal(t, len(s.RoomTypes), len(ptmap))
 						for _, rt := range s.RoomTypes {

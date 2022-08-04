@@ -1,9 +1,17 @@
 package chart
 
 import (
+	"cloud.google.com/go/datastore"
+	"context"
 	"encoding/json"
 	"fmt"
+	"google.golang.org/api/option"
 	"io"
+	"io/fs"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
 	"time"
 )
 
@@ -18,9 +26,10 @@ func (dr *DateRange) Contains(date time.Time) bool {
 }
 
 type RoomType struct {
-	Name     string
-	Sleeps   int
-	Bedrooms int
+	Name     string `json:"name"`
+	Code     string `json:"code"`
+	Sleeps   int    `json:"sleeps"`
+	Bedrooms int    `json:"bedrooms"`
 }
 
 type Points struct {
@@ -39,16 +48,108 @@ type PointChart struct {
 	Tiers     []Tier
 }
 
-var PointCharts map[string]map[int]*PointChart
+var (
+	Resorts = []string{
+		"ssr",
+		"aul",
+	}
+	PointCharts     map[string]map[int]*PointChart
+	dataStoreClient *datastore.Client
+)
 
 func LoadPointChart(in io.Reader) (*PointChart, error) {
 	decoder := json.NewDecoder(in)
 	pc := &PointChart{}
 	err := decoder.Decode(pc)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error decoding point chart: %s", err)
 	}
 	return pc, nil
+}
+
+func InitDatastore(projectId, credentialFile string) (err error) {
+	ctx := context.Background()
+	dataStoreClient, err = datastore.NewClient(ctx, projectId, option.WithCredentialsFile(credentialFile))
+	if err != nil {
+		err = fmt.Errorf("error creating new client: %+v", err)
+	}
+	return
+}
+
+type pointChartRecord struct {
+	ResortCode string `json:"resortCode"`
+	ResortName string `json:"resortName"`
+	Year       int    `json:"year"`
+	Chart      string `json:"chart"`
+}
+
+func LoadPointChartByCodeAndYear(ctx context.Context, resortCode string, year int) (*PointChart, error) {
+	if PointCharts == nil {
+		PointCharts = make(map[string]map[int]*PointChart)
+	}
+	if resort, ok := PointCharts[resortCode]; ok {
+		if chart, ok := resort[year]; ok {
+			return chart, nil
+		}
+	} else {
+		PointCharts[resortCode] = make(map[int]*PointChart)
+	}
+	query := datastore.NewQuery("PointChart").
+		FilterField("resortCode", "=", resortCode).
+		FilterField("year", "=", year)
+	charts := make([]*pointChartRecord, 0)
+	_, err := dataStoreClient.GetAll(ctx, query, &charts)
+	if err != nil {
+		return nil, fmt.Errorf("query failed for %s - %d: %+v", resortCode, year, err)
+	}
+	if l := len(charts); l > 1 {
+		return nil, fmt.Errorf("multiple charts found %s - %d (%d)", resortCode, year, l)
+	}
+	for _, pointChart := range charts {
+		pc, err := LoadPointChart(strings.NewReader(pointChart.Chart))
+		if err != nil {
+			return nil, fmt.Errorf("point chart parsing failed for %s - %d: %+v", resortCode, year, err)
+		}
+		PointCharts[pointChart.ResortCode][year] = pc
+		return pc, nil
+	}
+	return nil, fmt.Errorf("chart not found %s - %d", resortCode, year)
+}
+
+func contains[E comparable](v []E, find E) bool {
+	for _, e := range v {
+		if e == find {
+			return true
+		}
+	}
+	return false
+}
+
+var filepathRegexp = regexp.MustCompile(".*/([a-z]+)/(\\d{4}).json$")
+
+func LoadPointCharts() error {
+	PointCharts = make(map[string]map[int]*PointChart)
+	return filepath.Walk(filepath.Clean("."), func(path string, info fs.FileInfo, err error) error {
+		match := filepathRegexp.FindStringSubmatch(path)
+		if match != nil && len(match) == 3 && contains(Resorts, match[1]) {
+			f, err := os.Open(path)
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			chart, err := LoadPointChart(f)
+			if err != nil {
+				return fmt.Errorf("error loading %s - %s", path, err)
+			}
+			resort := PointCharts[chart.Resort]
+			if resort == nil {
+				resort = make(map[int]*PointChart)
+				PointCharts[chart.Resort] = resort
+			}
+			resort[chart.Year] = chart
+		}
+		return nil
+	})
 }
 
 func (pc *PointChart) GetPointsForDay(date time.Time, roomTypes ...string) (map[string]int, error) {
@@ -60,7 +161,7 @@ func (pc *PointChart) GetPointsForDay(date time.Time, roomTypes ...string) (map[
 	if roomTypes == nil || len(roomTypes) == 0 {
 		roomTypes = make([]string, 0, len(pc.RoomTypes))
 		for _, rt := range pc.RoomTypes {
-			roomTypes = append(roomTypes, rt.Name)
+			roomTypes = append(roomTypes, rt.Code)
 		}
 	}
 	for _, t := range pc.Tiers {
@@ -90,7 +191,7 @@ func (pc *PointChart) GetPointsForStay(stay *Stay) (map[string]int, error) {
 	for date := stay.From; date.Before(stay.To); date = date.Add(time.Hour * 24) {
 		dayPoints, err := pc.GetPointsForDay(date)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("error getting points for a date: %+v - %s : %+v", stay, date.String(), err)
 		}
 		for rt, pts := range dayPoints {
 			points[rt] += pts

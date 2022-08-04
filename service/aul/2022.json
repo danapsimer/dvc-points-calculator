@@ -1,0 +1,422 @@
+{
+  "resort": "Aulani, Disney Vacation Club Villas, Ko Olina, Hawai'i",
+  "year": 2022,
+  "roomTypes": [
+    {
+      "name": "Hotel Room",
+      "code": "htl",
+      "sleeps": 4,
+      "bedrooms": 0
+    },
+    {
+      "name": "Deluxe Studio (Standard View)",
+      "code": "dss",
+      "sleeps": 4,
+      "bedrooms": 0
+    },
+    {
+      "name": "Deluxe Studio (Island Gardens View)",
+      "code": "dss",
+      "sleeps": 4,
+      "bedrooms": 0
+    },
+    {
+      "name": "Deluxe Studio (Poolside Gardens View)",
+      "code": "dsp",
+      "sleeps": 4,
+      "bedrooms": 0
+    },
+    {
+      "name": "Deluxe Studio (Ocean View)",
+      "code": "dso",
+      "sleeps": 4,
+      "bedrooms": 0
+    },
+    {
+      "name": "One Bedroom Villa (Standard View)",
+      "code": "1bs",
+      "sleeps": 5,
+      "bedrooms": 1
+    },
+    {
+      "name": "One Bedroom Villa (Island Gardens View)",
+      "code": "1bi",
+      "sleeps": 5,
+      "bedrooms": 1
+    },
+    {
+      "name": "One Bedroom Villa (Poolside Gardens View)",
+      "code": "1bp",
+      "sleeps": 5,
+      "bedrooms": 1
+    },
+    {
+      "name": "One Bedroom Villa (Ocean View)",
+      "code": "1bo",
+      "sleeps": 5,
+      "bedrooms": 1
+    },
+    {
+      "name": "Two Bedroom Villa (Standard View)",
+      "code": "2bs",
+      "sleeps": 9,
+      "bedrooms": 2
+    },
+    {
+      "name": "Two Bedroom Villa (Island Gardens View)",
+      "code": "2bi",
+      "sleeps": 9,
+      "bedrooms": 2
+    },
+    {
+      "name": "Two Bedroom Villa (Poolside Gardens View)",
+      "code": "2bp",
+      "sleeps": 9,
+      "bedrooms": 2
+    },
+    {
+      "name": "Two Bedroom Villa (Ocean View)",
+      "code": "2bo",
+      "sleeps": 9,
+      "bedrooms": 2
+    },
+    {
+      "name": "Three Bedroom Grand Villa (Standard View)",
+      "code": "3bs",
+      "sleeps": 12,
+      "bedrooms": 3
+    },
+    {
+      "name": "Three Bedroom Grand Villa (Ocean View)",
+      "code": "3bo",
+      "sleeps": 12,
+      "bedrooms": 3
+    }
+  ],
+  "tiers": [
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-01-02T00:00:00Z",
+          "endDate": "2022-02-26T00:00:00Z"
+        },
+        {
+          "startDate": "2022-09-04T00:00:00Z",
+          "endDate": "2022-10-08T00:00:00Z"
+        },
+        {
+          "startDate": "2022-11-15T00:00:00Z",
+          "endDate": "2022-11-21T00:00:00Z"
+        },
+        {
+          "startDate": "2022-11-27T00:00:00Z",
+          "endDate": "2022-12-22T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "htl": {
+          "weekday": 16,
+          "weekend": 16
+        },
+        "dss": {
+          "weekday": 17,
+          "weekend": 17
+        },
+        "dsi": {
+          "weekday": 19,
+          "weekend": 19
+        },
+        "dsp": {
+          "weekday": 23,
+          "weekend": 23
+        },
+        "dso": {
+          "weekday": 25,
+          "weekend": 25
+        },
+        "1bs": {
+          "weekday": 34,
+          "weekend": 34
+        },
+        "1bi": {
+          "weekday": 35,
+          "weekend": 35
+        },
+        "1bp": {
+          "weekday": 44,
+          "weekend": 44
+        },
+        "1bo": {
+          "weekday": 46,
+          "weekend": 46
+        },
+        "2bs": {
+          "weekday": 47,
+          "weekend": 47
+        },
+        "2bi": {
+          "weekday": 49,
+          "weekend": 49
+        },
+        "2bp": {
+          "weekday": 59,
+          "weekend": 59
+        },
+        "2bo": {
+          "weekday": 62,
+          "weekend": 62
+        },
+        "3bs": {
+          "weekday": 95,
+          "weekend": 95
+        },
+        "3bo": {
+          "weekday": 122,
+          "weekend": 122
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-04-24T00:00:00Z",
+          "endDate": "2022-04-28T00:00:00Z"
+        },
+        {
+          "startDate": "2022-05-06T00:00:00Z",
+          "endDate": "2022-06-26T00:00:00Z"
+        },
+        {
+          "startDate": "2022-10-09T00:00:00Z",
+          "endDate": "2022-11-14T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "htl": {
+          "weekday": 17,
+          "weekend": 17
+        },
+        "dss": {
+          "weekday": 19,
+          "weekend": 19
+        },
+        "dsi": {
+          "weekday": 21,
+          "weekend": 21
+        },
+        "dsp": {
+          "weekday": 24,
+          "weekend": 24
+        },
+        "dso": {
+          "weekday": 26,
+          "weekend": 26
+        },
+        "1bs": {
+          "weekday": 37,
+          "weekend": 37
+        },
+        "1bi": {
+          "weekday": 44,
+          "weekend": 44
+        },
+        "1bp": {
+          "weekday": 46,
+          "weekend": 46
+        },
+        "1bo": {
+          "weekday": 50,
+          "weekend": 50
+        },
+        "2bs": {
+          "weekday": 51,
+          "weekend": 51
+        },
+        "2bi": {
+          "weekday": 59,
+          "weekend": 59
+        },
+        "2bp": {
+          "weekday": 62,
+          "weekend": 62
+        },
+        "2bo": {
+          "weekday": 69,
+          "weekend": 69
+        },
+        "3bs": {
+          "weekday": 103,
+          "weekend": 103
+        },
+        "3bo": {
+          "weekday": 134,
+          "weekend": 134
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-02-27T00:00:00Z",
+          "endDate": "2022-04-07T00:00:00Z"
+        },
+        {
+          "startDate": "2022-08-15T00:00:00Z",
+          "endDate": "2022-09-03T00:00:00Z"
+        },
+        {
+          "startDate": "2022-11-22T00:00:00Z",
+          "endDate": "2022-11-26T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "htl": {
+          "weekday": 18,
+          "weekend": 18
+        },
+        "dss": {
+          "weekday": 22,
+          "weekend": 22
+        },
+        "dsi": {
+          "weekday": 25,
+          "weekend": 25
+        },
+        "dsp": {
+          "weekday": 26,
+          "weekend": 26
+        },
+        "dso": {
+          "weekday": 29,
+          "weekend": 29
+        },
+        "1bs": {
+          "weekday": 44,
+          "weekend": 44
+        },
+        "1bi": {
+          "weekday": 46,
+          "weekend": 46
+        },
+        "1bp": {
+          "weekday": 50,
+          "weekend": 50
+        },
+        "1bo": {
+          "weekday": 58,
+          "weekend": 58
+        },
+        "2bs": {
+          "weekday": 60,
+          "weekend": 60
+        },
+        "2bi": {
+          "weekday": 62,
+          "weekend": 62
+        },
+        "2bp": {
+          "weekday": 70,
+          "weekend": 70
+        },
+        "2bo": {
+          "weekday": 79,
+          "weekend": 79
+        },
+        "3bs": {
+          "weekday": 121,
+          "weekend": 121
+        },
+        "3bo": {
+          "weekday": 157,
+          "weekend": 157
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2022-01-01T00:00:00Z",
+          "endDate": "2022-01-01T00:00:00Z"
+        },
+        {
+          "startDate": "2022-04-08T00:00:00Z",
+          "endDate": "2022-04-23T00:00:00Z"
+        },
+        {
+          "startDate": "2022-04-29T00:00:00Z",
+          "endDate": "2022-05-05T00:00:00Z"
+        },
+        {
+          "startDate": "2022-06-27T00:00:00Z",
+          "endDate": "2022-08-14T00:00:00Z"
+        },
+        {
+          "startDate": "2022-12-23T00:00:00Z",
+          "endDate": "2022-12-31T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "htl": {
+          "weekday": 21,
+          "weekend": 21
+        },
+        "dss": {
+          "weekday": 24,
+          "weekend": 24
+        },
+        "dsi": {
+          "weekday": 27,
+          "weekend": 27
+        },
+        "dsp": {
+          "weekday": 29,
+          "weekend": 29
+        },
+        "dso": {
+          "weekday": 31,
+          "weekend": 31
+        },
+        "1bs": {
+          "weekday": 46,
+          "weekend": 46
+        },
+        "1bi": {
+          "weekday": 50,
+          "weekend": 50
+        },
+        "1bp": {
+          "weekday": 58,
+          "weekend": 58
+        },
+        "1bo": {
+          "weekday": 62,
+          "weekend": 62
+        },
+        "2bs": {
+          "weekday": 64,
+          "weekend": 64
+        },
+        "2bi": {
+          "weekday": 71,
+          "weekend": 71
+        },
+        "2bp": {
+          "weekday": 79,
+          "weekend": 79
+        },
+        "2bo": {
+          "weekday": 84,
+          "weekend": 84
+        },
+        "3bs": {
+          "weekday": 140,
+          "weekend": 140
+        },
+        "3bo": {
+          "weekday": 184,
+          "weekend": 184
+        }
+      }
+    }
+  ]
+}
