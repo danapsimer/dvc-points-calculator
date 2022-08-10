@@ -39,9 +39,11 @@ func ReportErrors(err error) gin.H {
 				to := fieldError.Value().(time.Time)
 				errors[i] = fmt.Sprintf("stay cannot be longer than 1 year, %s - %s", from.Format("01-02-2006"), to.Format("01-02-2006"))
 			case "ltefield":
-				errors[i] = fmt.Sprintf("'from' date must be before 'to' date")
+				errors[i] = fmt.Sprintf("'%s' must be less than '%s' date", fieldError.Field(), fieldError.Param())
 			case "len":
-				errors[i] = fmt.Sprintf("%s must have length of %s got %+v", fieldError.Field(), fieldError.Param(), fieldError.Value())
+				errors[i] = fmt.Sprintf("'%s' must have length of %s got %+v", fieldError.Field(), fieldError.Param(), fieldError.Value())
+			case "number":
+				errors[i] = fmt.Sprintf("'%s' must be a number: %s", fieldError.Field(), fieldError.Value())
 			default:
 				errors[i] = fmt.Sprintf("validation failed: field=%s, value=%+v, tag=%s, param=%s", fieldError.Field(), fieldError.Value(), fieldError.Tag(), fieldError.Param())
 			}
