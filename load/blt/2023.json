@@ -1,0 +1,492 @@
+{
+  "resort": "Bay Lake Tower at Disney's Contemporary Resort",
+  "code": "blt",
+  "year": 2023,
+  "roomTypes": [
+    {
+      "name": "Deluxe Studio (Standard View)",
+      "code": "dss",
+      "sleeps": 4,
+      "bedrooms": 0,
+      "beds": 2
+    },
+    {
+      "name": "Deluxe Studio (Lake View)",
+      "code": "dsl",
+      "sleeps": 4,
+      "bedrooms": 0,
+      "beds": 2
+    },
+    {
+      "name": "Deluxe Studio (Theme Park View)",
+      "code": "dsp",
+      "sleeps": 4,
+      "bedrooms": 0,
+      "beds": 2
+    },
+    {
+      "name": "One Bedroom Villa (Standard View)",
+      "code": "1bs",
+      "sleeps": 5,
+      "bedrooms": 1,
+      "beds": 3
+    },
+    {
+      "name": "One Bedroom Villa (Lake View)",
+      "code": "1bl",
+      "sleeps": 5,
+      "bedrooms": 1,
+      "beds": 3
+    },
+    {
+      "name": "One Bedroom Villa (Theme Park View)",
+      "code": "1bp",
+      "sleeps": 5,
+      "bedrooms": 1,
+      "beds": 3
+    },
+    {
+      "name": "Two Bedroom Villa (Standard View)",
+      "code": "2bs",
+      "sleeps": 9,
+      "bedrooms": 2,
+      "beds": 5
+    },
+    {
+      "name": "Two Bedroom Villa (Lake View)",
+      "code": "2bl",
+      "sleeps": 9,
+      "bedrooms": 2,
+      "beds": 5
+    },
+    {
+      "name": "Two Bedroom Villa (Theme Park View)",
+      "code": "2bp",
+      "sleeps": 9,
+      "bedrooms": 2,
+      "beds": 5
+    },
+    {
+      "name": "Three Bedroom Grand Villa (Lake View)",
+      "code": "3bl",
+      "sleeps": 12,
+      "bedrooms": 3,
+      "beds": 6
+    },
+    {
+      "name": "Three Bedroom Grand Villa (Theme Park View)",
+      "code": "3bp",
+      "sleeps": 12,
+      "bedrooms": 3,
+      "beds": 6
+    }
+  ],
+  "tiers": [
+    {
+      "dateRanges": [
+        {
+          "startDate": "09-01",
+          "endDate": "09-30"
+        }
+      ],
+      "roomTypePoints": {
+        "dss": {
+          "weekday": 13,
+          "weekend": 16
+        },
+        "dsl": {
+          "weekday": 16,
+          "weekend": 19
+        },
+        "dsp": {
+          "weekday": 18,
+          "weekend": 23
+        },
+        "1bs": {
+          "weekday": 24,
+          "weekend": 32
+        },
+        "1bl": {
+          "weekday": 29,
+          "weekend": 36
+        },
+        "1bp": {
+          "weekday": 35,
+          "weekend": 44
+        },
+        "2bs": {
+          "weekday": 35,
+          "weekend": 42
+        },
+        "2bl": {
+          "weekday": 38,
+          "weekend": 47
+        },
+        "2bp": {
+          "weekday": 48,
+          "weekend": 59
+        },
+        "3bl": {
+          "weekday": 82,
+          "weekend": 98
+        },
+        "3bp": {
+          "weekday": 101,
+          "weekend": 120
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "01-01",
+          "endDate": "01-31"
+        },
+        {
+          "startDate": "05-01",
+          "endDate": "05-14"
+        }
+      ],
+      "roomTypePoints": {
+        "dss": {
+          "weekday": 15,
+          "weekend": 17
+        },
+        "dsl": {
+          "weekday": 18,
+          "weekend": 19
+        },
+        "dsp": {
+          "weekday": 20,
+          "weekend": 23
+        },
+        "1bs": {
+          "weekday": 28,
+          "weekend": 35
+        },
+        "1bl": {
+          "weekday": 33,
+          "weekend": 38
+        },
+        "1bp": {
+          "weekday": 39,
+          "weekend": 46
+        },
+        "2bs": {
+          "weekday": 40,
+          "weekend": 45
+        },
+        "2bl": {
+          "weekday": 43,
+          "weekend": 50
+        },
+        "2bp": {
+          "weekday": 54,
+          "weekend": 61
+        },
+        "3bl": {
+          "weekday": 88,
+          "weekend": 104
+        },
+        "3bp": {
+          "weekday": 106,
+          "weekend": 125
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "05-15",
+          "endDate": "06-10"
+        },
+        {
+          "startDate": "12-01",
+          "endDate": "12-23"
+        }
+      ],
+      "roomTypePoints": {
+        "dss": {
+          "weekday": 16,
+          "weekend": 18
+        },
+        "dsl": {
+          "weekday": 19,
+          "weekend": 20
+        },
+        "dsp": {
+          "weekday": 21,
+          "weekend": 25
+        },
+        "1bs": {
+          "weekday": 30,
+          "weekend": 38
+        },
+        "1bl": {
+          "weekday": 35,
+          "weekend": 41
+        },
+        "1bp": {
+          "weekday": 41,
+          "weekend": 50
+        },
+        "2bs": {
+          "weekday": 42,
+          "weekend": 48
+        },
+        "2bl": {
+          "weekday": 46,
+          "weekend": 54
+        },
+        "2bp": {
+          "weekday": 57,
+          "weekend": 66
+        },
+        "3bl": {
+          "weekday": 96,
+          "weekend": 112
+        },
+        "3bp": {
+          "weekday": 115,
+          "weekend": 135
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "02-01",
+          "endDate": "02-15"
+        },
+        {
+          "startDate": "06-11",
+          "endDate": "08-31"
+        }
+      ],
+      "roomTypePoints": {
+        "dss": {
+          "weekday": 17,
+          "weekend": 19
+        },
+        "dsl": {
+          "weekday": 19,
+          "weekend": 21
+        },
+        "dsp": {
+          "weekday": 23,
+          "weekend": 26
+        },
+        "1bs": {
+          "weekday": 31,
+          "weekend": 39
+        },
+        "1bl": {
+          "weekday": 36,
+          "weekend": 44
+        },
+        "1bp": {
+          "weekday": 45,
+          "weekend": 53
+        },
+        "2bs": {
+          "weekday": 43,
+          "weekend": 49
+        },
+        "2bl": {
+          "weekday": 47,
+          "weekend": 58
+        },
+        "2bp": {
+          "weekday": 58,
+          "weekend": 67
+        },
+        "3bl": {
+          "weekday": 100,
+          "weekend": 115
+        },
+        "3bp": {
+          "weekday": 120,
+          "weekend": 141
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "10-01",
+          "endDate": "11-21"
+        },
+        {
+          "startDate": "11-25",
+          "endDate": "11-30"
+        }
+      ],
+      "roomTypePoints": {
+        "dss": {
+          "weekday": 18,
+          "weekend": 21
+        },
+        "dsl": {
+          "weekday": 20,
+          "weekend": 23
+        },
+        "dsp": {
+          "weekday": 24,
+          "weekend": 27
+        },
+        "1bs": {
+          "weekday": 33,
+          "weekend": 41
+        },
+        "1bl": {
+          "weekday": 38,
+          "weekend": 47
+        },
+        "1bp": {
+          "weekday": 47,
+          "weekend": 56
+        },
+        "2bs": {
+          "weekday": 45,
+          "weekend": 53
+        },
+        "2bl": {
+          "weekday": 50,
+          "weekend": 61
+        },
+        "2bp": {
+          "weekday": 60,
+          "weekend": 72
+        },
+        "3bl": {
+          "weekday": 108,
+          "weekend": 126
+        },
+        "3bp": {
+          "weekday": 131,
+          "weekend": 153
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "02-16",
+          "endDate": "04-01"
+        },
+        {
+          "startDate": "04-10",
+          "endDate": "04-30"
+        },
+        {
+          "startDate": "11-22",
+          "endDate": "11-24"
+        }
+      ],
+      "roomTypePoints": {
+        "dss": {
+          "weekday": 19,
+          "weekend": 22
+        },
+        "dsl": {
+          "weekday": 21,
+          "weekend": 24
+        },
+        "dsp": {
+          "weekday": 26,
+          "weekend": 29
+        },
+        "1bs": {
+          "weekday": 36,
+          "weekend": 44
+        },
+        "1bl": {
+          "weekday": 42,
+          "weekend": 48
+        },
+        "1bp": {
+          "weekday": 49,
+          "weekend": 59
+        },
+        "2bs": {
+          "weekday": 50,
+          "weekend": 57
+        },
+        "2bl": {
+          "weekday": 54,
+          "weekend": 62
+        },
+        "2bp": {
+          "weekday": 65,
+          "weekend": 76
+        },
+        "3bl": {
+          "weekday": 120,
+          "weekend": 140
+        },
+        "3bp": {
+          "weekday": 143,
+          "weekend": 168
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "04-02",
+          "endDate": "04-09"
+        },
+        {
+          "startDate": "12-24",
+          "endDate": "12-31"
+        }
+      ],
+      "roomTypePoints": {
+        "dss": {
+          "weekday": 26,
+          "weekend": 29
+        },
+        "dsl": {
+          "weekday": 28,
+          "weekend": 32
+        },
+        "dsp": {
+          "weekday": 34,
+          "weekend": 38
+        },
+        "1bs": {
+          "weekday": 48,
+          "weekend": 56
+        },
+        "1bl": {
+          "weekday": 53,
+          "weekend": 62
+        },
+        "1bp": {
+          "weekday": 64,
+          "weekend": 75
+        },
+        "2bs": {
+          "weekday": 66,
+          "weekend": 77
+        },
+        "2bl": {
+          "weekday": 72,
+          "weekend": 84
+        },
+        "2bp": {
+          "weekday": 88,
+          "weekend": 98
+        },
+        "3bl": {
+          "weekday": 146,
+          "weekend": 171
+        },
+        "3bp": {
+          "weekday": 176,
+          "weekend": 207
+        }
+      }
+    }
+  ]
+}

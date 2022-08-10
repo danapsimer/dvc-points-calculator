@@ -13,6 +13,7 @@ var (
 	Resorts            = []string{
 		"ssr",
 		"aul",
+		"blt",
 	}
 )
 

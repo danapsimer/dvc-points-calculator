@@ -4,17 +4,68 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"strconv"
+	"strings"
 	"time"
 )
 
+type TierDate time.Time
+
+func ParseTierDate(dateStr string) (TierDate, error) {
+	var tierDate TierDate
+
+	parts := strings.Split(dateStr, "-")
+	if len(parts) != 2 {
+		return tierDate, fmt.Errorf("malformed tier date: %s - expected a month and day seperated by '-'", dateStr)
+	}
+	month, err := strconv.Atoi(parts[0])
+	if err != nil {
+		return tierDate, fmt.Errorf("malformed tier date: %s - expected a numeric month component: %s", dateStr, parts[0])
+	}
+	day, err := strconv.Atoi(parts[1])
+	if err != nil {
+		return tierDate, fmt.Errorf("malformed tier date: %s - expected a numeric day component: %s", dateStr, parts[1])
+	}
+	tierDate = TierDate(time.Date(time.Now().Year(), time.Month(month), day, 0, 0, 0, 0, time.UTC))
+	return tierDate, nil
+}
+
+func (t TierDate) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("\"%02d-%02d\"", t.Month(), t.Day())), nil
+}
+
+func (t *TierDate) UnmarshalJSON(date []byte) error {
+	dateStr := string(date)
+	if !strings.HasPrefix(dateStr, "\"") || !strings.HasSuffix(dateStr, "\"") {
+		return fmt.Errorf("malformed json string: %s", dateStr)
+	}
+	dateStr = dateStr[1 : len(dateStr)-1]
+	d, err := ParseTierDate(dateStr)
+	if err != nil {
+		return err
+	}
+	*t = d
+	return nil
+}
+
+func (t TierDate) Month() time.Month {
+	return time.Time(t).Month()
+}
+
+func (t TierDate) Day() int {
+	return time.Time(t).Day()
+}
+
 type DateRange struct {
-	StartDate time.Time
-	EndDate   time.Time
+	StartDate TierDate `json:"startDate"`
+	EndDate   TierDate `json:"endDate"`
 }
 
 // Contains date must be truncated to midnight in UTC.
 func (dr *DateRange) Contains(date time.Time) bool {
-	return dr.StartDate.Equal(date) || (dr.StartDate.Before(date) && (dr.EndDate.Equal(date) || dr.EndDate.After(date)))
+	from := time.Date(date.Year(), dr.StartDate.Month(), dr.StartDate.Day(), 0, 0, 0, 0, time.UTC)
+	to := time.Date(date.Year(), dr.EndDate.Month(), dr.EndDate.Day(), 0, 0, 0, 0, time.UTC)
+	return from.Equal(date) || (from.Before(date) && (to.Equal(date) || to.After(date)))
 }
 
 type RoomType struct {

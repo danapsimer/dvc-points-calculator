@@ -113,20 +113,20 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-01-02T00:00:00Z",
-          "endDate": "2022-02-26T00:00:00Z"
+          "startDate": "01-02",
+          "endDate": "02-26"
         },
         {
-          "startDate": "2022-09-04T00:00:00Z",
-          "endDate": "2022-10-08T00:00:00Z"
+          "startDate": "09-04",
+          "endDate": "10-08"
         },
         {
-          "startDate": "2022-11-15T00:00:00Z",
-          "endDate": "2022-11-21T00:00:00Z"
+          "startDate": "11-15",
+          "endDate": "11-21"
         },
         {
-          "startDate": "2022-11-27T00:00:00Z",
-          "endDate": "2022-12-22T00:00:00Z"
+          "startDate": "11-27",
+          "endDate": "12-22"
         }
       ],
       "roomTypePoints": {
@@ -195,16 +195,16 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-04-24T00:00:00Z",
-          "endDate": "2022-04-28T00:00:00Z"
+          "startDate": "04-24",
+          "endDate": "04-28"
         },
         {
-          "startDate": "2022-05-06T00:00:00Z",
-          "endDate": "2022-06-26T00:00:00Z"
+          "startDate": "05-06",
+          "endDate": "06-26"
         },
         {
-          "startDate": "2022-10-09T00:00:00Z",
-          "endDate": "2022-11-14T00:00:00Z"
+          "startDate": "10-09",
+          "endDate": "11-14"
         }
       ],
       "roomTypePoints": {
@@ -273,16 +273,16 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-02-27T00:00:00Z",
-          "endDate": "2022-04-07T00:00:00Z"
+          "startDate": "02-27",
+          "endDate": "04-07"
         },
         {
-          "startDate": "2022-08-15T00:00:00Z",
-          "endDate": "2022-09-03T00:00:00Z"
+          "startDate": "08-15",
+          "endDate": "09-03"
         },
         {
-          "startDate": "2022-11-22T00:00:00Z",
-          "endDate": "2022-11-26T00:00:00Z"
+          "startDate": "11-22",
+          "endDate": "11-26"
         }
       ],
       "roomTypePoints": {
@@ -351,24 +351,24 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-01-01T00:00:00Z",
-          "endDate": "2022-01-01T00:00:00Z"
+          "startDate": "01-01",
+          "endDate": "01-01"
         },
         {
-          "startDate": "2022-04-08T00:00:00Z",
-          "endDate": "2022-04-23T00:00:00Z"
+          "startDate": "04-08",
+          "endDate": "04-23"
         },
         {
-          "startDate": "2022-04-29T00:00:00Z",
-          "endDate": "2022-05-05T00:00:00Z"
+          "startDate": "04-29",
+          "endDate": "05-05"
         },
         {
-          "startDate": "2022-06-27T00:00:00Z",
-          "endDate": "2022-08-14T00:00:00Z"
+          "startDate": "06-27",
+          "endDate": "08-14"
         },
         {
-          "startDate": "2022-12-23T00:00:00Z",
-          "endDate": "2022-12-31T00:00:00Z"
+          "startDate": "12-23",
+          "endDate": "12-31"
         }
       ],
       "roomTypePoints": {
