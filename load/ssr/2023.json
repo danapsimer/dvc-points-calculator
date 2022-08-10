@@ -1,81 +1,91 @@
 {
   "resort": "Disney's Saratoga Springs Resort & Spa",
-  "year": 2022,
+  "code": "ssr",
+  "year": 2023,
   "roomTypes": [
     {
       "name": "Deluxe Studio (Standard)",
       "code": "dss",
       "sleeps": 4,
-      "bedrooms": 0
+      "bedrooms": 0,
+      "beds": 2
     },
     {
       "name": "Deluxe Studio (Preferred)",
       "code": "dsp",
       "sleeps": 4,
-      "bedrooms": 0
+      "bedrooms": 0,
+      "beds": 2
     },
     {
       "name": "One Bedroom Villa (Standard)",
       "code": "1bs",
       "sleeps": 5,
-      "bedrooms": 1
+      "bedrooms": 1,
+      "beds": 3
     },
     {
       "name": "One Bedroom Villa (Preferred)",
       "code": "1bp",
       "sleeps": 5,
-      "bedrooms": 1
+      "bedrooms": 1,
+      "beds": 3
     },
     {
       "name": "Two Bedroom Villa (Standard)",
       "code": "2bs",
       "sleeps": 9,
-      "bedrooms": 2
+      "bedrooms": 2,
+      "beds": 5
     },
     {
       "name": "Two Bedroom Villa (Preferred)",
       "code": "2bp",
       "sleeps": 9,
-      "bedrooms": 2
+      "bedrooms": 2,
+      "beds": 5
     },
     {
       "name": "Three Bedroom Grand Villa (Standard)",
       "code": "3bs",
       "sleeps": 12,
-      "bedrooms": 3
+      "bedrooms": 3,
+      "beds": 6
     },
     {
       "name": "Three Bedroom Grand Villa (Preferred)",
       "code": "3bp",
       "sleeps": 12,
-      "bedrooms": 3
+      "bedrooms": 3,
+      "beds": 6
     },
     {
       "name": "Three Bedroom Treehouse Villa",
       "code": "3bt",
       "sleeps": 9,
-      "bedrooms": 3
+      "bedrooms": 3,
+      "beds": 5
     }
   ],
   "tiers": [
     {
       "dateRanges": [
         {
-          "startDate": "2022-09-01T00:00:00Z",
-          "endDate": "2022-09-30T00:00:00Z"
+          "startDate": "2023-09-01T00:00:00Z",
+          "endDate": "2023-09-30T00:00:00Z"
         }
       ],
       "roomTypePoints": {
         "dss": {
-          "weekday": 10,
+          "weekday": 9,
           "weekend": 14
         },
         "dsp": {
-          "weekday": 12,
+          "weekday": 11,
           "weekend": 16
         },
         "1bs": {
-          "weekday": 20,
+          "weekday": 21,
           "weekend": 27
         },
         "1bp": {
@@ -88,7 +98,7 @@
         },
         "2bp": {
           "weekday": 35,
-          "weekend": 40
+          "weekend": 39
         },
         "3bs": {
           "weekday": 63,
@@ -107,12 +117,12 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-01-01T00:00:00Z",
-          "endDate": "2022-01-31T00:00:00Z"
+          "startDate": "2023-01-01T00:00:00Z",
+          "endDate": "2023-01-31T00:00:00Z"
         },
         {
-          "startDate": "2022-12-01T00:00:00Z",
-          "endDate": "2022-12-14T00:00:00Z"
+          "startDate": "2023-05-01T00:00:00Z",
+          "endDate": "2023-05-14T00:00:00Z"
         }
       ],
       "roomTypePoints": {
@@ -121,7 +131,7 @@
           "weekend": 15
         },
         "dsp": {
-          "weekday": 14,
+          "weekday": 13,
           "weekend": 17
         },
         "1bs": {
@@ -145,7 +155,7 @@
           "weekend": 78
         },
         "3bp": {
-          "weekday": 77,
+          "weekday": 76,
           "weekend": 89
         },
         "3bt": {
@@ -157,11 +167,11 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-05-01T00:00:00Z",
-          "endDate": "2022-06-10T00:00:00Z"
+          "startDate": "2023-05-15T00:00:00Z",
+          "endDate": "2023-06-10T00:00:00Z"
         },
         {
-          "startDate": "2022-12-15T00:00:00Z",
+          "startDate": "2022-12-01T00:00:00Z",
           "endDate": "2022-12-23T00:00:00Z"
         }
       ],
@@ -187,7 +197,7 @@
           "weekend": 39
         },
         "2bp": {
-          "weekday": 40,
+          "weekday": 39,
           "weekend": 45
         },
         "3bs": {
@@ -195,7 +205,7 @@
           "weekend": 83
         },
         "3bp": {
-          "weekday": 83,
+          "weekday": 82,
           "weekend": 94
         },
         "3bt": {
@@ -207,20 +217,12 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-02-01T00:00:00Z",
-          "endDate": "2022-02-15T00:00:00Z"
+          "startDate": "2023-02-01T00:00:00Z",
+          "endDate": "2023-02-15T00:00:00Z"
         },
         {
-          "startDate": "2022-06-11T00:00:00Z",
-          "endDate": "2022-08-31T00:00:00Z"
-        },
-        {
-          "startDate": "2022-10-01T00:00:00Z",
-          "endDate": "2022-11-22T00:00:00Z"
-        },
-        {
-          "startDate": "2022-11-26T00:00:00Z",
-          "endDate": "2022-11-30T00:00:00Z"
+          "startDate": "2023-06-11T00:00:00Z",
+          "endDate": "2023-08-31T00:00:00Z"
         }
       ],
       "roomTypePoints": {
@@ -233,31 +235,81 @@
           "weekend": 19
         },
         "1bs": {
-          "weekday": 29,
+          "weekday": 28,
+          "weekend": 33
+        },
+        "1bp": {
+          "weekday": 32,
+          "weekend": 37
+        },
+        "2bs": {
+          "weekday": 36,
+          "weekend": 39
+        },
+        "2bp": {
+          "weekday": 41,
+          "weekend": 50
+        },
+        "3bs": {
+          "weekday": 77,
+          "weekend": 86
+        },
+        "3bp": {
+          "weekday": 87,
+          "weekend": 98
+        },
+        "3bt": {
+          "weekday": 44,
+          "weekend": 51
+        }
+      }
+    },
+    {
+      "dateRanges": [
+        {
+          "startDate": "2023-10-01T00:00:00Z",
+          "endDate": "2023-11-21T00:00:00Z"
+        },
+        {
+          "startDate": "2023-11-25T00:00:00Z",
+          "endDate": "2023-11-30T00:00:00Z"
+        }
+      ],
+      "roomTypePoints": {
+        "dss": {
+          "weekday": 14,
+          "weekend": 17
+        },
+        "dsp": {
+          "weekday": 16,
+          "weekend": 19
+        },
+        "1bs": {
+          "weekday": 30,
           "weekend": 34
         },
         "1bp": {
-          "weekday": 33,
-          "weekend": 38
+          "weekday": 34,
+          "weekend": 39
         },
         "2bs": {
           "weekday": 37,
-          "weekend": 40
+          "weekend": 45
         },
         "2bp": {
-          "weekday": 43,
-          "weekend": 51
+          "weekday": 46,
+          "weekend": 54
         },
         "3bs": {
-          "weekday": 80,
-          "weekend": 88
+          "weekday": 86,
+          "weekend": 97
         },
         "3bp": {
-          "weekday": 91,
-          "weekend": 101
+          "weekday": 98,
+          "weekend": 112
         },
         "3bt": {
-          "weekday": 45,
+          "weekday": 47,
           "weekend": 52
         }
       }
@@ -265,62 +317,20 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-04-24T00:00:00Z",
-          "endDate": "2022-04-30T00:00:00Z"
-        }
-      ],
-      "roomTypePoints": {
-        "dss": {
-          "weekday": 14,
-          "weekend": 18
-        },
-        "dsp": {
-          "weekday": 16,
-          "weekend": 20
-        },
-        "1bs": {
-          "weekday": 31,
-          "weekend": 35
-        },
-        "1bp": {
-          "weekday": 35,
-          "weekend": 40
-        },
-        "2bs": {
-          "weekday": 38,
-          "weekend": 45
-        },
-        "2bp": {
-          "weekday": 47,
-          "weekend": 55
-        },
-        "3bs": {
-          "weekday": 88,
-          "weekend": 99
-        },
-        "3bp": {
-          "weekday": 101,
-          "weekend": 115
-        },
-        "3bt": {
-          "weekday": 48,
-          "weekend": 54
-        }
-      }
-    },
-    {
-      "dateRanges": [
-        {
-          "startDate": "2022-02-16T00:00:00Z",
-          "endDate": "2022-04-09T00:00:00Z"
+          "startDate": "2023-02-16T00:00:00Z",
+          "endDate": "2023-02-28T00:00:00Z"
         },
         {
-          "startDate": "2022-04-18T00:00:00Z",
-          "endDate": "2022-04-23T00:00:00Z"
+          "startDate": "2023-03-01T00:00:00Z",
+          "endDate": "2023-04-01T00:00:00Z"
         },
         {
-          "startDate": "2022-11-23T00:00:00Z",
-          "endDate": "2022-11-25T00:00:00Z"
+          "startDate": "2023-04-10T00:00:00Z",
+          "endDate": "2023-04-30T00:00:00Z"
+        },
+        {
+          "startDate": "2023-11-22T00:00:00Z",
+          "endDate": "2023-11-24T00:00:00Z"
         }
       ],
       "roomTypePoints": {
@@ -333,7 +343,7 @@
           "weekend": 21
         },
         "1bs": {
-          "weekday": 31,
+          "weekday": 32,
           "weekend": 36
         },
         "1bp": {
@@ -349,11 +359,11 @@
           "weekend": 59
         },
         "3bs": {
-          "weekday": 96,
-          "weekend": 108
+          "weekday": 93,
+          "weekend": 107
         },
         "3bp": {
-          "weekday": 109,
+          "weekday": 108,
           "weekend": 125
         },
         "3bt": {
@@ -365,8 +375,8 @@
     {
       "dateRanges": [
         {
-          "startDate": "2022-04-10T00:00:00Z",
-          "endDate": "2022-04-17T00:00:00Z"
+          "startDate": "2023-04-02T00:00:00Z",
+          "endDate": "2023-04-09T00:00:00Z"
         },
         {
           "startDate": "2022-12-24T00:00:00Z",
@@ -403,7 +413,7 @@
           "weekend": 126
         },
         "3bp": {
-          "weekday": 132,
+          "weekday": 131,
           "weekend": 139
         },
         "3bt": {

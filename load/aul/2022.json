@@ -1,116 +1,132 @@
 {
   "resort": "Aulani, Disney Vacation Club Villas, Ko Olina, Hawai'i",
-  "year": 2023,
+  "code": "aul",
+  "year": 2022,
   "roomTypes": [
     {
       "name": "Hotel Room",
       "code": "htl",
       "sleeps": 4,
-      "bedrooms": 0
+      "bedrooms": 0,
+      "beds": 2
     },
     {
       "name": "Deluxe Studio (Standard View)",
       "code": "dss",
       "sleeps": 4,
-      "bedrooms": 0
+      "bedrooms": 0,
+      "beds": 2
     },
     {
       "name": "Deluxe Studio (Island Gardens View)",
       "code": "dss",
       "sleeps": 4,
-      "bedrooms": 0
+      "bedrooms": 0,
+      "beds": 2
     },
     {
       "name": "Deluxe Studio (Poolside Gardens View)",
       "code": "dsp",
       "sleeps": 4,
-      "bedrooms": 0
+      "bedrooms": 0,
+      "beds": 2
     },
     {
       "name": "Deluxe Studio (Ocean View)",
       "code": "dso",
       "sleeps": 4,
-      "bedrooms": 0
+      "bedrooms": 0,
+      "beds": 2
     },
     {
       "name": "One Bedroom Villa (Standard View)",
       "code": "1bs",
       "sleeps": 5,
-      "bedrooms": 1
+      "bedrooms": 1,
+      "beds": 3
     },
     {
       "name": "One Bedroom Villa (Island Gardens View)",
       "code": "1bi",
       "sleeps": 5,
-      "bedrooms": 1
+      "bedrooms": 1,
+      "beds": 3
     },
     {
       "name": "One Bedroom Villa (Poolside Gardens View)",
       "code": "1bp",
       "sleeps": 5,
-      "bedrooms": 1
+      "bedrooms": 1,
+      "beds": 3
     },
     {
       "name": "One Bedroom Villa (Ocean View)",
       "code": "1bo",
       "sleeps": 5,
-      "bedrooms": 1
+      "bedrooms": 1,
+      "beds": 3
     },
     {
       "name": "Two Bedroom Villa (Standard View)",
       "code": "2bs",
       "sleeps": 9,
-      "bedrooms": 2
+      "bedrooms": 2,
+      "beds": 5
     },
     {
       "name": "Two Bedroom Villa (Island Gardens View)",
       "code": "2bi",
       "sleeps": 9,
-      "bedrooms": 2
+      "bedrooms": 2,
+      "beds": 5
     },
     {
       "name": "Two Bedroom Villa (Poolside Gardens View)",
       "code": "2bp",
       "sleeps": 9,
-      "bedrooms": 2
+      "bedrooms": 2,
+      "beds": 5
     },
     {
       "name": "Two Bedroom Villa (Ocean View)",
       "code": "2bo",
       "sleeps": 9,
-      "bedrooms": 2
+      "bedrooms": 2,
+      "beds": 5
     },
     {
       "name": "Three Bedroom Grand Villa (Standard View)",
       "code": "3bs",
       "sleeps": 12,
-      "bedrooms": 3
+      "bedrooms": 3,
+      "beds": 6
     },
     {
       "name": "Three Bedroom Grand Villa (Ocean View)",
       "code": "3bo",
       "sleeps": 12,
-      "bedrooms": 3
+      "bedrooms": 3,
+      "beds": 6
     }
   ],
   "tiers": [
     {
       "dateRanges": [
         {
-          "startDate": "2023-01-06T00:00:00Z",
-          "endDate": "2023-02-25T00:00:00Z"
+          "startDate": "2022-01-02T00:00:00Z",
+          "endDate": "2022-02-26T00:00:00Z"
         },
         {
-          "startDate": "2023-09-03T00:00:00Z",
-          "endDate": "2023-10-07T00:00:00Z"
+          "startDate": "2022-09-04T00:00:00Z",
+          "endDate": "2022-10-08T00:00:00Z"
         },
         {
-          "startDate": "2023-11-14T00:00:00Z",
-          "endDate": "2023-11-20T00:00:00Z"
+          "startDate": "2022-11-15T00:00:00Z",
+          "endDate": "2022-11-21T00:00:00Z"
         },
         {
-          "startDate": "2023-11-26T00:00:00Z",
-          "endDate": "2023-12-21T00:00:00Z"
+          "startDate": "2022-11-27T00:00:00Z",
+          "endDate": "2022-12-22T00:00:00Z"
         }
       ],
       "roomTypePoints": {
@@ -179,16 +195,16 @@
     {
       "dateRanges": [
         {
-          "startDate": "2023-04-16T00:00:00Z",
-          "endDate": "2023-04-28T00:00:00Z"
+          "startDate": "2022-04-24T00:00:00Z",
+          "endDate": "2022-04-28T00:00:00Z"
         },
         {
-          "startDate": "2023-05-06T00:00:00Z",
-          "endDate": "2023-06-25T00:00:00Z"
+          "startDate": "2022-05-06T00:00:00Z",
+          "endDate": "2022-06-26T00:00:00Z"
         },
         {
-          "startDate": "2023-10-08T00:00:00Z",
-          "endDate": "2023-11-13T00:00:00Z"
+          "startDate": "2022-10-09T00:00:00Z",
+          "endDate": "2022-11-14T00:00:00Z"
         }
       ],
       "roomTypePoints": {
@@ -257,16 +273,16 @@
     {
       "dateRanges": [
         {
-          "startDate": "2023-02-26T00:00:00Z",
-          "endDate": "2023-03-30T00:00:00Z"
+          "startDate": "2022-02-27T00:00:00Z",
+          "endDate": "2022-04-07T00:00:00Z"
         },
         {
-          "startDate": "2023-08-14T00:00:00Z",
-          "endDate": "2023-09-02T00:00:00Z"
+          "startDate": "2022-08-15T00:00:00Z",
+          "endDate": "2022-09-03T00:00:00Z"
         },
         {
-          "startDate": "2023-11-21T00:00:00Z",
-          "endDate": "2023-11-25T00:00:00Z"
+          "startDate": "2022-11-22T00:00:00Z",
+          "endDate": "2022-11-26T00:00:00Z"
         }
       ],
       "roomTypePoints": {
@@ -335,24 +351,24 @@
     {
       "dateRanges": [
         {
-          "startDate": "2023-01-01T00:00:00Z",
-          "endDate": "2023-01-05T00:00:00Z"
+          "startDate": "2022-01-01T00:00:00Z",
+          "endDate": "2022-01-01T00:00:00Z"
         },
         {
-          "startDate": "2023-03-31T00:00:00Z",
-          "endDate": "2023-04-15T00:00:00Z"
+          "startDate": "2022-04-08T00:00:00Z",
+          "endDate": "2022-04-23T00:00:00Z"
         },
         {
-          "startDate": "2023-04-29T00:00:00Z",
-          "endDate": "2023-05-05T00:00:00Z"
+          "startDate": "2022-04-29T00:00:00Z",
+          "endDate": "2022-05-05T00:00:00Z"
         },
         {
-          "startDate": "2023-06-26T00:00:00Z",
-          "endDate": "2023-08-13T00:00:00Z"
+          "startDate": "2022-06-27T00:00:00Z",
+          "endDate": "2022-08-14T00:00:00Z"
         },
         {
-          "startDate": "2023-12-22T00:00:00Z",
-          "endDate": "2023-12-31T00:00:00Z"
+          "startDate": "2022-12-23T00:00:00Z",
+          "endDate": "2022-12-31T00:00:00Z"
         }
       ],
       "roomTypePoints": {

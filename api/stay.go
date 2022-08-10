@@ -2,6 +2,7 @@ package api
 
 import (
 	"dvccalc/chart"
+	"dvccalc/model"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -16,7 +17,7 @@ const (
 )
 
 func stayRangeValidator(sl validator.StructLevel) {
-	stay, ok := sl.Current().Interface().(chart.Stay)
+	stay, ok := sl.Current().Interface().(model.Stay)
 	if !ok {
 		log.Printf("cant get stay struct")
 		return
@@ -52,7 +53,7 @@ func ReportErrors(err error) gin.H {
 }
 
 func GetStay(context *gin.Context) {
-	var stay chart.Stay
+	var stay model.Stay
 	if err := context.ShouldBindUri(&stay); err != nil {
 		context.JSON(http.StatusBadRequest, ReportErrors(err))
 		return

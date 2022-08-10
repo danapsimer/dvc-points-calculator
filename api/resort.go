@@ -2,20 +2,23 @@ package api
 
 import (
 	"dvccalc/chart"
+	"dvccalc/db"
+	"dvccalc/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 type resortQuery struct {
 	ResortCode string `json:"resortCode" uri:"resortCode" binding:"required"`
-	Year       int    `json:"year" uri:"year" binding:"required,len=4"`
+	Year       string `json:"year" uri:"year" binding:"required,number,len=4"`
 }
 
 type resortInfo struct {
 	resortQuery
 	ResortName string           `json:"resortName"`
-	RoomTypes  []chart.RoomType `json:"roomTypes"`
+	RoomTypes  []model.RoomType `json:"roomTypes"`
 }
 
 func GetResort(context *gin.Context) {
@@ -24,7 +27,8 @@ func GetResort(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, ReportErrors(err))
 		return
 	}
-	pc, err := chart.LoadPointChartByCodeAndYear(context, rq.ResortCode, rq.Year)
+	year, _ := strconv.Atoi(rq.Year)
+	pc, err := db.GetPointChart(context, rq.ResortCode, year)
 	if err != nil {
 		if strings.HasPrefix(err.Error(), chart.ErrorChartNotFound) {
 			context.JSON(http.StatusNotFound, ReportErrors(err))

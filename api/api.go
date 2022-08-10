@@ -1,7 +1,8 @@
 package api
 
 import (
-	"dvccalc/chart"
+	"dvccalc/db"
+	"dvccalc/model"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -44,7 +45,7 @@ var (
 func init() {
 	router = gin.Default()
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterStructValidation(stayRangeValidator, chart.Stay{})
+		v.RegisterStructValidation(stayRangeValidator, model.Stay{})
 	} else {
 		panic("unable to register validators")
 	}
@@ -53,7 +54,7 @@ func init() {
 }
 
 func Start() error {
-	err := chart.InitDatastore(config.GoogleProjectID, config.GoogleCredentialsFile)
+	err := db.InitDatastore(config.GoogleProjectID, config.GoogleCredentialsFile)
 	if err != nil {
 		return fmt.Errorf("error while initializing google datastore: %+v", err)
 	}

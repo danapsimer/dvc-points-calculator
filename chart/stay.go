@@ -2,48 +2,34 @@ package chart
 
 import (
 	"context"
+	"dvccalc/db"
+	"dvccalc/model"
 	"fmt"
 	"time"
 )
 
 var (
 	ErrorChartNotFound = "chart not found"
+	Resorts            = []string{
+		"ssr",
+		"aul",
+	}
 )
 
-type Stay struct {
-	From           time.Time `json:"from" uri:"from" binding:"required,ltefield=To" time_format:"2006-01-02" time_utc:"1"`
-	To             time.Time `json:"to" uri:"to" binding:"required" time_format:"2006-01-02" time_utc:"1"`
-	IncludeResorts []string  `json:"includeResorts" form:"incResort"`
-	ExcludeResorts []string  `json:"excludeResorts" form:"exResort"`
+func NewStayResult(stay *model.Stay) *model.StayResult {
+	return &model.StayResult{Stay: *stay, Rooms: make(map[string]map[string]int)}
 }
 
-type StayResult struct {
-	Stay
-	Rooms map[string]map[string]int `json:"rooms"`
-}
-
-func NewStayResult(stay *Stay) *StayResult {
-	return &StayResult{*stay, make(map[string]map[string]int)}
-}
-
-func (sr *StayResult) addPoints(resort, roomType string, points int) {
-	if sr.Rooms[resort] == nil {
-		sr.Rooms[resort] = make(map[string]int)
-	}
-	sr.Rooms[resort][roomType] += points
-}
-
-func (sr *StayResult) mergeResults(results ...*StayResult) {
-	for _, result := range results {
-		for resort, resortPoints := range result.Rooms {
-			for roomType, roomTypePoints := range resortPoints {
-				sr.addPoints(resort, roomType, roomTypePoints)
-			}
+func contains[E comparable](v []E, find E) bool {
+	for _, e := range v {
+		if e == find {
+			return true
 		}
 	}
+	return false
 }
 
-func StayQuery(ctx context.Context, stay *Stay) (*StayResult, error) {
+func StayQuery(ctx context.Context, stay *model.Stay) (*model.StayResult, error) {
 	result := NewStayResult(stay)
 	if !stay.To.After(stay.From) {
 		return nil, fmt.Errorf("to date must be strictly after from date: %v - %v is not a valid date range",
@@ -67,7 +53,7 @@ func StayQuery(ctx context.Context, stay *Stay) (*StayResult, error) {
 		if err != nil {
 			return nil, err
 		}
-		result.mergeResults(result1, result2)
+		result.MergeResults(result1, result2)
 	} else {
 		resortsToSearch := make([]string, len(Resorts))
 		copy(resortsToSearch, Resorts)
@@ -82,10 +68,10 @@ func StayQuery(ctx context.Context, stay *Stay) (*StayResult, error) {
 			}
 		}
 		for _, resortCode := range resortsToSearch {
-			chart, err := LoadPointChartByCodeAndYear(ctx, resortCode, stay.From.Year())
+			chart, err := db.GetPointChart(ctx, resortCode, stay.From.Year())
 			if err != nil {
 				return nil, err
-			} else {
+			} else if chart != nil {
 				result.Rooms[resortCode], err = chart.GetPointsForStay(stay)
 				if err != nil {
 					return nil, fmt.Errorf("error calculating points for a stay: %+v - %+v", stay, err)
