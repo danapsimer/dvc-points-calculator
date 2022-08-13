@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
+	"net/http"
 )
 
 // GET /stay/:from/:to?resort=<resort list>
@@ -50,7 +51,21 @@ func init() {
 		panic("unable to register validators")
 	}
 	router.GET("/stay/:from/:to", GetStay)
+	router.GET("/resort", GetResorts)
+	router.POST("/resort", notImplemented)
+	router.GET("/resort/:resortCode", GetResort)
+	router.PUT("/resort/:resortCode", UpdateResort)
+	router.DELETE("/resort/:resortCode", notImplemented)
 	router.GET("/resort/:resortCode/:year", GetResort)
+	router.GET("/chart", notImplemented)
+	router.GET("/chart/:resortCode", notImplemented)
+	router.GET("/chart/:resortCode/:year", notImplemented)
+	router.PUT("/chart/:resortCode/:year", notImplemented)
+	router.DELETE("/chart/:resortCode/:year", notImplemented)
+}
+
+func notImplemented(context *gin.Context) {
+	context.JSON(http.StatusNotImplemented, gin.H{"msg": fmt.Sprintf("%s not implemented", context.FullPath())})
 }
 
 func Start() error {

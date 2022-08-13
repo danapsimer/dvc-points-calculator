@@ -15,6 +15,15 @@ var (
 	pointCharts     map[string]map[int]*model.PointChart
 )
 
+func InitDatastore(projectId, credentialFile string) (err error) {
+	ctx := context.Background()
+	dataStoreClient, err = datastore.NewClient(ctx, projectId, option.WithCredentialsFile(credentialFile))
+	if err != nil {
+		err = fmt.Errorf("error creating new client: %+v", err)
+	}
+	return
+}
+
 func AddPointChart(c *model.PointChart) {
 	if pointCharts == nil {
 		pointCharts = make(map[string]map[int]*model.PointChart)
@@ -51,15 +60,6 @@ func GetPointChart(ctx context.Context, code string, year int) (*model.PointChar
 	return chart, nil
 }
 
-func InitDatastore(projectId, credentialFile string) (err error) {
-	ctx := context.Background()
-	dataStoreClient, err = datastore.NewClient(ctx, projectId, option.WithCredentialsFile(credentialFile))
-	if err != nil {
-		err = fmt.Errorf("error creating new client: %+v", err)
-	}
-	return
-}
-
 type pointChartRecord struct {
 	ResortCode string `json:"resortCode" datastore:"resortCode"`
 	ResortName string `json:"resortName" datastore:"resortName"`
@@ -88,6 +88,25 @@ func loadPointChartByCodeAndYear(ctx context.Context, resortCode string, year in
 		return pc, nil
 	}
 	return nil, fmt.Errorf("chart not found %s - %d", resortCode, year)
+}
+
+func loadPointChartsByCode(ctx context.Context, resortCode string) ([]*model.PointChart, error) {
+	query := datastore.NewQuery("PointChart").
+		FilterField("resortCode", "=", resortCode)
+	charts := make([]*pointChartRecord, 0)
+	_, err := dataStoreClient.GetAll(ctx, query, &charts)
+	if err != nil {
+		return nil, fmt.Errorf("query failed for %s: %+v", resortCode, err)
+	}
+	result := make([]*model.PointChart, 0, len(charts))
+	for _, pointChart := range charts {
+		pc, err := model.ReadPointChart(bytes.NewBuffer(pointChart.Chart))
+		if err != nil {
+			return nil, fmt.Errorf("point chart parsing failed for %s - %d: %+v", resortCode, pc.Year, err)
+		}
+		result = append(result, pc)
+	}
+	return result, nil
 }
 
 func SavePointChart(ctx context.Context, chart *model.PointChart) error {

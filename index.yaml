@@ -1,0 +1,6 @@
+indexes:
+  - kind: PointChart
+    ancestor: no
+    properties:
+      - name: resortCode
+      - name: resortName

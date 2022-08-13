@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "admin": "libs/admin",
+    "data": "libs/data",
+    "points": "apps/points",
+    "points-e2e": "apps/points-e2e",
+    "proxy": "libs/proxy"
+  }
+}

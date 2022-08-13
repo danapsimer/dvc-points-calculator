@@ -1,0 +1,22 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/proxy/src",
+  "prefix": "ui",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/proxy"],
+      "options": {
+        "jestConfig": "libs/proxy/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/proxy/**/*.ts", "libs/proxy/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

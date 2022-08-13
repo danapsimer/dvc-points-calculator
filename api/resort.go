@@ -21,6 +21,11 @@ type resortInfo struct {
 	RoomTypes  []*model.RoomType `json:"roomTypes"`
 }
 
+type updateResort struct {
+	Code string `json:"-" uri:"resortCode" binding:"required"`
+	Name string `json:"name"`
+}
+
 func GetResort(context *gin.Context) {
 	rq := &resortQuery{}
 	if err := context.BindUri(rq); err != nil {
@@ -39,4 +44,35 @@ func GetResort(context *gin.Context) {
 	}
 	result := &resortInfo{*rq, pc.Resort, pc.RoomTypes}
 	context.JSON(http.StatusOK, result)
+}
+
+func GetResorts(context *gin.Context) {
+	resorts, err := db.GetResortList(context)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, ReportErrors(err))
+		return
+	}
+	context.JSON(http.StatusOK, resorts)
+}
+
+func UpdateResort(context *gin.Context) {
+	ur := &updateResort{}
+	if err := context.BindUri(ur); err != nil {
+		context.JSON(http.StatusBadRequest, ReportErrors(err))
+		return
+	}
+	if err := context.BindJSON(ur); err != nil {
+		context.JSON(http.StatusBadRequest, ReportErrors(err))
+	}
+	resort := &model.Resort{
+		Code: ur.Code,
+		Name: ur.Name,
+	}
+	var err error
+	resort, err = db.UpdateResort(context, resort)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, ReportErrors(err))
+		return
+	}
+	context.JSON(http.StatusOK, resort)
 }

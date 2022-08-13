@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+type Resort struct {
+	Name string `json:"name"`
+	Code string `json:"code"`
+}
+
 type RoomType struct {
 	Name     string `json:"name"`
 	Code     string `json:"code"`
