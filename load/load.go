@@ -4,12 +4,15 @@ import (
 	"context"
 	"dvccalc/chart"
 	"dvccalc/db"
+	"dvccalc/load/dvcrental"
 	"dvccalc/model"
+	"flag"
 	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 var filepathRegexp = regexp.MustCompile(".*/([a-z]+)/(\\d{4}).json$")
@@ -46,12 +49,41 @@ func LoadPointCharts() error {
 	})
 }
 
+var (
+	GoogleProjectId       string
+	GoogleCredentialsFile string
+	SeasonsFileName       string
+	ResortsFileName       string
+	ResortCodes           string
+	Command               string
+)
+
+func init() {
+	flag.StringVar(&Command, "command", "", "-command=<command>  *Required*")
+	flag.StringVar(&GoogleProjectId, "projectId", "dvc-points-calculator-qa", "-projectId=<google project name>")
+	flag.StringVar(&GoogleCredentialsFile, "credentials", "./google-credentials.json", "-credentials=<google service account credentials>")
+	flag.StringVar(&SeasonsFileName, "seasonsFile", "./load/dvcrental/seasons.json", "-seasonsFile=<seasons file name>")
+	flag.StringVar(&ResortsFileName, "resortsFile", "./load/dvcrental/resorts.json", "-resortsFile=<resorts file name>")
+	flag.StringVar(&ResortCodes, "resortCodes", strings.Join(chart.Resorts, ","), "-resortCodes=<comma seperated list of resort codes>")
+}
+
 func main() {
-	err := db.InitDatastore("dvc-points-calculator-qa", "./google-credentials.json")
+	flag.Parse()
+
+	chart.Resorts = strings.Split(ResortCodes, ",")
+
+	err := db.InitDatastore(GoogleProjectId, GoogleCredentialsFile)
 	if err != nil {
 		panic(err)
 	}
-	err = LoadPointCharts()
+	switch Command {
+	case "loadFromLocalFiles":
+		err = LoadPointCharts()
+	case "loadFromDVCRentalFiles":
+		err = dvcrental.ConvertDVCRentalCharts(chart.Resorts, SeasonsFileName, ResortsFileName)
+	default:
+		flag.Usage()
+	}
 	if err != nil {
 		panic(err)
 	}

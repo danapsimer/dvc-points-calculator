@@ -17,8 +17,8 @@ type resortQuery struct {
 
 type resortInfo struct {
 	resortQuery
-	ResortName string           `json:"resortName"`
-	RoomTypes  []model.RoomType `json:"roomTypes"`
+	ResortName string            `json:"resortName"`
+	RoomTypes  []*model.RoomType `json:"roomTypes"`
 }
 
 func GetResort(context *gin.Context) {

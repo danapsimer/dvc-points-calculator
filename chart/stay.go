@@ -4,6 +4,7 @@ import (
 	"context"
 	"dvccalc/db"
 	"dvccalc/model"
+	"dvccalc/util"
 	"fmt"
 	"time"
 )
@@ -19,15 +20,6 @@ var (
 
 func NewStayResult(stay *model.Stay) *model.StayResult {
 	return &model.StayResult{Stay: *stay, Rooms: make(map[string]map[string]int)}
-}
-
-func contains[E comparable](v []E, find E) bool {
-	for _, e := range v {
-		if e == find {
-			return true
-		}
-	}
-	return false
 }
 
 func StayQuery(ctx context.Context, stay *model.Stay) (*model.StayResult, error) {
@@ -59,8 +51,8 @@ func StayQuery(ctx context.Context, stay *model.Stay) (*model.StayResult, error)
 		resortsToSearch := make([]string, len(Resorts))
 		copy(resortsToSearch, Resorts)
 		for idx := len(resortsToSearch) - 1; idx >= 0; idx-- {
-			if (stay.IncludeResorts != nil && !contains(stay.IncludeResorts, resortsToSearch[idx])) ||
-				(stay.ExcludeResorts != nil && contains(stay.ExcludeResorts, resortsToSearch[idx])) {
+			if (stay.IncludeResorts != nil && !util.Contains(stay.IncludeResorts, resortsToSearch[idx])) ||
+				(stay.ExcludeResorts != nil && util.Contains(stay.ExcludeResorts, resortsToSearch[idx])) {
 				if idx < len(resortsToSearch)-1 {
 					resortsToSearch = append(resortsToSearch[:idx], resortsToSearch[idx+1:]...)
 				} else {
