@@ -1,9 +1,9 @@
 package api
 
 import (
-	"dvccalc/chart"
-	"dvccalc/db"
-	"dvccalc/model"
+	"github.com/danapsimer/dvc-points-calculator/chart"
+	"github.com/danapsimer/dvc-points-calculator/db"
+	"github.com/danapsimer/dvc-points-calculator/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"

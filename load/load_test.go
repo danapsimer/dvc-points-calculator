@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"dvccalc/chart"
-	"dvccalc/db"
-	"dvccalc/load/dvcrental"
 	"fmt"
+	"github.com/danapsimer/dvc-points-calculator/chart"
+	"github.com/danapsimer/dvc-points-calculator/db"
+	"github.com/danapsimer/dvc-points-calculator/load/dvcrental"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"strconv"

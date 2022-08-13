@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dvccalc/api"
+	"github.com/danapsimer/dvc-points-calculator/api"
 	"log"
 )
 

@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"cloud.google.com/go/datastore"
 	"context"
-	"dvccalc/model"
 	"encoding/json"
 	"fmt"
+	"github.com/danapsimer/dvc-points-calculator/model"
 	"google.golang.org/api/option"
 )
 

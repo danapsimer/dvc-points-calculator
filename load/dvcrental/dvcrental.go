@@ -3,11 +3,11 @@ package dvcrental
 import (
 	"bytes"
 	"context"
-	"dvccalc/db"
-	"dvccalc/model"
-	"dvccalc/util"
 	"encoding/json"
 	"fmt"
+	"github.com/danapsimer/dvc-points-calculator/db"
+	"github.com/danapsimer/dvc-points-calculator/model"
+	"github.com/danapsimer/dvc-points-calculator/util"
 	"os"
 	"sort"
 	"strconv"
@@ -17,7 +17,7 @@ import (
 var (
 	DVCRentalResortNameToCode = map[string]string{
 		"animal_kingdom_villas": "akv",
-		"aulani":                "aus",
+		"aulani":                "aul",
 		"bay_lake_tower":        "blt",
 		"beach_club_villas":     "bcv",
 		"boardwalk_villas":      "bwv",
@@ -34,7 +34,7 @@ var (
 	}
 	ResortCodeToDVCRentalResortName = map[string]string{
 		"akv": "animal_kingdom_villas",
-		"aus": "aulani",
+		"aul": "aulani",
 		"blt": "bay_lake_tower",
 		"bcv": "beach_club_villas",
 		"bwv": "boardwalk_villas",

@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"dvccalc/chart"
-	"dvccalc/db"
-	"dvccalc/load/dvcrental"
-	"dvccalc/model"
 	"flag"
 	"fmt"
+	"github.com/danapsimer/dvc-points-calculator/chart"
+	"github.com/danapsimer/dvc-points-calculator/db"
+	"github.com/danapsimer/dvc-points-calculator/load/dvcrental"
+	"github.com/danapsimer/dvc-points-calculator/model"
 	"io/fs"
 	"os"
 	"path/filepath"

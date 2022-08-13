@@ -2,19 +2,31 @@ package chart
 
 import (
 	"context"
-	"dvccalc/db"
-	"dvccalc/model"
-	"dvccalc/util"
 	"fmt"
+	"github.com/danapsimer/dvc-points-calculator/db"
+	"github.com/danapsimer/dvc-points-calculator/model"
+	"github.com/danapsimer/dvc-points-calculator/util"
 	"time"
 )
 
 var (
 	ErrorChartNotFound = "chart not found"
 	Resorts            = []string{
-		"ssr",
+		"akv",
 		"aul",
 		"blt",
+		"bcv",
+		"bwv",
+		"brv",
+		"ccv",
+		"gcv",
+		"gfv",
+		"hhr",
+		"okw",
+		"pvv",
+		"riv",
+		"ssr",
+		"vbr",
 	}
 )
 

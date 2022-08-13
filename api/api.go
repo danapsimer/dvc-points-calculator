@@ -1,9 +1,9 @@
 package api
 
 import (
-	"dvccalc/db"
-	"dvccalc/model"
 	"fmt"
+	"github.com/danapsimer/dvc-points-calculator/db"
+	"github.com/danapsimer/dvc-points-calculator/model"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
