@@ -17,6 +17,7 @@
     "paths": {
       "@ui/admin": ["libs/admin/src/index.ts"],
       "@ui/data": ["libs/data/src/index.ts"],
+      "@ui/model": ["libs/model/src/index.ts"],
       "@ui/proxy": ["libs/proxy/src/index.ts"]
     }
   },
