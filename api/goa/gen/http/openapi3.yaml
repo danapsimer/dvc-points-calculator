@@ -6,36 +6,156 @@ info:
 servers:
     - url: http://localhost:8080
 paths:
-    /resort:
+    /chart/{resortCode}/{year}:
         get:
             tags:
-                - dvcPointsCalculator
-            summary: GetResorts dvcPointsCalculator
-            operationId: dvcPointsCalculator#GetResorts
+                - Points
+            summary: GetPointChart Points
+            operationId: Points#GetPointChart
+            parameters:
+                - name: resortCode
+                  in: path
+                  description: the resort's code
+                  required: true
+                  schema:
+                    type: string
+                    description: the resort's code
+                    example: ssr
+                    pattern: '[a-z]{3}'
+                  example: ssr
+                - name: year
+                  in: path
+                  description: the year
+                  required: true
+                  schema:
+                    type: integer
+                    description: the year
+                    example: 2012
+                    minimum: 1990
+                    maximum: 2100
+                  example: 2066
             responses:
                 "200":
                     description: OK response.
                     content:
                         application/json:
                             schema:
-                                description: 'Response body may alternatively be one of #/components/schemas/DvcpointcalculatorResortResponseResortOnlyCollection or #/components/schemas/DvcpointcalculatorResortResponseResortUpdateCollection'
-                                $ref: '#/components/schemas/DvcpointcalculatorResortCollection'
+                                $ref: '#/components/schemas/PointChart'
+                            example:
+                                code: ssr
+                                resort: Disney's Saratoga Springs Resort & Spa
+                                roomTypes:
+                                    - bedrooms: 1
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
+                                    - bedrooms: 1
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
+                                    - bedrooms: 1
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
+                                tiers:
+                                    - dateRanges:
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                      roomTypePoints:
+                                        Labore blanditiis maiores omnis rerum qui.:
+                                            weekday: 4919755634042695143
+                                            weekend: 8366663380085310400
+                                        Voluptatum nemo molestias eaque.:
+                                            weekday: 4919755634042695143
+                                            weekend: 8366663380085310400
+                                    - dateRanges:
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                      roomTypePoints:
+                                        Labore blanditiis maiores omnis rerum qui.:
+                                            weekday: 4919755634042695143
+                                            weekend: 8366663380085310400
+                                        Voluptatum nemo molestias eaque.:
+                                            weekday: 4919755634042695143
+                                            weekend: 8366663380085310400
+                                    - dateRanges:
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                      roomTypePoints:
+                                        Labore blanditiis maiores omnis rerum qui.:
+                                            weekday: 4919755634042695143
+                                            weekend: 8366663380085310400
+                                        Voluptatum nemo molestias eaque.:
+                                            weekday: 4919755634042695143
+                                            weekend: 8366663380085310400
+                                    - dateRanges:
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                        - endDate: Burley Hane
+                                          startDate: Lexus Tillman
+                                      roomTypePoints:
+                                        Labore blanditiis maiores omnis rerum qui.:
+                                            weekday: 4919755634042695143
+                                            weekend: 8366663380085310400
+                                        Voluptatum nemo molestias eaque.:
+                                            weekday: 4919755634042695143
+                                            weekend: 8366663380085310400
+                "404":
+                    description: 'not_found: Not Found response.'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    /resort:
+        get:
+            tags:
+                - Points
+            summary: GetResorts Points
+            operationId: Points#GetResorts
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                description: 'Response body may alternatively be one of #/components/schemas/ResortResultResponseResortOnlyCollection or #/components/schemas/ResortResultResponseResortUpdateCollection'
+                                $ref: '#/components/schemas/ResortResultCollection'
                             example:
                                 - code: ssr
                                   name: Disney's Saratoga Springs Resort & Spa
                                   roomTypes:
                                     - bedrooms: 1
-                                      beds: 3
+                                      beds: 2
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
                                     - bedrooms: 1
-                                      beds: 3
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 3
+                                      beds: 2
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
@@ -43,62 +163,21 @@ paths:
                                   name: Disney's Saratoga Springs Resort & Spa
                                   roomTypes:
                                     - bedrooms: 1
-                                      beds: 3
+                                      beds: 2
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
                                     - bedrooms: 1
-                                      beds: 3
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 3
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                - code: ssr
-                                  name: Disney's Saratoga Springs Resort & Spa
-                                  roomTypes:
-                                    - bedrooms: 1
-                                      beds: 3
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 3
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 3
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                - code: ssr
-                                  name: Disney's Saratoga Springs Resort & Spa
-                                  roomTypes:
-                                    - bedrooms: 1
-                                      beds: 3
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 3
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 3
+                                      beds: 2
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
     /resort/{resortCode}:
         get:
             tags:
-                - dvcPointsCalculator
-            summary: GetResort dvcPointsCalculator
-            operationId: dvcPointsCalculator#GetResort
+                - Points
+            summary: GetResort Points
+            operationId: Points#GetResort
             parameters:
                 - name: resortCode
                   in: path
@@ -116,19 +195,24 @@ paths:
                     content:
                         application/json:
                             schema:
-                                description: 'Response body may alternatively be one of #/components/schemas/DvcpointcalculatorResortResponseResortOnly or #/components/schemas/DvcpointcalculatorResortResponseResortUpdate'
-                                $ref: '#/components/schemas/DvcpointcalculatorResort'
+                                description: 'Response body may alternatively be one of #/components/schemas/ResortResultResponseResortOnly or #/components/schemas/ResortResultResponseResortUpdate'
+                                $ref: '#/components/schemas/ResortResult'
                             example:
                                 code: ssr
                                 name: Disney's Saratoga Springs Resort & Spa
                                 roomTypes:
                                     - bedrooms: 1
-                                      beds: 3
+                                      beds: 2
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
                                     - bedrooms: 1
-                                      beds: 3
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
+                                    - bedrooms: 1
+                                      beds: 2
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
@@ -138,9 +222,239 @@ paths:
                         application/vnd.goa.error:
                             schema:
                                 $ref: '#/components/schemas/Error'
+    /resort/{resortCode}/year/{year}:
+        get:
+            tags:
+                - Points
+            summary: GetResortYear Points
+            operationId: Points#GetResortYear
+            parameters:
+                - name: resortCode
+                  in: path
+                  description: the resort's code
+                  required: true
+                  schema:
+                    type: string
+                    description: the resort's code
+                    example: ssr
+                    pattern: '[a-z]{3}'
+                  example: ssr
+                - name: year
+                  in: path
+                  description: the year
+                  required: true
+                  schema:
+                    type: integer
+                    description: the year
+                    example: 2061
+                    minimum: 1990
+                    maximum: 2100
+                  example: 2037
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ResortYearResult'
+                            example:
+                                code: ssr
+                                name: Disney's Saratoga Springs Resort & Spa
+                                roomTypes:
+                                    - bedrooms: 1
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
+                                    - bedrooms: 1
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
+                                    - bedrooms: 1
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
+                                    - bedrooms: 1
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
+                                year: 2054
+                "404":
+                    description: 'not_found: Not Found response.'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
 components:
     schemas:
-        DvcpointcalculatorResort:
+        Error:
+            type: object
+            properties:
+                fault:
+                    type: boolean
+                    description: Is the error a server-side fault?
+                    example: false
+                id:
+                    type: string
+                    description: ID is a unique identifier for this particular occurrence of the problem.
+                    example: 123abc
+                message:
+                    type: string
+                    description: Message is a human-readable explanation specific to this occurrence of the problem.
+                    example: parameter 'p' must be an integer
+                name:
+                    type: string
+                    description: Name is the name of this class of errors.
+                    example: bad_request
+                temporary:
+                    type: boolean
+                    description: Is the error temporary?
+                    example: true
+                timeout:
+                    type: boolean
+                    description: Is the error a timeout?
+                    example: false
+            example:
+                id: 3F1FKVRR
+                message: Value of ID must be an integer
+                name: bad_request
+            required:
+                - name
+                - id
+                - message
+                - temporary
+                - timeout
+                - fault
+        PointChart:
+            type: object
+            properties:
+                code:
+                    type: string
+                    description: resort's code
+                    example: ssr
+                    pattern: '[a-z]{3}'
+                resort:
+                    type: string
+                    description: resort's code
+                    example: Disney's Saratoga Springs Resort & Spa
+                roomTypes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RoomType'
+                    example:
+                        - bedrooms: 1
+                          beds: 2
+                          code: 1bp
+                          name: One Bedroom Villa (Preferred View)
+                          sleeps: 5
+                        - bedrooms: 1
+                          beds: 2
+                          code: 1bp
+                          name: One Bedroom Villa (Preferred View)
+                          sleeps: 5
+                        - bedrooms: 1
+                          beds: 2
+                          code: 1bp
+                          name: One Bedroom Villa (Preferred View)
+                          sleeps: 5
+                tiers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Tier'
+                    example:
+                        - dateRanges:
+                            - endDate: Burley Hane
+                              startDate: Lexus Tillman
+                            - endDate: Burley Hane
+                              startDate: Lexus Tillman
+                            - endDate: Burley Hane
+                              startDate: Lexus Tillman
+                            - endDate: Burley Hane
+                              startDate: Lexus Tillman
+                          roomTypePoints:
+                            Labore blanditiis maiores omnis rerum qui.:
+                                weekday: 4919755634042695143
+                                weekend: 8366663380085310400
+                            Voluptatum nemo molestias eaque.:
+                                weekday: 4919755634042695143
+                                weekend: 8366663380085310400
+                        - dateRanges:
+                            - endDate: Burley Hane
+                              startDate: Lexus Tillman
+                            - endDate: Burley Hane
+                              startDate: Lexus Tillman
+                            - endDate: Burley Hane
+                              startDate: Lexus Tillman
+                            - endDate: Burley Hane
+                              startDate: Lexus Tillman
+                          roomTypePoints:
+                            Labore blanditiis maiores omnis rerum qui.:
+                                weekday: 4919755634042695143
+                                weekend: 8366663380085310400
+                            Voluptatum nemo molestias eaque.:
+                                weekday: 4919755634042695143
+                                weekend: 8366663380085310400
+            example:
+                code: ssr
+                resort: Disney's Saratoga Springs Resort & Spa
+                roomTypes:
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                tiers:
+                    - dateRanges:
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                      roomTypePoints:
+                        Labore blanditiis maiores omnis rerum qui.:
+                            weekday: 4919755634042695143
+                            weekend: 8366663380085310400
+                        Voluptatum nemo molestias eaque.:
+                            weekday: 4919755634042695143
+                            weekend: 8366663380085310400
+                    - dateRanges:
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                      roomTypePoints:
+                        Labore blanditiis maiores omnis rerum qui.:
+                            weekday: 4919755634042695143
+                            weekend: 8366663380085310400
+                        Voluptatum nemo molestias eaque.:
+                            weekday: 4919755634042695143
+                            weekend: 8366663380085310400
+        ResortResult:
             type: object
             properties:
                 code:
@@ -158,22 +472,12 @@ components:
                         $ref: '#/components/schemas/RoomType'
                     example:
                         - bedrooms: 1
-                          beds: 3
+                          beds: 2
                           code: 1bp
                           name: One Bedroom Villa (Preferred View)
                           sleeps: 5
                         - bedrooms: 1
-                          beds: 3
-                          code: 1bp
-                          name: One Bedroom Villa (Preferred View)
-                          sleeps: 5
-                        - bedrooms: 1
-                          beds: 3
-                          code: 1bp
-                          name: One Bedroom Villa (Preferred View)
-                          sleeps: 5
-                        - bedrooms: 1
-                          beds: 3
+                          beds: 2
                           code: 1bp
                           name: One Bedroom Villa (Preferred View)
                           sleeps: 5
@@ -182,35 +486,30 @@ components:
                 name: Disney's Saratoga Springs Resort & Spa
                 roomTypes:
                     - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
                     - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
-        DvcpointcalculatorResortCollection:
+        ResortResultCollection:
             type: array
             items:
-                $ref: '#/components/schemas/DvcpointcalculatorResort'
+                $ref: '#/components/schemas/ResortResult'
             example:
                 - code: ssr
                   name: Disney's Saratoga Springs Resort & Spa
                   roomTypes:
                     - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
                     - bedrooms: 1
-                      beds: 3
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
@@ -218,17 +517,12 @@ components:
                   name: Disney's Saratoga Springs Resort & Spa
                   roomTypes:
                     - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
                     - bedrooms: 1
-                      beds: 3
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
@@ -236,17 +530,12 @@ components:
                   name: Disney's Saratoga Springs Resort & Spa
                   roomTypes:
                     - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
                     - bedrooms: 1
-                      beds: 3
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
@@ -254,21 +543,16 @@ components:
                   name: Disney's Saratoga Springs Resort & Spa
                   roomTypes:
                     - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
                     - bedrooms: 1
-                      beds: 3
+                      beds: 2
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
-                    - bedrooms: 1
-                      beds: 3
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-        DvcpointcalculatorResortResponseResortOnly:
+        ResortResultResponseResortOnly:
             type: object
             properties:
                 code:
@@ -280,15 +564,15 @@ components:
                     type: string
                     description: resort's name
                     example: Disney's Saratoga Springs Resort & Spa
-            description: DvcpointcalculatorResortResponse result type (resortOnly view)
+            description: ResortResultResponse result type (resortOnly view)
             example:
                 code: ssr
                 name: Disney's Saratoga Springs Resort & Spa
-        DvcpointcalculatorResortResponseResortOnlyCollection:
+        ResortResultResponseResortOnlyCollection:
             type: array
             items:
-                $ref: '#/components/schemas/DvcpointcalculatorResortResponseResortOnly'
-            description: GetResortsResponseBody is the result type for an array of DvcpointcalculatorResortResponse (resortOnly view)
+                $ref: '#/components/schemas/ResortResultResponseResortOnly'
+            description: GetResortsResponseBody is the result type for an array of ResortResultResponse (resortOnly view)
             example:
                 - code: ssr
                   name: Disney's Saratoga Springs Resort & Spa
@@ -298,62 +582,84 @@ components:
                   name: Disney's Saratoga Springs Resort & Spa
                 - code: ssr
                   name: Disney's Saratoga Springs Resort & Spa
-        DvcpointcalculatorResortResponseResortUpdate:
+        ResortResultResponseResortUpdate:
             type: object
             properties:
                 name:
                     type: string
                     description: resort's name
                     example: Disney's Saratoga Springs Resort & Spa
-            description: DvcpointcalculatorResortResponse result type (resortUpdate view)
+            description: ResortResultResponse result type (resortUpdate view)
             example:
                 name: Disney's Saratoga Springs Resort & Spa
-        DvcpointcalculatorResortResponseResortUpdateCollection:
+        ResortResultResponseResortUpdateCollection:
             type: array
             items:
-                $ref: '#/components/schemas/DvcpointcalculatorResortResponseResortUpdate'
-            description: GetResortsResponseBody is the result type for an array of DvcpointcalculatorResortResponse (resortUpdate view)
+                $ref: '#/components/schemas/ResortResultResponseResortUpdate'
+            description: GetResortsResponseBody is the result type for an array of ResortResultResponse (resortUpdate view)
             example:
                 - name: Disney's Saratoga Springs Resort & Spa
                 - name: Disney's Saratoga Springs Resort & Spa
-        Error:
+                - name: Disney's Saratoga Springs Resort & Spa
+                - name: Disney's Saratoga Springs Resort & Spa
+        ResortYearResult:
             type: object
             properties:
-                fault:
-                    type: boolean
-                    description: Is the error a server-side fault?
-                    example: true
-                id:
+                code:
                     type: string
-                    description: ID is a unique identifier for this particular occurrence of the problem.
-                    example: 123abc
-                message:
-                    type: string
-                    description: Message is a human-readable explanation specific to this occurrence of the problem.
-                    example: parameter 'p' must be an integer
+                    description: resort's code
+                    example: ssr
+                    pattern: '[a-z]{3}'
                 name:
                     type: string
-                    description: Name is the name of this class of errors.
-                    example: bad_request
-                temporary:
-                    type: boolean
-                    description: Is the error temporary?
-                    example: false
-                timeout:
-                    type: boolean
-                    description: Is the error a timeout?
-                    example: false
+                    description: resort's name
+                    example: Disney's Saratoga Springs Resort & Spa
+                roomTypes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RoomType'
+                    example:
+                        - bedrooms: 1
+                          beds: 2
+                          code: 1bp
+                          name: One Bedroom Villa (Preferred View)
+                          sleeps: 5
+                        - bedrooms: 1
+                          beds: 2
+                          code: 1bp
+                          name: One Bedroom Villa (Preferred View)
+                          sleeps: 5
+                        - bedrooms: 1
+                          beds: 2
+                          code: 1bp
+                          name: One Bedroom Villa (Preferred View)
+                          sleeps: 5
+                year:
+                    type: integer
+                    description: the year the resort info is for.
+                    example: 2030
+                    minimum: 1990
+                    maximum: 2100
             example:
-                id: 3F1FKVRR
-                message: Value of ID must be an integer
-                name: bad_request
-            required:
-                - name
-                - id
-                - message
-                - temporary
-                - timeout
-                - fault
+                code: ssr
+                name: Disney's Saratoga Springs Resort & Spa
+                roomTypes:
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                year: 2091
         RoomType:
             type: object
             properties:
@@ -361,12 +667,14 @@ components:
                     type: integer
                     description: number of bedrooms
                     example: 1
-                    format: int64
+                    minimum: 0
+                    maximum: 3
                 beds:
                     type: integer
                     description: number of beds
-                    example: 3
-                    format: int64
+                    example: 2
+                    minimum: 2
+                    maximum: 6
                 code:
                     type: string
                     description: room type's code
@@ -380,13 +688,87 @@ components:
                     type: integer
                     description: max room capacity
                     example: 5
-                    format: int64
+                    minimum: 1
+                    maximum: 12
             example:
                 bedrooms: 1
-                beds: 3
+                beds: 2
                 code: 1bp
                 name: One Bedroom Villa (Preferred View)
                 sleeps: 5
+        Tier:
+            type: object
+            properties:
+                dateRanges:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TierDateRange'
+                    example:
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                        - endDate: Burley Hane
+                          startDate: Lexus Tillman
+                roomTypePoints:
+                    type: object
+                    example:
+                        Aut ut qui illum rem.:
+                            weekday: 4919755634042695143
+                            weekend: 8366663380085310400
+                        Odio enim et earum adipisci eveniet.:
+                            weekday: 4919755634042695143
+                            weekend: 8366663380085310400
+                        Porro reprehenderit.:
+                            weekday: 4919755634042695143
+                            weekend: 8366663380085310400
+                    additionalProperties:
+                        $ref: '#/components/schemas/TierRoomTypePoints'
+            example:
+                dateRanges:
+                    - endDate: Burley Hane
+                      startDate: Lexus Tillman
+                    - endDate: Burley Hane
+                      startDate: Lexus Tillman
+                    - endDate: Burley Hane
+                      startDate: Lexus Tillman
+                roomTypePoints:
+                    Et at eaque sint voluptas a est.:
+                        weekday: 4919755634042695143
+                        weekend: 8366663380085310400
+                    Exercitationem laboriosam quaerat ut qui.:
+                        weekday: 4919755634042695143
+                        weekend: 8366663380085310400
+        TierDateRange:
+            type: object
+            properties:
+                endDate:
+                    type: string
+                    description: end date
+                    example: Dr. Aaron Lynch
+                    pattern: \d{1,2}-\d{1,2}
+                startDate:
+                    type: string
+                    description: start date
+                    example: Soledad Marquardt
+                    pattern: \d{1,2}-\d{1,2}
+            example:
+                endDate: Katelin Lubowitz
+                startDate: Clinton Schuster
+        TierRoomTypePoints:
+            type: object
+            properties:
+                weekday:
+                    type: integer
+                    description: points for Sunday - Thursday
+                    example: 4946159708034512209
+                    format: int64
+                weekend:
+                    type: integer
+                    description: points for Friday - Saturday
+                    example: 9026934001391109552
+                    format: int64
+            example:
+                weekday: 2097965859461862812
+                weekend: 1976708767640607993
 tags:
-    - name: dvcPointsCalculator
+    - name: Points
       description: provides resources for manipulating resorts, point charts, and querying stays

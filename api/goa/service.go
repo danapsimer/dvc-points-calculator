@@ -1,17 +1,17 @@
 package goa
 
 import (
-	dvcpointscalculator "github.com/danapsimer/dvc-points-calculator/api/goa/gen/dvc_points_calculator"
-	"github.com/danapsimer/dvc-points-calculator/api/goa/gen/http/dvc_points_calculator/server"
+	"github.com/danapsimer/dvc-points-calculator/api/goa/gen/http/points/server"
+	"github.com/danapsimer/dvc-points-calculator/api/goa/gen/points"
 	"github.com/danapsimer/dvc-points-calculator/db"
 	"github.com/spf13/viper"
 	goahttp "goa.design/goa/v3/http"
 	"net/http"
 )
 
-type DVCPointsCalculatorService struct {
-	dvcpointscalculator.Service
-	// Implements the dvcpointscalculator.Service interface
+type Points struct {
+	points.Service
+	// Implements the points.Service interface
 	// The function definitions are is other files within this package.
 }
 
@@ -20,8 +20,8 @@ func Start() error {
 	if err != nil {
 		return err
 	}
-	s := &DVCPointsCalculatorService{}
-	endpoints := dvcpointscalculator.NewEndpoints(s)      // Create endpoints
+	s := &Points{}
+	endpoints := points.NewEndpoints(s)                   // Create endpoints
 	mux := goahttp.NewMuxer()                             // Create HTTP muxer
 	dec := goahttp.RequestDecoder                         // Set HTTP request decoder
 	enc := goahttp.ResponseEncoder                        // Set HTTP response encoder
