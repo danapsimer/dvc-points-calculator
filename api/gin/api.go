@@ -1,4 +1,4 @@
-package api
+package gin
 
 import (
 	"fmt"
@@ -53,10 +53,10 @@ func init() {
 	router.GET("/stay/:from/:to", GetStay)
 	router.GET("/resort", GetResorts)
 	router.POST("/resort", notImplemented)
-	router.GET("/resort/:resortCode", GetResort)
+	router.GET("/resort/:resortCode", notImplemented)
 	router.PUT("/resort/:resortCode", UpdateResort)
 	router.DELETE("/resort/:resortCode", notImplemented)
-	router.GET("/resort/:resortCode/:year", GetResort)
+	router.GET("/resort/:resortCode/year/:year", GetResortYear)
 	router.GET("/chart", notImplemented)
 	router.GET("/chart/:resortCode", notImplemented)
 	router.GET("/chart/:resortCode/:year", notImplemented)

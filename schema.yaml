@@ -1,0 +1,454 @@
+openapi: 3.0.0
+info:
+  description: "Web service for retireving and maintaining DVC Point Chart information"
+  version: 1.0.2
+  title: DVC Point Calculator
+  contact:
+    email: dana@dhptech.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: resort
+    description: resort information
+  - name: chart
+    description: retrieve chart information
+  - name: stay
+    description: Search for stays that fit your criteria
+paths:
+  /stay/{from}/{to}:
+    parameters:
+      - name: from
+        description: "the check-in date"
+        in: path
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: path
+        description: "the check-out date"
+        required: true
+        schema:
+          type: string
+          format: date
+    get:
+      tags:
+        - stay
+      summary: "Retieve point costs for specified stays."
+      description: "Using the criteria provided in the request, retrieve all matching resorts and room types, and calculate the point cost for each for the given dates."
+      operationId: queryStay
+      parameters:
+        - name: includeResorts
+          in: query
+          description: "a list of resorts to include"
+          schema:
+            $ref: '#/components/schemas/ResortCodeArray'
+        - name: excludeResorts
+          in: query
+          description: "a list of resorts to exclude"
+          schema:
+            $ref: '#/components/schemas/ResortCodeArray'
+        - name: minSleeps
+          in: query
+          description: "restrict to room types that sleep at least this many people"
+          schema:
+            $ref: '#/components/schemas/MinSleeps'
+        - name: maxSleeps
+          in: query
+          description: "restrict to room types that sleep at most this many people"
+          schema:
+            $ref: '#/components/schemas/MaxSleeps'
+        - name: minBedrooms
+          in: query
+          description: "restrict to room types that have at least this many bedrooms"
+          schema:
+            $ref: '#/components/schemas/MinBedrooms'
+        - name: maxBedrooms
+          in: query
+          description: "restrict to room types that have at most this many bedrooms"
+          schema:
+            $ref: '#/components/schemas/MaxBedrooms'
+        - name: minBeds
+          in: query
+          description: "restrict to room types that have at least this many beds"
+          schema:
+            $ref: '#/components/schemas/MinBeds'
+        - name: maxBeds
+          in: query
+          description: "restrict to room types that have at most this many beds"
+          schema:
+            $ref: '#/components/schemas/MaxBeds'
+      responses:
+        "200":
+          $ref: '#/components/responses/StayResponse'
+        "400":
+          $ref: '#/components/responses/ErrorResponse'
+        "500":
+          $ref: '#/components/responses/ErrorResponse'
+  /resort/{resortCode}/year/{year}:
+    parameters:
+      - name: resortCode
+        in: path
+        description: "the code for the resort"
+        required: true
+        schema:
+          $ref: '#/components/schemas/ResortCode'
+      - name: year
+        in: path
+        required: true
+        description: "the year of the chart to pull data from"
+        schema:
+          $ref: '#/components/schemas/Year'
+    get:
+      tags:
+        - resort
+      summary: "Retrieve resort information including room types."
+      description: "Retrieve resort information including room types. Since room types can change year over year, the year is needed to list room types."
+      operationId: getResortYear
+      responses:
+        "200":
+          $ref: '#/components/responses/ResortYearResponse'
+        "400":
+          $ref: '#/components/responses/ErrorResponse'
+  /resort:
+    post:
+      tags:
+        - resort
+      summary: "Create a new Resort"
+      description: "creates a new resort with an empty point chart for the current year."
+      operationId: addResort
+      requestBody:
+        $ref: "#/components/requestBodies/Resort"
+      responses:
+        "400":
+          description: Invalid input
+    get:
+      tags:
+        - resort
+      summary: "retrieve a list of all resorts information"
+      description: "Retrieves a list of all resorts"
+      operationId: getResorts
+      responses:
+        "200":
+          $ref: '#/components/responses/ResortListResponse'
+        "400":
+          $ref: '#/components/responses/ErrorResponse'
+  /resort/{resortCode}:
+    parameters:
+      - name: resortCode
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ResortCode'
+    put:
+      tags:
+        - resort
+      summary: "Update a resort's information"
+      description: "Updates only the resort information that is common to all charts"
+      operationId: updateResort
+      requestBody:
+        $ref: "#/components/requestBodies/Resort"
+      responses:
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Resort not found
+servers:
+  - url: "http://localhost:8080"
+    description: "local dev server"
+components:
+  requestBodies:
+    ResortArray:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Resort"
+      description: List of user object
+      required: true
+    Resort:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Resort"
+      description: Resort object
+      required: true
+    ResortUpdate:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Resort"
+  responses:
+    ErrorResponse:
+      description: "An error response"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ResortListResponse:
+      description: "contains a list of resorts"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResortArray'
+    ResortYearResponse:
+      description: "contains information about a resort and year"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Resort'
+    StayResponse:
+      description: "successfully found stays that match the criteria"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/StayResponse"
+  schemas:
+    Year:
+      description: "a year for a point chart"
+      type: integer
+      minimum: 1990
+      maximum: 2100
+    MonthDay:
+      description: "a representation of a month-day partial date"
+      type: string
+      pattern: '\d{1,2}-\d{1,2}'
+      minLength: 3
+      maxLength: 5
+    MinSleeps:
+      description: "restrict query to room types that sleep at least this number of people"
+      type: integer
+      minimum: 1
+      maximum: 12
+      default: 1
+    MaxSleeps:
+      description: "restrict query to room types that sleep no more than this number of people"
+      type: integer
+      minimum: 1
+      maximum: 12
+      default: 12
+    MinBedrooms:
+      description: "restrict query to room types that have at least this number of bedrooms"
+      type: integer
+      minimum: 1
+      maximum: 3
+      default: 1
+    MaxBedrooms:
+      description: "restrict query to room types that have no more than this number of bedrooms"
+      type: integer
+      minimum: 1
+      maximum: 3
+      default: 3
+    MinBeds:
+      description: "restrict query to room types that have at least this number of beds"
+      type: integer
+      minimum: 1
+      maximum: 5
+      default: 1
+    MaxBeds:
+      description: "restrict query to room types that have no more than this number of beds"
+      type: integer
+      minimum: 1
+      maximum: 5
+      default: 5
+    ResortCode:
+      description: "a resort code"
+      type: string
+      minLength: 3
+      maxLength: 3
+      example: "blt"
+      pattern: "[a-z]{3}"
+    ResortCodeArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResortCode'
+      xml:
+        name: resort
+        wrapped: true
+    Resort:
+      description: "a resort"
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/ResortCode'
+        name:
+          type: string
+        roomTypes:
+          $ref: '#/components/schemas/RoomTypeArray'
+      xml:
+        name: resort
+    ResortArray:
+      description: "foo"
+      type: array
+      items:
+        $ref: '#/components/schemas/Resort'
+      xml:
+        wrapped: true
+    PointChart:
+      description: "a point chart for a particular resort and year"
+      type: object
+      properties:
+        resortCode:
+          type: string
+        resortName:
+          type: string
+        year:
+          type: integer
+          format: int32
+        roomTypes:
+          $ref: '#/components/schemas/RoomTypeArray'
+        tiers:
+          type: array
+          xml:
+            name: tier
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/Tier"
+      xml:
+        name: pointChart
+    RoomType:
+      description: "a room type for a resort"
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        sleeps:
+          type: integer
+        bedrooms:
+          type: integer
+        beds:
+          type: integer
+      xml:
+        name: roomType
+    RoomTypeArray:
+      type: array
+      xml:
+        name: roomType
+        wrapped: true
+      items:
+        $ref: "#/components/schemas/RoomType"
+    TierDateRange:
+      description: "a tier date range"
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/MonthDay'
+        to:
+          $ref: '#/components/schemas/MonthDay'
+    Tier:
+      description: "a tier within a resort's point chart"
+      type: object
+      properties:
+        dateRanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/TierDateRange'
+          xml:
+            name: dateRange
+            wrapped: true
+        roomTypePoints:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Points'
+      xml:
+        name: tier
+    Points:
+      description: "the points on a point chart broken out for weekend days (Friday & Saturday) and weekdays
+       (Sunday - Thursday)"
+      type: object
+      properties:
+        weekday:
+          type: integer
+        weekend:
+          type: integer
+      xml:
+        name: points
+    Stay:
+      description: "represents the stay as a from date, to date, and the criteria to select resorts and room types"
+      type: object
+      properties:
+        from:
+          description: "check in date"
+          type: string
+          format: date
+        to:
+          description: "check out date"
+          type: string
+          format: date
+        includeResorts:
+          $ref: '#/components/schemas/ResortCodeArray'
+        excludeResorts:
+          $ref: '#/components/schemas/ResortCodeArray'
+        minSleeps:
+          $ref: '#/components/schemas/MinSleeps'
+        maxSleeps:
+          $ref: '#/components/schemas/MaxSleeps'
+        minBedrooms:
+          $ref: '#/components/schemas/MinBedrooms'
+        maxBedrooms:
+          $ref: '#/components/schemas/MaxBedrooms'
+        minBeds:
+          $ref: '#/components/schemas/MinBeds'
+        maxBeds:
+          $ref: '#/components/schemas/MaxBeds'
+      xml:
+        name: stay
+    StayResponse:
+      description: "response from stay query requests"
+      type: object
+      properties:
+        from:
+          description: "check in date"
+          type: string
+          format: date
+        to:
+          description: "check out date"
+          type: string
+          format: date
+        includeResorts:
+          $ref: '#/components/schemas/ResortCodeArray'
+        excludeResorts:
+          $ref: '#/components/schemas/ResortCodeArray'
+        minSleeps:
+          $ref: '#/components/schemas/MinSleeps'
+        maxSleeps:
+          $ref: '#/components/schemas/MaxSleeps'
+        minBedrooms:
+          $ref: '#/components/schemas/MinBedrooms'
+        maxBedrooms:
+          $ref: '#/components/schemas/MaxBedrooms'
+        minBeds:
+          $ref: '#/components/schemas/MinBeds'
+        maxBeds:
+          $ref: '#/components/schemas/MaxBeds'
+        rooms:
+          description: "a map of resort codes to a map of roomCodes to the number of points for the stay"
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: integer
+      xml:
+        name: stayResponse
+    ErrorResponse:
+      description: "error details"
+      properties:
+        errorCode:
+          type: integer
+        errorMessage:
+          type: string
+        errorDetails:
+          type: array
+          items:
+            type: string
+          xml:
+            name: errorDetail
+            wrapped: true
+      xml:
+        name: error
+
+

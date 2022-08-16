@@ -21,20 +21,21 @@ type RoomType struct {
 }
 
 type Points struct {
-	Weekday, Weekend int
+	Weekday int `json:"weekday"`
+	Weekend int `json:"weekend"`
 }
 
 type Tier struct {
-	DateRanges     []*DateRange
-	RoomTypePoints map[string]*Points
+	DateRanges     []*DateRange       `json:"dateRanges"`
+	RoomTypePoints map[string]*Points `json:"roomTypePoints"`
 }
 
 type PointChart struct {
-	Resort    string
-	Code      string
-	Year      int
-	RoomTypes []*RoomType
-	Tiers     []*Tier
+	Resort    string      `json:"resort"`
+	Code      string      `json:"code"`
+	Year      int         `json:"year"`
+	RoomTypes []*RoomType `json:"roomTypes"`
+	Tiers     []*Tier     `json:"tiers"`
 }
 
 type Stay struct {

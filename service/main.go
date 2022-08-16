@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/danapsimer/dvc-points-calculator/api"
+	"github.com/danapsimer/dvc-points-calculator/api/gin"
 	"log"
 )
 
 func main() {
-	err := api.Start()
+	err := gin.Start()
 	if err != nil {
 		log.Fatalf("exiting with an error: %+v", err)
 	}

@@ -1,4 +1,4 @@
-package api
+package gin
 
 import (
 	"github.com/danapsimer/dvc-points-calculator/chart"
@@ -26,7 +26,7 @@ type updateResort struct {
 	Name string `json:"name"`
 }
 
-func GetResort(context *gin.Context) {
+func GetResortYear(context *gin.Context) {
 	rq := &resortQuery{}
 	if err := context.BindUri(rq); err != nil {
 		context.JSON(http.StatusBadRequest, ReportErrors(err))
