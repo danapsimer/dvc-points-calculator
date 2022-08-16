@@ -34,8 +34,8 @@ func GetResortList(ctx context.Context) ([]*model.Resort, error) {
 func GetResort(ctx context.Context, resortCode string) (*model.Resort, error) {
 	query := datastore.NewQuery("PointChart").
 		FilterField("resortCode", "=", resortCode).
-		DistinctOn("resortCode", "resortName").
-		Project("resortCode", "resortName")
+		DistinctOn("resortName").
+		Project("resortName")
 	resortRecords := make([]*resortRecord, 0)
 	_, err := dataStoreClient.GetAll(ctx, query, &resortRecords)
 	if err != nil {
@@ -48,7 +48,7 @@ func GetResort(ctx context.Context, resortCode string) (*model.Resort, error) {
 		return nil, nil
 	}
 	return &model.Resort{
-		Code: resortRecords[0].ResortCode,
+		Code: resortCode,
 		Name: resortRecords[0].ResortName,
 	}, nil
 }

@@ -8,8 +8,9 @@ import (
 )
 
 type Resort struct {
-	Name string `json:"name"`
-	Code string `json:"code"`
+	Name      string      `json:"name"`
+	Code      string      `json:"code"`
+	RoomTypes []*RoomType `json:"roomTypes"`
 }
 
 type RoomType struct {

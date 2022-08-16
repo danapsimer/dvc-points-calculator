@@ -43,7 +43,11 @@ var (
 	config = defaultConfig
 )
 
-func init() {
+func notImplemented(context *gin.Context) {
+	context.JSON(http.StatusNotImplemented, gin.H{"msg": fmt.Sprintf("%s not implemented", context.FullPath())})
+}
+
+func Start() error {
 	router = gin.Default()
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterStructValidation(stayRangeValidator, model.Stay{})
@@ -62,13 +66,6 @@ func init() {
 	router.GET("/chart/:resortCode/:year", notImplemented)
 	router.PUT("/chart/:resortCode/:year", notImplemented)
 	router.DELETE("/chart/:resortCode/:year", notImplemented)
-}
-
-func notImplemented(context *gin.Context) {
-	context.JSON(http.StatusNotImplemented, gin.H{"msg": fmt.Sprintf("%s not implemented", context.FullPath())})
-}
-
-func Start() error {
 	err := db.InitDatastore(config.GoogleProjectID, config.GoogleCredentialsFile)
 	if err != nil {
 		return fmt.Errorf("error while initializing google datastore: %+v", err)

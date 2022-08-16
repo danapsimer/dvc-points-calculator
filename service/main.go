@@ -1,13 +1,11 @@
+/*
+Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+
+*/
 package main
 
-import (
-	"github.com/danapsimer/dvc-points-calculator/api/gin"
-	"log"
-)
+import "github.com/danapsimer/dvc-points-calculator/service/cmd"
 
 func main() {
-	err := gin.Start()
-	if err != nil {
-		log.Fatalf("exiting with an error: %+v", err)
-	}
+	cmd.Execute()
 }
