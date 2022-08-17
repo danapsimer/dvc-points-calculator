@@ -2,6 +2,7 @@ package goa
 
 import (
 	"context"
+	"fmt"
 	"github.com/danapsimer/dvc-points-calculator/api/goa/gen/points"
 	"github.com/danapsimer/dvc-points-calculator/chart"
 	"github.com/danapsimer/dvc-points-calculator/model"
@@ -17,6 +18,10 @@ func (s *Points) QueryStay(ctx context.Context, stay *points.Stay) (res *points.
 	to, err := time.Parse("2006-01-02", stay.To)
 	if err != nil {
 		err = points.MakeInvalidInput(err)
+		return
+	}
+	if to.Before(from) {
+		err = points.MakeInvalidInput(fmt.Errorf("to date must be after from date"))
 		return
 	}
 	stayRequest := &model.Stay{
