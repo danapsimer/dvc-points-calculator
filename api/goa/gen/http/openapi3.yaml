@@ -30,10 +30,10 @@ paths:
                   schema:
                     type: integer
                     description: the year
-                    example: 2012
+                    example: 2019
                     minimum: 1990
                     maximum: 2100
-                  example: 2066
+                  example: 2094
             responses:
                 "200":
                     description: OK response.
@@ -55,76 +55,45 @@ paths:
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 2
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
                                 tiers:
                                     - dateRanges:
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
+                                        - endDate: 1-15
+                                          startDate: 1-15
+                                        - endDate: 1-15
+                                          startDate: 1-15
+                                        - endDate: 1-15
+                                          startDate: 1-15
+                                        - endDate: 1-15
+                                          startDate: 1-15
                                       roomTypePoints:
-                                        Labore blanditiis maiores omnis rerum qui.:
-                                            weekday: 4919755634042695143
-                                            weekend: 8366663380085310400
-                                        Voluptatum nemo molestias eaque.:
-                                            weekday: 4919755634042695143
-                                            weekend: 8366663380085310400
+                                        Ab quaerat delectus amet.:
+                                            weekday: 6454418589515295321
+                                            weekend: 3368857188488503470
+                                        Blanditiis eos.:
+                                            weekday: 6454418589515295321
+                                            weekend: 3368857188488503470
+                                        Dicta ipsum.:
+                                            weekday: 6454418589515295321
+                                            weekend: 3368857188488503470
                                     - dateRanges:
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
+                                        - endDate: 1-15
+                                          startDate: 1-15
+                                        - endDate: 1-15
+                                          startDate: 1-15
+                                        - endDate: 1-15
+                                          startDate: 1-15
+                                        - endDate: 1-15
+                                          startDate: 1-15
                                       roomTypePoints:
-                                        Labore blanditiis maiores omnis rerum qui.:
-                                            weekday: 4919755634042695143
-                                            weekend: 8366663380085310400
-                                        Voluptatum nemo molestias eaque.:
-                                            weekday: 4919755634042695143
-                                            weekend: 8366663380085310400
-                                    - dateRanges:
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                      roomTypePoints:
-                                        Labore blanditiis maiores omnis rerum qui.:
-                                            weekday: 4919755634042695143
-                                            weekend: 8366663380085310400
-                                        Voluptatum nemo molestias eaque.:
-                                            weekday: 4919755634042695143
-                                            weekend: 8366663380085310400
-                                    - dateRanges:
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                        - endDate: Burley Hane
-                                          startDate: Lexus Tillman
-                                      roomTypePoints:
-                                        Labore blanditiis maiores omnis rerum qui.:
-                                            weekday: 4919755634042695143
-                                            weekend: 8366663380085310400
-                                        Voluptatum nemo molestias eaque.:
-                                            weekday: 4919755634042695143
-                                            weekend: 8366663380085310400
+                                        Ab quaerat delectus amet.:
+                                            weekday: 6454418589515295321
+                                            weekend: 3368857188488503470
+                                        Blanditiis eos.:
+                                            weekday: 6454418589515295321
+                                            weekend: 3368857188488503470
+                                        Dicta ipsum.:
+                                            weekday: 6454418589515295321
+                                            weekend: 3368857188488503470
                 "404":
                     description: 'not_found: Not Found response.'
                     content:
@@ -216,6 +185,11 @@ paths:
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
+                                    - bedrooms: 1
+                                      beds: 2
+                                      code: 1bp
+                                      name: One Bedroom Villa (Preferred View)
+                                      sleeps: 5
                 "404":
                     description: 'not_found: Not Found response.'
                     content:
@@ -246,10 +220,10 @@ paths:
                   schema:
                     type: integer
                     description: the year
-                    example: 2061
+                    example: 2034
                     minimum: 1990
                     maximum: 2100
-                  example: 2037
+                  example: 2011
             responses:
                 "200":
                     description: OK response.
@@ -281,9 +255,181 @@ paths:
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
-                                year: 2054
+                                year: 2068
                 "404":
                     description: 'not_found: Not Found response.'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    /stay/{from}/{to}:
+        get:
+            tags:
+                - Points
+            summary: QueryStay Points
+            operationId: Points#QueryStay
+            parameters:
+                - name: includeResorts
+                  in: query
+                  description: resorts to include in the search
+                  allowEmptyValue: true
+                  schema:
+                    type: array
+                    items:
+                        type: string
+                        example: Laborum qui.
+                    description: resorts to include in the search
+                    example:
+                        - Tenetur ut illo.
+                        - Et quas nihil ab.
+                  example:
+                    - Optio dolores minima aut ea.
+                    - Sed aliquam.
+                    - Delectus deserunt.
+                    - Molestiae ipsa et natus et repudiandae dolor.
+                - name: excludeResorts
+                  in: query
+                  description: resorts to exclude from the search
+                  allowEmptyValue: true
+                  schema:
+                    type: array
+                    items:
+                        type: string
+                        example: Illum quia ullam ut rerum dignissimos sed.
+                    description: resorts to exclude from the search
+                    example:
+                        - Officia cumque.
+                        - Sit autem est iste distinctio.
+                        - Sed qui qui autem fugit vero similique.
+                        - Magnam accusantium.
+                  example:
+                    - Non accusamus placeat est nostrum asperiores laboriosam.
+                    - Aspernatur velit distinctio provident.
+                - name: minSleeps
+                  in: query
+                  description: the minimum capacity of room types to include
+                  allowEmptyValue: true
+                  schema:
+                    type: integer
+                    description: the minimum capacity of room types to include
+                    default: 1
+                    example: 5
+                    minimum: 1
+                    maximum: 12
+                  example: 5
+                - name: maxSleeps
+                  in: query
+                  description: the maximum capacity of room types to include
+                  allowEmptyValue: true
+                  schema:
+                    type: integer
+                    description: the maximum capacity of room types to include
+                    default: 12
+                    example: 5
+                    minimum: 1
+                    maximum: 12
+                  example: 5
+                - name: minBedrooms
+                  in: query
+                  description: the minimum number of bedrooms of room types to include
+                  allowEmptyValue: true
+                  schema:
+                    type: integer
+                    description: the minimum number of bedrooms of room types to include
+                    default: 0
+                    example: 1
+                    minimum: 0
+                    maximum: 3
+                  example: 1
+                - name: maxBedrooms
+                  in: query
+                  description: the maximum number of bedrooms of room types to include
+                  allowEmptyValue: true
+                  schema:
+                    type: integer
+                    description: the maximum number of bedrooms of room types to include
+                    default: 3
+                    example: 1
+                    minimum: 0
+                    maximum: 3
+                  example: 1
+                - name: minBeds
+                  in: query
+                  description: the minimum number of beds of room types to include
+                  allowEmptyValue: true
+                  schema:
+                    type: integer
+                    description: the minimum number of beds of room types to include
+                    default: 2
+                    example: 2
+                    minimum: 2
+                    maximum: 6
+                  example: 2
+                - name: maxBeds
+                  in: query
+                  description: the maximum number of beds of room types to include
+                  allowEmptyValue: true
+                  schema:
+                    type: integer
+                    description: the maximum number of beds of room types to include
+                    default: 6
+                    example: 2
+                    minimum: 2
+                    maximum: 6
+                  example: 2
+                - name: from
+                  in: path
+                  description: Check-in Date
+                  required: true
+                  schema:
+                    type: string
+                    description: Check-in Date
+                    example: "2003-03-17"
+                    format: date
+                  example: "2009-08-25"
+                - name: to
+                  in: path
+                  description: Check-in Date
+                  required: true
+                  schema:
+                    type: string
+                    description: Check-in Date
+                    example: "1979-10-06"
+                    format: date
+                  example: "2005-02-08"
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StayResult'
+                            example:
+                                Rooms:
+                                    Natus dolore.:
+                                        Consequatur iure ad voluptas.: 8574616182601461648
+                                        Dolor ipsa excepturi ipsam.: 6388531504808450497
+                                        Sapiente incidunt maxime.: 8072956163745422818
+                                    Neque omnis qui unde temporibus.:
+                                        Maxime enim.: 8117318412957450039
+                                        Porro soluta.: 5930516599835123592
+                                excludeResorts:
+                                    - Vero tempora facere facere doloremque nulla velit.
+                                    - Aut fugit consectetur et dolorem corporis commodi.
+                                    - Autem provident architecto magnam qui.
+                                from: "1980-11-20"
+                                includeResorts:
+                                    - Eligendi fugiat.
+                                    - Voluptates ab voluptatibus.
+                                maxBedrooms: 1
+                                maxBeds: 2
+                                maxSleeps: 5
+                                minBedrooms: 1
+                                minBeds: 2
+                                minSleeps: 5
+                                to: "2010-02-05"
+                "400":
+                    description: 'invalid_input: Bad Request response.'
                     content:
                         application/vnd.goa.error:
                             schema:
@@ -312,11 +458,11 @@ components:
                 temporary:
                     type: boolean
                     description: Is the error temporary?
-                    example: true
+                    example: false
                 timeout:
                     type: boolean
                     description: Is the error a timeout?
-                    example: false
+                    example: true
             example:
                 id: 3F1FKVRR
                 message: Value of ID must be an integer
@@ -360,43 +506,54 @@ components:
                           code: 1bp
                           name: One Bedroom Villa (Preferred View)
                           sleeps: 5
+                        - bedrooms: 1
+                          beds: 2
+                          code: 1bp
+                          name: One Bedroom Villa (Preferred View)
+                          sleeps: 5
                 tiers:
                     type: array
                     items:
                         $ref: '#/components/schemas/Tier'
                     example:
                         - dateRanges:
-                            - endDate: Burley Hane
-                              startDate: Lexus Tillman
-                            - endDate: Burley Hane
-                              startDate: Lexus Tillman
-                            - endDate: Burley Hane
-                              startDate: Lexus Tillman
-                            - endDate: Burley Hane
-                              startDate: Lexus Tillman
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
                           roomTypePoints:
-                            Labore blanditiis maiores omnis rerum qui.:
-                                weekday: 4919755634042695143
-                                weekend: 8366663380085310400
-                            Voluptatum nemo molestias eaque.:
-                                weekday: 4919755634042695143
-                                weekend: 8366663380085310400
+                            Ab quaerat delectus amet.:
+                                weekday: 6454418589515295321
+                                weekend: 3368857188488503470
+                            Blanditiis eos.:
+                                weekday: 6454418589515295321
+                                weekend: 3368857188488503470
+                            Dicta ipsum.:
+                                weekday: 6454418589515295321
+                                weekend: 3368857188488503470
                         - dateRanges:
-                            - endDate: Burley Hane
-                              startDate: Lexus Tillman
-                            - endDate: Burley Hane
-                              startDate: Lexus Tillman
-                            - endDate: Burley Hane
-                              startDate: Lexus Tillman
-                            - endDate: Burley Hane
-                              startDate: Lexus Tillman
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
                           roomTypePoints:
-                            Labore blanditiis maiores omnis rerum qui.:
-                                weekday: 4919755634042695143
-                                weekend: 8366663380085310400
-                            Voluptatum nemo molestias eaque.:
-                                weekday: 4919755634042695143
-                                weekend: 8366663380085310400
+                            Ab quaerat delectus amet.:
+                                weekday: 6454418589515295321
+                                weekend: 3368857188488503470
+                            Blanditiis eos.:
+                                weekday: 6454418589515295321
+                                weekend: 3368857188488503470
+                            Dicta ipsum.:
+                                weekday: 6454418589515295321
+                                weekend: 3368857188488503470
             example:
                 code: ssr
                 resort: Disney's Saratoga Springs Resort & Spa
@@ -411,49 +568,50 @@ components:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
                 tiers:
                     - dateRanges:
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
                       roomTypePoints:
-                        Labore blanditiis maiores omnis rerum qui.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
-                        Voluptatum nemo molestias eaque.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
+                        Ab quaerat delectus amet.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Blanditiis eos.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Dicta ipsum.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
                     - dateRanges:
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
                       roomTypePoints:
-                        Labore blanditiis maiores omnis rerum qui.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
-                        Voluptatum nemo molestias eaque.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
+                        Ab quaerat delectus amet.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Blanditiis eos.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Dicta ipsum.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+            required:
+                - code
+                - resort
+                - roomTypes
+                - tiers
         ResortResult:
             type: object
             properties:
@@ -495,37 +653,21 @@ components:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
         ResortResultCollection:
             type: array
             items:
                 $ref: '#/components/schemas/ResortResult'
             example:
-                - code: ssr
-                  name: Disney's Saratoga Springs Resort & Spa
-                  roomTypes:
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                - code: ssr
-                  name: Disney's Saratoga Springs Resort & Spa
-                  roomTypes:
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
                 - code: ssr
                   name: Disney's Saratoga Springs Resort & Spa
                   roomTypes:
@@ -578,10 +720,6 @@ components:
                   name: Disney's Saratoga Springs Resort & Spa
                 - code: ssr
                   name: Disney's Saratoga Springs Resort & Spa
-                - code: ssr
-                  name: Disney's Saratoga Springs Resort & Spa
-                - code: ssr
-                  name: Disney's Saratoga Springs Resort & Spa
         ResortResultResponseResortUpdate:
             type: object
             properties:
@@ -598,8 +736,6 @@ components:
                 $ref: '#/components/schemas/ResortResultResponseResortUpdate'
             description: GetResortsResponseBody is the result type for an array of ResortResultResponse (resortUpdate view)
             example:
-                - name: Disney's Saratoga Springs Resort & Spa
-                - name: Disney's Saratoga Springs Resort & Spa
                 - name: Disney's Saratoga Springs Resort & Spa
                 - name: Disney's Saratoga Springs Resort & Spa
         ResortYearResult:
@@ -634,10 +770,15 @@ components:
                           code: 1bp
                           name: One Bedroom Villa (Preferred View)
                           sleeps: 5
+                        - bedrooms: 1
+                          beds: 2
+                          code: 1bp
+                          name: One Bedroom Villa (Preferred View)
+                          sleeps: 5
                 year:
                     type: integer
                     description: the year the resort info is for.
-                    example: 2030
+                    example: 2095
                     minimum: 1990
                     maximum: 2100
             example:
@@ -659,7 +800,12 @@ components:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
-                year: 2091
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                year: 2040
         RoomType:
             type: object
             properties:
@@ -696,6 +842,129 @@ components:
                 code: 1bp
                 name: One Bedroom Villa (Preferred View)
                 sleeps: 5
+            required:
+                - code
+                - name
+                - sleeps
+                - bedrooms
+                - beds
+        StayResult:
+            type: object
+            properties:
+                Rooms:
+                    type: object
+                    example:
+                        Iste culpa autem sequi et.:
+                            Consequatur tempore est et aliquam dolor labore.: 1637162125649141113
+                            Ut perferendis omnis eligendi unde ea.: 7988137997357595204
+                    additionalProperties:
+                        type: object
+                        example:
+                            Qui distinctio recusandae.: 7119910758436254995
+                            Qui nostrum.: 3402487506901643424
+                            Repudiandae occaecati quod consequatur.: 4004922119701619658
+                        additionalProperties:
+                            type: integer
+                            example: 2672335852095110826
+                            format: int64
+                excludeResorts:
+                    type: array
+                    items:
+                        type: string
+                        example: Voluptatibus assumenda est.
+                    description: resorts to exclude from the search
+                    example:
+                        - Officia vitae molestiae aspernatur aut.
+                        - Eveniet sequi dolorem et.
+                        - Dolores esse enim atque.
+                        - Cumque laudantium.
+                from:
+                    type: string
+                    description: Check-in Date
+                    example: "1988-06-22"
+                    format: date
+                includeResorts:
+                    type: array
+                    items:
+                        type: string
+                        example: Consequuntur officiis quia sunt.
+                    description: resorts to include in the search
+                    example:
+                        - Sed et optio quasi.
+                        - Nihil debitis maxime.
+                maxBedrooms:
+                    type: integer
+                    description: the maximum number of bedrooms of room types to include
+                    default: 3
+                    example: 1
+                    minimum: 0
+                    maximum: 3
+                maxBeds:
+                    type: integer
+                    description: the maximum number of beds of room types to include
+                    default: 6
+                    example: 2
+                    minimum: 2
+                    maximum: 6
+                maxSleeps:
+                    type: integer
+                    description: the maximum capacity of room types to include
+                    default: 12
+                    example: 5
+                    minimum: 1
+                    maximum: 12
+                minBedrooms:
+                    type: integer
+                    description: the minimum number of bedrooms of room types to include
+                    default: 0
+                    example: 1
+                    minimum: 0
+                    maximum: 3
+                minBeds:
+                    type: integer
+                    description: the minimum number of beds of room types to include
+                    default: 2
+                    example: 2
+                    minimum: 2
+                    maximum: 6
+                minSleeps:
+                    type: integer
+                    description: the minimum capacity of room types to include
+                    default: 1
+                    example: 5
+                    minimum: 1
+                    maximum: 12
+                to:
+                    type: string
+                    description: Check-in Date
+                    example: "1988-02-23"
+                    format: date
+            example:
+                Rooms:
+                    Voluptatibus est quo repellendus voluptate.:
+                        Cumque voluptas quia ratione.: 5472818650291812284
+                        Qui iusto quisquam mollitia fugiat rerum.: 883091948163607100
+                        Quis quos distinctio numquam.: 5788899565541549409
+                excludeResorts:
+                    - Corporis voluptate.
+                    - Placeat modi alias ad iusto eum.
+                    - Perferendis officia inventore.
+                from: "2011-05-01"
+                includeResorts:
+                    - Et est asperiores omnis dolor tenetur odio.
+                    - Officiis natus similique.
+                    - Velit id.
+                maxBedrooms: 1
+                maxBeds: 2
+                maxSleeps: 5
+                minBedrooms: 1
+                minBeds: 2
+                minSleeps: 5
+                to: "2006-10-02"
+            required:
+                - Rooms
+                - from
+                - to
         Tier:
             type: object
             properties:
@@ -704,71 +973,81 @@ components:
                     items:
                         $ref: '#/components/schemas/TierDateRange'
                     example:
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
                 roomTypePoints:
                     type: object
                     example:
-                        Aut ut qui illum rem.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
-                        Odio enim et earum adipisci eveniet.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
-                        Porro reprehenderit.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
+                        Dolor vel exercitationem mollitia nihil.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Dolore adipisci occaecati quas est.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
                     additionalProperties:
                         $ref: '#/components/schemas/TierRoomTypePoints'
             example:
                 dateRanges:
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
                 roomTypePoints:
-                    Et at eaque sint voluptas a est.:
-                        weekday: 4919755634042695143
-                        weekend: 8366663380085310400
-                    Exercitationem laboriosam quaerat ut qui.:
-                        weekday: 4919755634042695143
-                        weekend: 8366663380085310400
+                    In quas reiciendis commodi nemo velit.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
+                    Sed sunt ut totam in.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
+            required:
+                - dateRanges
+                - roomTypePoints
         TierDateRange:
             type: object
             properties:
                 endDate:
                     type: string
                     description: end date
-                    example: Dr. Aaron Lynch
-                    pattern: \d{1,2}-\d{1,2}
+                    example: 1-15
+                    pattern: (0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)-(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)
                 startDate:
                     type: string
                     description: start date
-                    example: Soledad Marquardt
-                    pattern: \d{1,2}-\d{1,2}
+                    example: 1-15
+                    pattern: (0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)-(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)
             example:
-                endDate: Katelin Lubowitz
-                startDate: Clinton Schuster
+                endDate: 1-15
+                startDate: 1-15
+            required:
+                - startDate
+                - endDate
         TierRoomTypePoints:
             type: object
             properties:
                 weekday:
                     type: integer
                     description: points for Sunday - Thursday
-                    example: 4946159708034512209
+                    example: 8269340996442861983
                     format: int64
                 weekend:
                     type: integer
                     description: points for Friday - Saturday
-                    example: 9026934001391109552
+                    example: 7265516665358861442
                     format: int64
             example:
-                weekday: 2097965859461862812
-                weekend: 1976708767640607993
+                weekday: 6258824316793245125
+                weekend: 1278897184106417632
+            required:
+                - weekday
+                - weekend
 tags:
     - name: Points
       description: provides resources for manipulating resorts, point charts, and querying stays

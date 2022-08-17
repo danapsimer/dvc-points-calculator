@@ -20,15 +20,17 @@ type Client struct {
 	GetResortEndpoint     goa.Endpoint
 	GetResortYearEndpoint goa.Endpoint
 	GetPointChartEndpoint goa.Endpoint
+	QueryStayEndpoint     goa.Endpoint
 }
 
 // NewClient initializes a "Points" service client given the endpoints.
-func NewClient(getResorts, getResort, getResortYear, getPointChart goa.Endpoint) *Client {
+func NewClient(getResorts, getResort, getResortYear, getPointChart, queryStay goa.Endpoint) *Client {
 	return &Client{
 		GetResortsEndpoint:    getResorts,
 		GetResortEndpoint:     getResort,
 		GetResortYearEndpoint: getResortYear,
 		GetPointChartEndpoint: getPointChart,
+		QueryStayEndpoint:     queryStay,
 	}
 }
 
@@ -79,4 +81,17 @@ func (c *Client) GetPointChart(ctx context.Context, p *GetPointChartPayload) (re
 		return
 	}
 	return ires.(*PointChart), nil
+}
+
+// QueryStay calls the "QueryStay" endpoint of the "Points" service.
+// QueryStay may return the following errors:
+//   - "invalid_input" (type *goa.ServiceError)
+//   - error: internal error
+func (c *Client) QueryStay(ctx context.Context, p *Stay) (res *StayResult, err error) {
+	var ires interface{}
+	ires, err = c.QueryStayEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*StayResult), nil
 }

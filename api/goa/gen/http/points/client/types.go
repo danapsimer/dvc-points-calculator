@@ -11,6 +11,7 @@ package client
 import (
 	points "github.com/danapsimer/dvc-points-calculator/api/goa/gen/points"
 	pointsviews "github.com/danapsimer/dvc-points-calculator/api/goa/gen/points/views"
+	"github.com/danapsimer/dvc-points-calculator/model"
 	goa "goa.design/goa/v3/pkg"
 )
 
@@ -49,6 +50,32 @@ type GetPointChartResponseBody struct {
 	Resort    *string                 `form:"resort,omitempty" json:"resort,omitempty" xml:"resort,omitempty"`
 	RoomTypes []*RoomTypeResponseBody `form:"roomTypes,omitempty" json:"roomTypes,omitempty" xml:"roomTypes,omitempty"`
 	Tiers     []*TierResponseBody     `form:"tiers,omitempty" json:"tiers,omitempty" xml:"tiers,omitempty"`
+}
+
+// QueryStayResponseBody is the type of the "Points" service "QueryStay"
+// endpoint HTTP response body.
+type QueryStayResponseBody struct {
+	Rooms map[string]map[string]int `form:"Rooms,omitempty" json:"Rooms,omitempty" xml:"Rooms,omitempty"`
+	// Check-in Date
+	From *string `form:"from,omitempty" json:"from,omitempty" xml:"from,omitempty"`
+	// Check-in Date
+	To *string `form:"to,omitempty" json:"to,omitempty" xml:"to,omitempty"`
+	// resorts to include in the search
+	IncludeResorts []string `form:"includeResorts,omitempty" json:"includeResorts,omitempty" xml:"includeResorts,omitempty"`
+	// resorts to exclude from the search
+	ExcludeResorts []string `form:"excludeResorts,omitempty" json:"excludeResorts,omitempty" xml:"excludeResorts,omitempty"`
+	// the minimum capacity of room types to include
+	MinSleeps *int `form:"minSleeps,omitempty" json:"minSleeps,omitempty" xml:"minSleeps,omitempty"`
+	// the maximum capacity of room types to include
+	MaxSleeps *int `form:"maxSleeps,omitempty" json:"maxSleeps,omitempty" xml:"maxSleeps,omitempty"`
+	// the minimum number of bedrooms of room types to include
+	MinBedrooms *int `form:"minBedrooms,omitempty" json:"minBedrooms,omitempty" xml:"minBedrooms,omitempty"`
+	// the maximum number of bedrooms of room types to include
+	MaxBedrooms *int `form:"maxBedrooms,omitempty" json:"maxBedrooms,omitempty" xml:"maxBedrooms,omitempty"`
+	// the minimum number of beds of room types to include
+	MinBeds *int `form:"minBeds,omitempty" json:"minBeds,omitempty" xml:"minBeds,omitempty"`
+	// the maximum number of beds of room types to include
+	MaxBeds *int `form:"maxBeds,omitempty" json:"maxBeds,omitempty" xml:"maxBeds,omitempty"`
 }
 
 // GetResortNotFoundResponseBody is the type of the "Points" service
@@ -90,6 +117,24 @@ type GetResortYearNotFoundResponseBody struct {
 // GetPointChartNotFoundResponseBody is the type of the "Points" service
 // "GetPointChart" endpoint HTTP response body for the "not_found" error.
 type GetPointChartNotFoundResponseBody struct {
+	// Name is the name of this class of errors.
+	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	// ID is a unique identifier for this particular occurrence of the problem.
+	ID *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Message is a human-readable explanation specific to this occurrence of the
+	// problem.
+	Message *string `form:"message,omitempty" json:"message,omitempty" xml:"message,omitempty"`
+	// Is the error temporary?
+	Temporary *bool `form:"temporary,omitempty" json:"temporary,omitempty" xml:"temporary,omitempty"`
+	// Is the error a timeout?
+	Timeout *bool `form:"timeout,omitempty" json:"timeout,omitempty" xml:"timeout,omitempty"`
+	// Is the error a server-side fault?
+	Fault *bool `form:"fault,omitempty" json:"fault,omitempty" xml:"fault,omitempty"`
+}
+
+// QueryStayInvalidInputResponseBody is the type of the "Points" service
+// "QueryStay" endpoint HTTP response body for the "invalid_input" error.
+type QueryStayInvalidInputResponseBody struct {
 	// Name is the name of this class of errors.
 	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 	// ID is a unique identifier for this particular occurrence of the problem.
@@ -151,9 +196,9 @@ type TierResponseBody struct {
 // TierDateRangeResponseBody is used to define fields on response body types.
 type TierDateRangeResponseBody struct {
 	// start date
-	StartDate *string `form:"startDate,omitempty" json:"startDate,omitempty" xml:"startDate,omitempty"`
+	StartDate *model.TierDate `form:"startDate,omitempty" json:"startDate,omitempty" xml:"startDate,omitempty"`
 	// end date
-	EndDate *string `form:"endDate,omitempty" json:"endDate,omitempty" xml:"endDate,omitempty"`
+	EndDate *model.TierDate `form:"endDate,omitempty" json:"endDate,omitempty" xml:"endDate,omitempty"`
 }
 
 // TierRoomTypePointsResponseBody is used to define fields on response body
@@ -245,20 +290,16 @@ func NewGetResortYearNotFound(body *GetResortYearNotFoundResponseBody) *goa.Serv
 // endpoint result from a HTTP "OK" response.
 func NewGetPointChartPointChartOK(body *GetPointChartResponseBody) *points.PointChart {
 	v := &points.PointChart{
-		Code:   body.Code,
-		Resort: body.Resort,
+		Code:   *body.Code,
+		Resort: *body.Resort,
 	}
-	if body.RoomTypes != nil {
-		v.RoomTypes = make([]*points.RoomType, len(body.RoomTypes))
-		for i, val := range body.RoomTypes {
-			v.RoomTypes[i] = unmarshalRoomTypeResponseBodyToPointsRoomType(val)
-		}
+	v.RoomTypes = make([]*points.RoomType, len(body.RoomTypes))
+	for i, val := range body.RoomTypes {
+		v.RoomTypes[i] = unmarshalRoomTypeResponseBodyToPointsRoomType(val)
 	}
-	if body.Tiers != nil {
-		v.Tiers = make([]*points.Tier, len(body.Tiers))
-		for i, val := range body.Tiers {
-			v.Tiers[i] = unmarshalTierResponseBodyToPointsTier(val)
-		}
+	v.Tiers = make([]*points.Tier, len(body.Tiers))
+	for i, val := range body.Tiers {
+		v.Tiers[i] = unmarshalTierResponseBodyToPointsTier(val)
 	}
 
 	return v
@@ -279,9 +320,106 @@ func NewGetPointChartNotFound(body *GetPointChartNotFoundResponseBody) *goa.Serv
 	return v
 }
 
+// NewQueryStayStayResultOK builds a "Points" service "QueryStay" endpoint
+// result from a HTTP "OK" response.
+func NewQueryStayStayResultOK(body *QueryStayResponseBody) *points.StayResult {
+	v := &points.StayResult{
+		From: *body.From,
+		To:   *body.To,
+	}
+	if body.MinSleeps != nil {
+		v.MinSleeps = *body.MinSleeps
+	}
+	if body.MaxSleeps != nil {
+		v.MaxSleeps = *body.MaxSleeps
+	}
+	if body.MinBedrooms != nil {
+		v.MinBedrooms = *body.MinBedrooms
+	}
+	if body.MaxBedrooms != nil {
+		v.MaxBedrooms = *body.MaxBedrooms
+	}
+	if body.MinBeds != nil {
+		v.MinBeds = *body.MinBeds
+	}
+	if body.MaxBeds != nil {
+		v.MaxBeds = *body.MaxBeds
+	}
+	v.Rooms = make(map[string]map[string]int, len(body.Rooms))
+	for key, val := range body.Rooms {
+		tk := key
+		tvb := make(map[string]int, len(val))
+		for key, val := range val {
+			tk := key
+			tv := val
+			tvb[tk] = tv
+		}
+		v.Rooms[tk] = tvb
+	}
+	if body.IncludeResorts != nil {
+		v.IncludeResorts = make([]string, len(body.IncludeResorts))
+		for i, val := range body.IncludeResorts {
+			v.IncludeResorts[i] = val
+		}
+	}
+	if body.ExcludeResorts != nil {
+		v.ExcludeResorts = make([]string, len(body.ExcludeResorts))
+		for i, val := range body.ExcludeResorts {
+			v.ExcludeResorts[i] = val
+		}
+	}
+	if body.MinSleeps == nil {
+		v.MinSleeps = 1
+	}
+	if body.MaxSleeps == nil {
+		v.MaxSleeps = 12
+	}
+	if body.MinBedrooms == nil {
+		v.MinBedrooms = 0
+	}
+	if body.MaxBedrooms == nil {
+		v.MaxBedrooms = 3
+	}
+	if body.MinBeds == nil {
+		v.MinBeds = 2
+	}
+	if body.MaxBeds == nil {
+		v.MaxBeds = 6
+	}
+
+	return v
+}
+
+// NewQueryStayInvalidInput builds a Points service QueryStay endpoint
+// invalid_input error.
+func NewQueryStayInvalidInput(body *QueryStayInvalidInputResponseBody) *goa.ServiceError {
+	v := &goa.ServiceError{
+		Name:      *body.Name,
+		ID:        *body.ID,
+		Message:   *body.Message,
+		Temporary: *body.Temporary,
+		Timeout:   *body.Timeout,
+		Fault:     *body.Fault,
+	}
+
+	return v
+}
+
 // ValidateGetPointChartResponseBody runs the validations defined on
 // GetPointChartResponseBody
 func ValidateGetPointChartResponseBody(body *GetPointChartResponseBody) (err error) {
+	if body.Code == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("code", "body"))
+	}
+	if body.Resort == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("resort", "body"))
+	}
+	if body.RoomTypes == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("roomTypes", "body"))
+	}
+	if body.Tiers == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("tiers", "body"))
+	}
 	if body.Code != nil {
 		err = goa.MergeErrors(err, goa.ValidatePattern("body.code", *body.Code, "[a-z]{3}"))
 	}
@@ -297,6 +435,87 @@ func ValidateGetPointChartResponseBody(body *GetPointChartResponseBody) (err err
 			if err2 := ValidateTierResponseBody(e); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
+		}
+	}
+	return
+}
+
+// ValidateQueryStayResponseBody runs the validations defined on
+// QueryStayResponseBody
+func ValidateQueryStayResponseBody(body *QueryStayResponseBody) (err error) {
+	if body.Rooms == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("Rooms", "body"))
+	}
+	if body.From == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("from", "body"))
+	}
+	if body.To == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("to", "body"))
+	}
+	if body.From != nil {
+		err = goa.MergeErrors(err, goa.ValidateFormat("body.from", *body.From, goa.FormatDate))
+	}
+	if body.To != nil {
+		err = goa.MergeErrors(err, goa.ValidateFormat("body.to", *body.To, goa.FormatDate))
+	}
+	if body.MinSleeps != nil {
+		if *body.MinSleeps < 1 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.minSleeps", *body.MinSleeps, 1, true))
+		}
+	}
+	if body.MinSleeps != nil {
+		if *body.MinSleeps > 12 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.minSleeps", *body.MinSleeps, 12, false))
+		}
+	}
+	if body.MaxSleeps != nil {
+		if *body.MaxSleeps < 1 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.maxSleeps", *body.MaxSleeps, 1, true))
+		}
+	}
+	if body.MaxSleeps != nil {
+		if *body.MaxSleeps > 12 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.maxSleeps", *body.MaxSleeps, 12, false))
+		}
+	}
+	if body.MinBedrooms != nil {
+		if *body.MinBedrooms < 0 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.minBedrooms", *body.MinBedrooms, 0, true))
+		}
+	}
+	if body.MinBedrooms != nil {
+		if *body.MinBedrooms > 3 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.minBedrooms", *body.MinBedrooms, 3, false))
+		}
+	}
+	if body.MaxBedrooms != nil {
+		if *body.MaxBedrooms < 0 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.maxBedrooms", *body.MaxBedrooms, 0, true))
+		}
+	}
+	if body.MaxBedrooms != nil {
+		if *body.MaxBedrooms > 3 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.maxBedrooms", *body.MaxBedrooms, 3, false))
+		}
+	}
+	if body.MinBeds != nil {
+		if *body.MinBeds < 2 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.minBeds", *body.MinBeds, 2, true))
+		}
+	}
+	if body.MinBeds != nil {
+		if *body.MinBeds > 6 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.minBeds", *body.MinBeds, 6, false))
+		}
+	}
+	if body.MaxBeds != nil {
+		if *body.MaxBeds < 2 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.maxBeds", *body.MaxBeds, 2, true))
+		}
+	}
+	if body.MaxBeds != nil {
+		if *body.MaxBeds > 6 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.maxBeds", *body.MaxBeds, 6, false))
 		}
 	}
 	return
@@ -374,6 +593,30 @@ func ValidateGetPointChartNotFoundResponseBody(body *GetPointChartNotFoundRespon
 	return
 }
 
+// ValidateQueryStayInvalidInputResponseBody runs the validations defined on
+// QueryStay_invalid_input_Response_Body
+func ValidateQueryStayInvalidInputResponseBody(body *QueryStayInvalidInputResponseBody) (err error) {
+	if body.Name == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("name", "body"))
+	}
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
+	if body.Message == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("message", "body"))
+	}
+	if body.Temporary == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("temporary", "body"))
+	}
+	if body.Timeout == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("timeout", "body"))
+	}
+	if body.Fault == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("fault", "body"))
+	}
+	return
+}
+
 // ValidateResortResultResponse runs the validations defined on
 // ResortResultResponse
 func ValidateResortResultResponse(body *ResortResultResponse) (err error) {
@@ -392,6 +635,21 @@ func ValidateResortResultResponse(body *ResortResultResponse) (err error) {
 
 // ValidateRoomTypeResponse runs the validations defined on RoomTypeResponse
 func ValidateRoomTypeResponse(body *RoomTypeResponse) (err error) {
+	if body.Code == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("code", "body"))
+	}
+	if body.Name == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("name", "body"))
+	}
+	if body.Sleeps == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("sleeps", "body"))
+	}
+	if body.Bedrooms == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("bedrooms", "body"))
+	}
+	if body.Beds == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("beds", "body"))
+	}
 	if body.Code != nil {
 		err = goa.MergeErrors(err, goa.ValidatePattern("body.code", *body.Code, "[a-z0-9]{3}"))
 	}
@@ -431,6 +689,21 @@ func ValidateRoomTypeResponse(body *RoomTypeResponse) (err error) {
 // ValidateRoomTypeResponseBody runs the validations defined on
 // RoomTypeResponseBody
 func ValidateRoomTypeResponseBody(body *RoomTypeResponseBody) (err error) {
+	if body.Code == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("code", "body"))
+	}
+	if body.Name == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("name", "body"))
+	}
+	if body.Sleeps == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("sleeps", "body"))
+	}
+	if body.Bedrooms == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("bedrooms", "body"))
+	}
+	if body.Beds == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("beds", "body"))
+	}
 	if body.Code != nil {
 		err = goa.MergeErrors(err, goa.ValidatePattern("body.code", *body.Code, "[a-z0-9]{3}"))
 	}
@@ -469,9 +742,22 @@ func ValidateRoomTypeResponseBody(body *RoomTypeResponseBody) (err error) {
 
 // ValidateTierResponseBody runs the validations defined on TierResponseBody
 func ValidateTierResponseBody(body *TierResponseBody) (err error) {
+	if body.DateRanges == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("dateRanges", "body"))
+	}
+	if body.RoomTypePoints == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("roomTypePoints", "body"))
+	}
 	for _, e := range body.DateRanges {
 		if e != nil {
 			if err2 := ValidateTierDateRangeResponseBody(e); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	for _, v := range body.RoomTypePoints {
+		if v != nil {
+			if err2 := ValidateTierRoomTypePointsResponseBody(v); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
 		}
@@ -482,11 +768,29 @@ func ValidateTierResponseBody(body *TierResponseBody) (err error) {
 // ValidateTierDateRangeResponseBody runs the validations defined on
 // TierDateRangeResponseBody
 func ValidateTierDateRangeResponseBody(body *TierDateRangeResponseBody) (err error) {
+	if body.StartDate == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("startDate", "body"))
+	}
+	if body.EndDate == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("endDate", "body"))
+	}
 	if body.StartDate != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.startDate", *body.StartDate, "\\d{1,2}-\\d{1,2}"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.startDate", *body.StartDate, "(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)-(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)"))
 	}
 	if body.EndDate != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.endDate", *body.EndDate, "\\d{1,2}-\\d{1,2}"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.endDate", *body.EndDate, "(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)-(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)"))
+	}
+	return
+}
+
+// ValidateTierRoomTypePointsResponseBody runs the validations defined on
+// TierRoomTypePointsResponseBody
+func ValidateTierRoomTypePointsResponseBody(body *TierRoomTypePointsResponseBody) (err error) {
+	if body.Weekday == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("weekday", "body"))
+	}
+	if body.Weekend == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("weekend", "body"))
 	}
 	return
 }

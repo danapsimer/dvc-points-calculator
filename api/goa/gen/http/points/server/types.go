@@ -11,6 +11,7 @@ package server
 import (
 	points "github.com/danapsimer/dvc-points-calculator/api/goa/gen/points"
 	pointsviews "github.com/danapsimer/dvc-points-calculator/api/goa/gen/points/views"
+	"github.com/danapsimer/dvc-points-calculator/model"
 	goa "goa.design/goa/v3/pkg"
 )
 
@@ -68,11 +69,37 @@ type GetResortYearResponseBody struct {
 // "GetPointChart" endpoint HTTP response body.
 type GetPointChartResponseBody struct {
 	// resort's code
-	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
+	Code string `form:"code" json:"code" xml:"code"`
 	// resort's code
-	Resort    *string                 `form:"resort,omitempty" json:"resort,omitempty" xml:"resort,omitempty"`
-	RoomTypes []*RoomTypeResponseBody `form:"roomTypes,omitempty" json:"roomTypes,omitempty" xml:"roomTypes,omitempty"`
-	Tiers     []*TierResponseBody     `form:"tiers,omitempty" json:"tiers,omitempty" xml:"tiers,omitempty"`
+	Resort    string                  `form:"resort" json:"resort" xml:"resort"`
+	RoomTypes []*RoomTypeResponseBody `form:"roomTypes" json:"roomTypes" xml:"roomTypes"`
+	Tiers     []*TierResponseBody     `form:"tiers" json:"tiers" xml:"tiers"`
+}
+
+// QueryStayResponseBody is the type of the "Points" service "QueryStay"
+// endpoint HTTP response body.
+type QueryStayResponseBody struct {
+	Rooms map[string]map[string]int `form:"Rooms" json:"Rooms" xml:"Rooms"`
+	// Check-in Date
+	From string `form:"from" json:"from" xml:"from"`
+	// Check-in Date
+	To string `form:"to" json:"to" xml:"to"`
+	// resorts to include in the search
+	IncludeResorts []string `form:"includeResorts,omitempty" json:"includeResorts,omitempty" xml:"includeResorts,omitempty"`
+	// resorts to exclude from the search
+	ExcludeResorts []string `form:"excludeResorts,omitempty" json:"excludeResorts,omitempty" xml:"excludeResorts,omitempty"`
+	// the minimum capacity of room types to include
+	MinSleeps int `form:"minSleeps" json:"minSleeps" xml:"minSleeps"`
+	// the maximum capacity of room types to include
+	MaxSleeps int `form:"maxSleeps" json:"maxSleeps" xml:"maxSleeps"`
+	// the minimum number of bedrooms of room types to include
+	MinBedrooms int `form:"minBedrooms" json:"minBedrooms" xml:"minBedrooms"`
+	// the maximum number of bedrooms of room types to include
+	MaxBedrooms int `form:"maxBedrooms" json:"maxBedrooms" xml:"maxBedrooms"`
+	// the minimum number of beds of room types to include
+	MinBeds int `form:"minBeds" json:"minBeds" xml:"minBeds"`
+	// the maximum number of beds of room types to include
+	MaxBeds int `form:"maxBeds" json:"maxBeds" xml:"maxBeds"`
 }
 
 // GetResortNotFoundResponseBody is the type of the "Points" service
@@ -129,6 +156,24 @@ type GetPointChartNotFoundResponseBody struct {
 	Fault bool `form:"fault" json:"fault" xml:"fault"`
 }
 
+// QueryStayInvalidInputResponseBody is the type of the "Points" service
+// "QueryStay" endpoint HTTP response body for the "invalid_input" error.
+type QueryStayInvalidInputResponseBody struct {
+	// Name is the name of this class of errors.
+	Name string `form:"name" json:"name" xml:"name"`
+	// ID is a unique identifier for this particular occurrence of the problem.
+	ID string `form:"id" json:"id" xml:"id"`
+	// Message is a human-readable explanation specific to this occurrence of the
+	// problem.
+	Message string `form:"message" json:"message" xml:"message"`
+	// Is the error temporary?
+	Temporary bool `form:"temporary" json:"temporary" xml:"temporary"`
+	// Is the error a timeout?
+	Timeout bool `form:"timeout" json:"timeout" xml:"timeout"`
+	// Is the error a server-side fault?
+	Fault bool `form:"fault" json:"fault" xml:"fault"`
+}
+
 // ResortResultResponse is used to define fields on response body types.
 type ResortResultResponse struct {
 	// resort's code
@@ -141,15 +186,15 @@ type ResortResultResponse struct {
 // RoomTypeResponse is used to define fields on response body types.
 type RoomTypeResponse struct {
 	// room type's code
-	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
+	Code string `form:"code" json:"code" xml:"code"`
 	// room type's name
-	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	Name string `form:"name" json:"name" xml:"name"`
 	// max room capacity
-	Sleeps *int `form:"sleeps,omitempty" json:"sleeps,omitempty" xml:"sleeps,omitempty"`
+	Sleeps int `form:"sleeps" json:"sleeps" xml:"sleeps"`
 	// number of bedrooms
-	Bedrooms *int `form:"bedrooms,omitempty" json:"bedrooms,omitempty" xml:"bedrooms,omitempty"`
+	Bedrooms int `form:"bedrooms" json:"bedrooms" xml:"bedrooms"`
 	// number of beds
-	Beds *int `form:"beds,omitempty" json:"beds,omitempty" xml:"beds,omitempty"`
+	Beds int `form:"beds" json:"beds" xml:"beds"`
 }
 
 // ResortResultResponseResortOnly is used to define fields on response body
@@ -171,38 +216,38 @@ type ResortResultResponseResortUpdate struct {
 // RoomTypeResponseBody is used to define fields on response body types.
 type RoomTypeResponseBody struct {
 	// room type's code
-	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
+	Code string `form:"code" json:"code" xml:"code"`
 	// room type's name
-	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	Name string `form:"name" json:"name" xml:"name"`
 	// max room capacity
-	Sleeps *int `form:"sleeps,omitempty" json:"sleeps,omitempty" xml:"sleeps,omitempty"`
+	Sleeps int `form:"sleeps" json:"sleeps" xml:"sleeps"`
 	// number of bedrooms
-	Bedrooms *int `form:"bedrooms,omitempty" json:"bedrooms,omitempty" xml:"bedrooms,omitempty"`
+	Bedrooms int `form:"bedrooms" json:"bedrooms" xml:"bedrooms"`
 	// number of beds
-	Beds *int `form:"beds,omitempty" json:"beds,omitempty" xml:"beds,omitempty"`
+	Beds int `form:"beds" json:"beds" xml:"beds"`
 }
 
 // TierResponseBody is used to define fields on response body types.
 type TierResponseBody struct {
-	DateRanges     []*TierDateRangeResponseBody               `form:"dateRanges,omitempty" json:"dateRanges,omitempty" xml:"dateRanges,omitempty"`
-	RoomTypePoints map[string]*TierRoomTypePointsResponseBody `form:"roomTypePoints,omitempty" json:"roomTypePoints,omitempty" xml:"roomTypePoints,omitempty"`
+	DateRanges     []*TierDateRangeResponseBody               `form:"dateRanges" json:"dateRanges" xml:"dateRanges"`
+	RoomTypePoints map[string]*TierRoomTypePointsResponseBody `form:"roomTypePoints" json:"roomTypePoints" xml:"roomTypePoints"`
 }
 
 // TierDateRangeResponseBody is used to define fields on response body types.
 type TierDateRangeResponseBody struct {
 	// start date
-	StartDate *string `form:"startDate,omitempty" json:"startDate,omitempty" xml:"startDate,omitempty"`
+	StartDate model.TierDate `form:"startDate" json:"startDate" xml:"startDate"`
 	// end date
-	EndDate *string `form:"endDate,omitempty" json:"endDate,omitempty" xml:"endDate,omitempty"`
+	EndDate model.TierDate `form:"endDate" json:"endDate" xml:"endDate"`
 }
 
 // TierRoomTypePointsResponseBody is used to define fields on response body
 // types.
 type TierRoomTypePointsResponseBody struct {
 	// points for Sunday - Thursday
-	Weekday *int `form:"weekday,omitempty" json:"weekday,omitempty" xml:"weekday,omitempty"`
+	Weekday int `form:"weekday" json:"weekday" xml:"weekday"`
 	// points for Friday - Saturday
-	Weekend *int `form:"weekend,omitempty" json:"weekend,omitempty" xml:"weekend,omitempty"`
+	Weekend int `form:"weekend" json:"weekend" xml:"weekend"`
 }
 
 // NewResortResultResponseCollection builds the HTTP response body from the
@@ -309,6 +354,83 @@ func NewGetPointChartResponseBody(res *points.PointChart) *GetPointChartResponse
 	return body
 }
 
+// NewQueryStayResponseBody builds the HTTP response body from the result of
+// the "QueryStay" endpoint of the "Points" service.
+func NewQueryStayResponseBody(res *points.StayResult) *QueryStayResponseBody {
+	body := &QueryStayResponseBody{
+		From:        res.From,
+		To:          res.To,
+		MinSleeps:   res.MinSleeps,
+		MaxSleeps:   res.MaxSleeps,
+		MinBedrooms: res.MinBedrooms,
+		MaxBedrooms: res.MaxBedrooms,
+		MinBeds:     res.MinBeds,
+		MaxBeds:     res.MaxBeds,
+	}
+	if res.Rooms != nil {
+		body.Rooms = make(map[string]map[string]int, len(res.Rooms))
+		for key, val := range res.Rooms {
+			tk := key
+			tvb := make(map[string]int, len(val))
+			for key, val := range val {
+				tk := key
+				tv := val
+				tvb[tk] = tv
+			}
+			body.Rooms[tk] = tvb
+		}
+	}
+	if res.IncludeResorts != nil {
+		body.IncludeResorts = make([]string, len(res.IncludeResorts))
+		for i, val := range res.IncludeResorts {
+			body.IncludeResorts[i] = val
+		}
+	}
+	if res.ExcludeResorts != nil {
+		body.ExcludeResorts = make([]string, len(res.ExcludeResorts))
+		for i, val := range res.ExcludeResorts {
+			body.ExcludeResorts[i] = val
+		}
+	}
+	{
+		var zero int
+		if body.MinSleeps == zero {
+			body.MinSleeps = 1
+		}
+	}
+	{
+		var zero int
+		if body.MaxSleeps == zero {
+			body.MaxSleeps = 12
+		}
+	}
+	{
+		var zero int
+		if body.MinBedrooms == zero {
+			body.MinBedrooms = 0
+		}
+	}
+	{
+		var zero int
+		if body.MaxBedrooms == zero {
+			body.MaxBedrooms = 3
+		}
+	}
+	{
+		var zero int
+		if body.MinBeds == zero {
+			body.MinBeds = 2
+		}
+	}
+	{
+		var zero int
+		if body.MaxBeds == zero {
+			body.MaxBeds = 6
+		}
+	}
+	return body
+}
+
 // NewGetResortNotFoundResponseBody builds the HTTP response body from the
 // result of the "GetResort" endpoint of the "Points" service.
 func NewGetResortNotFoundResponseBody(res *goa.ServiceError) *GetResortNotFoundResponseBody {
@@ -351,6 +473,20 @@ func NewGetPointChartNotFoundResponseBody(res *goa.ServiceError) *GetPointChartN
 	return body
 }
 
+// NewQueryStayInvalidInputResponseBody builds the HTTP response body from the
+// result of the "QueryStay" endpoint of the "Points" service.
+func NewQueryStayInvalidInputResponseBody(res *goa.ServiceError) *QueryStayInvalidInputResponseBody {
+	body := &QueryStayInvalidInputResponseBody{
+		Name:      res.Name,
+		ID:        res.ID,
+		Message:   res.Message,
+		Temporary: res.Temporary,
+		Timeout:   res.Timeout,
+		Fault:     res.Fault,
+	}
+	return body
+}
+
 // NewGetResortPayload builds a Points service GetResort endpoint payload.
 func NewGetResortPayload(resortCode string) *points.GetResortPayload {
 	v := &points.GetResortPayload{}
@@ -375,6 +511,23 @@ func NewGetPointChartPayload(resortCode string, year int) *points.GetPointChartP
 	v := &points.GetPointChartPayload{}
 	v.ResortCode = resortCode
 	v.Year = year
+
+	return v
+}
+
+// NewQueryStayStay builds a Points service QueryStay endpoint payload.
+func NewQueryStayStay(from string, to string, includeResorts []string, excludeResorts []string, minSleeps int, maxSleeps int, minBedrooms int, maxBedrooms int, minBeds int, maxBeds int) *points.Stay {
+	v := &points.Stay{}
+	v.From = from
+	v.To = to
+	v.IncludeResorts = includeResorts
+	v.ExcludeResorts = excludeResorts
+	v.MinSleeps = minSleeps
+	v.MaxSleeps = maxSleeps
+	v.MinBedrooms = minBedrooms
+	v.MaxBedrooms = maxBedrooms
+	v.MinBeds = minBeds
+	v.MaxBeds = maxBeds
 
 	return v
 }

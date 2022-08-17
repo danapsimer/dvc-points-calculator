@@ -14,21 +14,62 @@ import (
 
 // ConvertToRoomType creates an instance of RoomType initialized from t.
 func (t *RoomType) ConvertToRoomType() *model.RoomType {
-	v := &model.RoomType{}
-	if t.Code != nil {
-		v.Code = *t.Code
+	v := &model.RoomType{
+		Code:     t.Code,
+		Name:     t.Name,
+		Sleeps:   t.Sleeps,
+		Bedrooms: t.Bedrooms,
+		Beds:     t.Beds,
 	}
-	if t.Name != nil {
-		v.Name = *t.Name
+	return v
+}
+
+// ConvertToDateRange creates an instance of DateRange initialized from t.
+func (t *TierDateRange) ConvertToDateRange() *model.DateRange {
+	v := &model.DateRange{
+		StartDate: t.StartDate,
+		EndDate:   t.EndDate,
 	}
-	if t.Sleeps != nil {
-		v.Sleeps = *t.Sleeps
+	return v
+}
+
+// ConvertToPoints creates an instance of Points initialized from t.
+func (t *TierRoomTypePoints) ConvertToPoints() *model.Points {
+	v := &model.Points{
+		Weekday: t.Weekday,
+		Weekend: t.Weekend,
 	}
-	if t.Bedrooms != nil {
-		v.Bedrooms = *t.Bedrooms
+	return v
+}
+
+// ConvertToTier creates an instance of Tier initialized from t.
+func (t *Tier) ConvertToTier() *model.Tier {
+	v := &model.Tier{}
+	v.DateRanges = make([]*model.DateRange, len(t.DateRanges))
+	for i, val := range t.DateRanges {
+		v.DateRanges[i] = transformTierDateRangeToModelDateRange(val)
 	}
-	if t.Beds != nil {
-		v.Beds = *t.Beds
+	v.RoomTypePoints = make(map[string]*model.Points, len(t.RoomTypePoints))
+	for key, val := range t.RoomTypePoints {
+		tk := key
+		v.RoomTypePoints[tk] = transformTierRoomTypePointsToModelPoints(val)
+	}
+	return v
+}
+
+// ConvertToPointChart creates an instance of PointChart initialized from t.
+func (t *PointChart) ConvertToPointChart() *model.PointChart {
+	v := &model.PointChart{
+		Code:   t.Code,
+		Resort: t.Resort,
+	}
+	v.RoomTypes = make([]*model.RoomType, len(t.RoomTypes))
+	for i, val := range t.RoomTypes {
+		v.RoomTypes[i] = transformRoomTypeToModelRoomType(val)
+	}
+	v.Tiers = make([]*model.Tier, len(t.Tiers))
+	for i, val := range t.Tiers {
+		v.Tiers[i] = transformTierToModelTier(val)
 	}
 	return v
 }
@@ -36,11 +77,69 @@ func (t *RoomType) ConvertToRoomType() *model.RoomType {
 // CreateFromRoomType initializes t from the fields of v
 func (t *RoomType) CreateFromRoomType(v *model.RoomType) {
 	temp := &RoomType{
-		Name:     &v.Name,
-		Code:     &v.Code,
-		Sleeps:   &v.Sleeps,
-		Bedrooms: &v.Bedrooms,
-		Beds:     &v.Beds,
+		Name:     v.Name,
+		Code:     v.Code,
+		Sleeps:   v.Sleeps,
+		Bedrooms: v.Bedrooms,
+		Beds:     v.Beds,
+	}
+	*t = *temp
+}
+
+// CreateFromDateRange initializes t from the fields of v
+func (t *TierDateRange) CreateFromDateRange(v *model.DateRange) {
+	temp := &TierDateRange{
+		StartDate: v.StartDate,
+		EndDate:   v.EndDate,
+	}
+	*t = *temp
+}
+
+// CreateFromPoints initializes t from the fields of v
+func (t *TierRoomTypePoints) CreateFromPoints(v *model.Points) {
+	temp := &TierRoomTypePoints{
+		Weekday: v.Weekday,
+		Weekend: v.Weekend,
+	}
+	*t = *temp
+}
+
+// CreateFromTier initializes t from the fields of v
+func (t *Tier) CreateFromTier(v *model.Tier) {
+	temp := &Tier{}
+	if v.DateRanges != nil {
+		temp.DateRanges = make([]*TierDateRange, len(v.DateRanges))
+		for i, val := range v.DateRanges {
+			temp.DateRanges[i] = transformModelDateRangeToTierDateRange(val)
+		}
+	}
+	if v.RoomTypePoints != nil {
+		temp.RoomTypePoints = make(map[string]*TierRoomTypePoints, len(v.RoomTypePoints))
+		for key, val := range v.RoomTypePoints {
+			tk := key
+			temp.RoomTypePoints[tk] = transformModelPointsToTierRoomTypePoints(val)
+		}
+	}
+	*t = *temp
+}
+
+// CreateFromPointChart initializes t from the fields of v
+func (t *PointChart) CreateFromPointChart(v *model.PointChart) {
+	temp := &PointChart{
+		Resort: v.Resort,
+		Code:   v.Code,
+	}
+	if v.RoomTypes != nil {
+		temp.RoomTypes = make([]*RoomType, len(v.RoomTypes))
+		for i, val := range v.RoomTypes {
+			temp.RoomTypes[i] = transformModelRoomTypeToRoomType(val)
+		}
+	}
+	if v.Tiers != nil {
+		temp.Tiers = make([]*Tier, len(v.Tiers))
+		for i, val := range v.Tiers {
+			temp.Tiers[i] = transformModelTierToTier(val)
+		}
 	}
 	*t = *temp
 }
@@ -75,6 +174,87 @@ func (t *ResortResult) CreateFromResort2(v *model.Resort) {
 	*t = *temp
 }
 
+// transformTierDateRangeToModelDateRange builds a value of type
+// *model.DateRange from a value of type *TierDateRange.
+func transformTierDateRangeToModelDateRange(v *TierDateRange) *model.DateRange {
+	res := &model.DateRange{
+		StartDate: v.StartDate,
+		EndDate:   v.EndDate,
+	}
+
+	return res
+}
+
+// transformTierRoomTypePointsToModelPoints builds a value of type
+// *model.Points from a value of type *TierRoomTypePoints.
+func transformTierRoomTypePointsToModelPoints(v *TierRoomTypePoints) *model.Points {
+	res := &model.Points{
+		Weekday: v.Weekday,
+		Weekend: v.Weekend,
+	}
+
+	return res
+}
+
+// transformRoomTypeToModelRoomType builds a value of type *model.RoomType from
+// a value of type *RoomType.
+func transformRoomTypeToModelRoomType(v *RoomType) *model.RoomType {
+	res := &model.RoomType{
+		Code:     v.Code,
+		Name:     v.Name,
+		Sleeps:   v.Sleeps,
+		Bedrooms: v.Bedrooms,
+		Beds:     v.Beds,
+	}
+
+	return res
+}
+
+// transformTierToModelTier builds a value of type *model.Tier from a value of
+// type *Tier.
+func transformTierToModelTier(v *Tier) *model.Tier {
+	res := &model.Tier{}
+	res.DateRanges = make([]*model.DateRange, len(v.DateRanges))
+	for i, val := range v.DateRanges {
+		res.DateRanges[i] = transformTierDateRangeToModelDateRange(val)
+	}
+	res.RoomTypePoints = make(map[string]*model.Points, len(v.RoomTypePoints))
+	for key, val := range v.RoomTypePoints {
+		tk := key
+		res.RoomTypePoints[tk] = transformTierRoomTypePointsToModelPoints(val)
+	}
+
+	return res
+}
+
+// transformModelDateRangeToTierDateRange builds a value of type *TierDateRange
+// from a value of type *model.DateRange.
+func transformModelDateRangeToTierDateRange(v *model.DateRange) *TierDateRange {
+	if v == nil {
+		return nil
+	}
+	res := &TierDateRange{
+		StartDate: v.StartDate,
+		EndDate:   v.EndDate,
+	}
+
+	return res
+}
+
+// transformModelPointsToTierRoomTypePoints builds a value of type
+// *TierRoomTypePoints from a value of type *model.Points.
+func transformModelPointsToTierRoomTypePoints(v *model.Points) *TierRoomTypePoints {
+	if v == nil {
+		return nil
+	}
+	res := &TierRoomTypePoints{
+		Weekday: v.Weekday,
+		Weekend: v.Weekend,
+	}
+
+	return res
+}
+
 // transformModelRoomTypeToRoomType builds a value of type *RoomType from a
 // value of type *model.RoomType.
 func transformModelRoomTypeToRoomType(v *model.RoomType) *RoomType {
@@ -82,11 +262,35 @@ func transformModelRoomTypeToRoomType(v *model.RoomType) *RoomType {
 		return nil
 	}
 	res := &RoomType{
-		Name:     &v.Name,
-		Code:     &v.Code,
-		Sleeps:   &v.Sleeps,
-		Bedrooms: &v.Bedrooms,
-		Beds:     &v.Beds,
+		Name:     v.Name,
+		Code:     v.Code,
+		Sleeps:   v.Sleeps,
+		Bedrooms: v.Bedrooms,
+		Beds:     v.Beds,
+	}
+
+	return res
+}
+
+// transformModelTierToTier builds a value of type *Tier from a value of type
+// *model.Tier.
+func transformModelTierToTier(v *model.Tier) *Tier {
+	if v == nil {
+		return nil
+	}
+	res := &Tier{}
+	if v.DateRanges != nil {
+		res.DateRanges = make([]*TierDateRange, len(v.DateRanges))
+		for i, val := range v.DateRanges {
+			res.DateRanges[i] = transformModelDateRangeToTierDateRange(val)
+		}
+	}
+	if v.RoomTypePoints != nil {
+		res.RoomTypePoints = make(map[string]*TierRoomTypePoints, len(v.RoomTypePoints))
+		for key, val := range v.RoomTypePoints {
+			tk := key
+			res.RoomTypePoints[tk] = transformModelPointsToTierRoomTypePoints(val)
+		}
 	}
 
 	return res

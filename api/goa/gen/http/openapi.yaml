@@ -38,6 +38,11 @@ paths:
                     description: OK response.
                     schema:
                         $ref: '#/definitions/PointsGetPointChartResponseBody'
+                        required:
+                            - code
+                            - resort
+                            - roomTypes
+                            - tiers
                 "404":
                     description: Not Found response.
                     schema:
@@ -112,6 +117,104 @@ paths:
                         $ref: '#/definitions/PointsGetResortYearNotFoundResponseBody'
             schemes:
                 - http
+    /stay/{from}/{to}:
+        get:
+            tags:
+                - Points
+            summary: QueryStay Points
+            operationId: Points#QueryStay
+            parameters:
+                - name: includeResorts
+                  in: query
+                  description: resorts to include in the search
+                  required: false
+                  type: array
+                  items:
+                    type: string
+                  collectionFormat: multi
+                - name: excludeResorts
+                  in: query
+                  description: resorts to exclude from the search
+                  required: false
+                  type: array
+                  items:
+                    type: string
+                  collectionFormat: multi
+                - name: minSleeps
+                  in: query
+                  description: the minimum capacity of room types to include
+                  required: false
+                  type: integer
+                  default: 1
+                  maximum: 12
+                  minimum: 1
+                - name: maxSleeps
+                  in: query
+                  description: the maximum capacity of room types to include
+                  required: false
+                  type: integer
+                  default: 12
+                  maximum: 12
+                  minimum: 1
+                - name: minBedrooms
+                  in: query
+                  description: the minimum number of bedrooms of room types to include
+                  required: false
+                  type: integer
+                  default: 0
+                  maximum: 3
+                  minimum: 0
+                - name: maxBedrooms
+                  in: query
+                  description: the maximum number of bedrooms of room types to include
+                  required: false
+                  type: integer
+                  default: 3
+                  maximum: 3
+                  minimum: 0
+                - name: minBeds
+                  in: query
+                  description: the minimum number of beds of room types to include
+                  required: false
+                  type: integer
+                  default: 2
+                  maximum: 6
+                  minimum: 2
+                - name: maxBeds
+                  in: query
+                  description: the maximum number of beds of room types to include
+                  required: false
+                  type: integer
+                  default: 6
+                  maximum: 6
+                  minimum: 2
+                - name: from
+                  in: path
+                  description: Check-in Date
+                  required: true
+                  type: string
+                  format: date
+                - name: to
+                  in: path
+                  description: Check-in Date
+                  required: true
+                  type: string
+                  format: date
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/PointsQueryStayResponseBody'
+                        required:
+                            - Rooms
+                            - from
+                            - to
+                "400":
+                    description: Bad Request response.
+                    schema:
+                        $ref: '#/definitions/PointsQueryStayInvalidInputResponseBody'
+            schemes:
+                - http
 definitions:
     PointsGetPointChartNotFoundResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
@@ -140,14 +243,14 @@ definitions:
             timeout:
                 type: boolean
                 description: Is the error a timeout?
-                example: false
+                example: true
         description: GetPointChart_not_found_Response_Body result type (default view)
         example:
-            fault: false
+            fault: true
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
-            temporary: false
+            temporary: true
             timeout: true
         required:
             - name
@@ -184,53 +287,49 @@ definitions:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
             tiers:
                 type: array
                 items:
                     $ref: '#/definitions/TierResponseBody'
                 example:
                     - dateRanges:
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
                       roomTypePoints:
-                        Labore blanditiis maiores omnis rerum qui.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
-                        Voluptatum nemo molestias eaque.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
+                        Ab quaerat delectus amet.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Blanditiis eos.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Dicta ipsum.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
                     - dateRanges:
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
-                        - endDate: Burley Hane
-                          startDate: Lexus Tillman
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
                       roomTypePoints:
-                        Labore blanditiis maiores omnis rerum qui.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
-                        Voluptatum nemo molestias eaque.:
-                            weekday: 4919755634042695143
-                            weekend: 8366663380085310400
+                        Ab quaerat delectus amet.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Blanditiis eos.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
+                        Dicta ipsum.:
+                            weekday: 6454418589515295321
+                            weekend: 3368857188488503470
         example:
             code: ssr
             resort: Disney's Saratoga Springs Resort & Spa
@@ -245,44 +344,50 @@ definitions:
                   code: 1bp
                   name: One Bedroom Villa (Preferred View)
                   sleeps: 5
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
             tiers:
                 - dateRanges:
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
                   roomTypePoints:
-                    Labore blanditiis maiores omnis rerum qui.:
-                        weekday: 4919755634042695143
-                        weekend: 8366663380085310400
-                    Voluptatum nemo molestias eaque.:
-                        weekday: 4919755634042695143
-                        weekend: 8366663380085310400
+                    Ab quaerat delectus amet.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
+                    Blanditiis eos.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
+                    Dicta ipsum.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
                 - dateRanges:
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
                   roomTypePoints:
-                    Labore blanditiis maiores omnis rerum qui.:
-                        weekday: 4919755634042695143
-                        weekend: 8366663380085310400
-                    Voluptatum nemo molestias eaque.:
-                        weekday: 4919755634042695143
-                        weekend: 8366663380085310400
+                    Ab quaerat delectus amet.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
+                    Blanditiis eos.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
+                    Dicta ipsum.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
+        required:
+            - code
+            - resort
+            - roomTypes
+            - tiers
     PointsGetResortNotFoundResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object
@@ -310,15 +415,15 @@ definitions:
             timeout:
                 type: boolean
                 description: Is the error a timeout?
-                example: true
+                example: false
         description: GetResort_not_found_Response_Body result type (default view)
         example:
-            fault: true
+            fault: false
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
-            temporary: false
-            timeout: true
+            temporary: true
+            timeout: false
         required:
             - name
             - id
@@ -359,11 +464,6 @@ definitions:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
         description: GetResortResponseBody result type (default view)
         example:
             code: ssr
@@ -386,7 +486,7 @@ definitions:
             fault:
                 type: boolean
                 description: Is the error a server-side fault?
-                example: true
+                example: false
             id:
                 type: string
                 description: ID is a unique identifier for this particular occurrence of the problem.
@@ -406,7 +506,7 @@ definitions:
             timeout:
                 type: boolean
                 description: Is the error a timeout?
-                example: true
+                example: false
         description: GetResortYear_not_found_Response_Body result type (default view)
         example:
             fault: false
@@ -450,10 +550,15 @@ definitions:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
             year:
                 type: integer
                 description: the year the resort info is for.
-                example: 1998
+                example: 2087
                 minimum: 1990
                 maximum: 2100
         description: GetResortYearResponseBody result type (default view)
@@ -471,7 +576,169 @@ definitions:
                   code: 1bp
                   name: One Bedroom Villa (Preferred View)
                   sleeps: 5
-            year: 2046
+            year: 2091
+    PointsQueryStayInvalidInputResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: false
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: false
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: QueryStay_invalid_input_Response_Body result type (default view)
+        example:
+            fault: true
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: false
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    PointsQueryStayResponseBody:
+        title: PointsQueryStayResponseBody
+        type: object
+        properties:
+            Rooms:
+                type: object
+                example:
+                    Eius ut incidunt nesciunt hic quibusdam.:
+                        Deserunt eos ratione architecto sed totam consectetur.: 4272375574989711216
+                        Soluta est eligendi eum sunt qui.: 2334412238377471837
+                    Necessitatibus quis soluta.:
+                        Assumenda earum nobis amet veritatis consectetur.: 6744637038513867021
+                        Est et dolorem.: 3117364866476888461
+                additionalProperties:
+                    type: object
+                    example:
+                        Dolor assumenda et deleniti.: 7137171991713911461
+                        Nostrum eaque animi.: 4296606376424092045
+                    additionalProperties:
+                        type: integer
+                        example: 3195416189495381961
+                        format: int64
+            excludeResorts:
+                type: array
+                items:
+                    type: string
+                    example: Officia facere qui nesciunt harum cumque cupiditate.
+                description: resorts to exclude from the search
+                example:
+                    - Numquam dolorem unde.
+                    - Repellendus ut repellat est est aut maxime.
+            from:
+                type: string
+                description: Check-in Date
+                example: "1987-04-08"
+                format: date
+            includeResorts:
+                type: array
+                items:
+                    type: string
+                    example: Voluptatem dolor earum qui modi.
+                description: resorts to include in the search
+                example:
+                    - Et eum et dolores qui.
+                    - Consequatur fuga in.
+                    - Omnis vero.
+                    - Commodi molestiae sunt perferendis harum iste.
+            maxBedrooms:
+                type: integer
+                description: the maximum number of bedrooms of room types to include
+                default: 3
+                example: 1
+                minimum: 0
+                maximum: 3
+            maxBeds:
+                type: integer
+                description: the maximum number of beds of room types to include
+                default: 6
+                example: 2
+                minimum: 2
+                maximum: 6
+            maxSleeps:
+                type: integer
+                description: the maximum capacity of room types to include
+                default: 12
+                example: 5
+                minimum: 1
+                maximum: 12
+            minBedrooms:
+                type: integer
+                description: the minimum number of bedrooms of room types to include
+                default: 0
+                example: 1
+                minimum: 0
+                maximum: 3
+            minBeds:
+                type: integer
+                description: the minimum number of beds of room types to include
+                default: 2
+                example: 2
+                minimum: 2
+                maximum: 6
+            minSleeps:
+                type: integer
+                description: the minimum capacity of room types to include
+                default: 1
+                example: 5
+                minimum: 1
+                maximum: 12
+            to:
+                type: string
+                description: Check-in Date
+                example: "1978-01-27"
+                format: date
+        example:
+            Rooms:
+                Et corporis voluptates.:
+                    Et nihil vitae.: 6645776767288152107
+                    Rerum molestias ullam et occaecati nisi.: 3145849629962948048
+            excludeResorts:
+                - Quam est fugit ratione magnam.
+                - Nisi eaque.
+                - Quisquam unde vel iste qui error sit.
+            from: "1977-03-21"
+            includeResorts:
+                - Occaecati fugiat distinctio rerum consequatur magnam.
+                - Sunt exercitationem eum.
+                - Et nesciunt aut in.
+            maxBedrooms: 1
+            maxBeds: 2
+            maxSleeps: 5
+            minBedrooms: 1
+            minBeds: 2
+            minSleeps: 5
+            to: "1980-11-22"
+        required:
+            - Rooms
+            - from
+            - to
     PointsResortResultResponseCollection:
         title: 'Mediatype identifier: application/vnd.dvc.point.calculator.resort; type=collection; view=default'
         type: array
@@ -479,6 +746,29 @@ definitions:
             $ref: '#/definitions/ResortResultResponse'
         description: GetResortsResponseBody is the result type for an array of ResortResultResponse (default view)
         example:
+            - code: ssr
+              name: Disney's Saratoga Springs Resort & Spa
+              roomTypes:
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
             - code: ssr
               name: Disney's Saratoga Springs Resort & Spa
               roomTypes:
@@ -576,16 +866,21 @@ definitions:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
         description: ResortResultResponse result type (default view)
         example:
             code: ssr
             name: Disney's Saratoga Springs Resort & Spa
             roomTypes:
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
                 - bedrooms: 1
                   beds: 2
                   code: 1bp
@@ -633,6 +928,12 @@ definitions:
             code: 1bp
             name: One Bedroom Villa (Preferred View)
             sleeps: 5
+        required:
+            - code
+            - name
+            - sleeps
+            - bedrooms
+            - beds
     RoomTypeResponseBody:
         title: RoomTypeResponseBody
         type: object
@@ -670,6 +971,12 @@ definitions:
             code: 1bp
             name: One Bedroom Villa (Preferred View)
             sleeps: 5
+        required:
+            - code
+            - name
+            - sleeps
+            - bedrooms
+            - beds
     TierDateRangeResponseBody:
         title: TierDateRangeResponseBody
         type: object
@@ -677,16 +984,19 @@ definitions:
             endDate:
                 type: string
                 description: end date
-                example: Major Simonis
-                pattern: \d{1,2}-\d{1,2}
+                example: 1-15
+                pattern: (0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)-(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)
             startDate:
                 type: string
                 description: start date
-                example: Adelbert Lang
-                pattern: \d{1,2}-\d{1,2}
+                example: 1-15
+                pattern: (0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)-(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)
         example:
-            endDate: Hazle Thiel
-            startDate: Assunta Weissnat
+            endDate: 1-15
+            startDate: 1-15
+        required:
+            - startDate
+            - endDate
     TierResponseBody:
         title: TierResponseBody
         type: object
@@ -696,42 +1006,40 @@ definitions:
                 items:
                     $ref: '#/definitions/TierDateRangeResponseBody'
                 example:
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
-                    - endDate: Burley Hane
-                      startDate: Lexus Tillman
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
             roomTypePoints:
                 type: object
                 example:
-                    Aliquam iste.:
-                        weekday: 4919755634042695143
-                        weekend: 8366663380085310400
-                    Nulla nulla eos facilis amet iusto.:
-                        weekday: 4919755634042695143
-                        weekend: 8366663380085310400
+                    Aliquam sint voluptates dicta maiores ullam est.:
+                        weekday: 6454418589515295321
+                        weekend: 3368857188488503470
                 additionalProperties:
                     $ref: '#/definitions/TierRoomTypePointsResponseBody'
         example:
             dateRanges:
-                - endDate: Burley Hane
-                  startDate: Lexus Tillman
-                - endDate: Burley Hane
-                  startDate: Lexus Tillman
-                - endDate: Burley Hane
-                  startDate: Lexus Tillman
-                - endDate: Burley Hane
-                  startDate: Lexus Tillman
+                - endDate: 1-15
+                  startDate: 1-15
+                - endDate: 1-15
+                  startDate: 1-15
+                - endDate: 1-15
+                  startDate: 1-15
             roomTypePoints:
-                Nihil quis.:
-                    weekday: 4919755634042695143
-                    weekend: 8366663380085310400
-                Voluptatem blanditiis labore explicabo sit animi cum.:
-                    weekday: 4919755634042695143
-                    weekend: 8366663380085310400
+                Neque nulla et.:
+                    weekday: 6454418589515295321
+                    weekend: 3368857188488503470
+                Vel eveniet ea quibusdam velit.:
+                    weekday: 6454418589515295321
+                    weekend: 3368857188488503470
+        required:
+            - dateRanges
+            - roomTypePoints
     TierRoomTypePointsResponseBody:
         title: TierRoomTypePointsResponseBody
         type: object
@@ -739,13 +1047,16 @@ definitions:
             weekday:
                 type: integer
                 description: points for Sunday - Thursday
-                example: 4056527439409501759
+                example: 7371879081197435314
                 format: int64
             weekend:
                 type: integer
                 description: points for Friday - Saturday
-                example: 5737925375864314622
+                example: 3215908680558838877
                 format: int64
         example:
-            weekday: 5067713511290110392
-            weekend: 8591690992313933494
+            weekday: 6837028636257374756
+            weekend: 287311464615699291
+        required:
+            - weekday
+            - weekend

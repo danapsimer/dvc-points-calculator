@@ -266,6 +266,189 @@ func EncodeGetPointChartError(encoder func(context.Context, http.ResponseWriter)
 	}
 }
 
+// EncodeQueryStayResponse returns an encoder for responses returned by the
+// Points QueryStay endpoint.
+func EncodeQueryStayResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res, _ := v.(*points.StayResult)
+		enc := encoder(ctx, w)
+		body := NewQueryStayResponseBody(res)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeQueryStayRequest returns a decoder for requests sent to the Points
+// QueryStay endpoint.
+func DecodeQueryStayRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			from           string
+			to             string
+			includeResorts []string
+			excludeResorts []string
+			minSleeps      int
+			maxSleeps      int
+			minBedrooms    int
+			maxBedrooms    int
+			minBeds        int
+			maxBeds        int
+			err            error
+
+			params = mux.Vars(r)
+		)
+		from = params["from"]
+		err = goa.MergeErrors(err, goa.ValidateFormat("from", from, goa.FormatDate))
+
+		to = params["to"]
+		err = goa.MergeErrors(err, goa.ValidateFormat("to", to, goa.FormatDate))
+
+		includeResorts = r.URL.Query()["includeResorts"]
+		excludeResorts = r.URL.Query()["excludeResorts"]
+		{
+			minSleepsRaw := r.URL.Query().Get("minSleeps")
+			if minSleepsRaw == "" {
+				minSleeps = 1
+			} else {
+				v, err2 := strconv.ParseInt(minSleepsRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("minSleeps", minSleepsRaw, "integer"))
+				}
+				minSleeps = int(v)
+			}
+		}
+		if minSleeps < 1 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("minSleeps", minSleeps, 1, true))
+		}
+		if minSleeps > 12 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("minSleeps", minSleeps, 12, false))
+		}
+		{
+			maxSleepsRaw := r.URL.Query().Get("maxSleeps")
+			if maxSleepsRaw == "" {
+				maxSleeps = 12
+			} else {
+				v, err2 := strconv.ParseInt(maxSleepsRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("maxSleeps", maxSleepsRaw, "integer"))
+				}
+				maxSleeps = int(v)
+			}
+		}
+		if maxSleeps < 1 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("maxSleeps", maxSleeps, 1, true))
+		}
+		if maxSleeps > 12 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("maxSleeps", maxSleeps, 12, false))
+		}
+		{
+			minBedroomsRaw := r.URL.Query().Get("minBedrooms")
+			if minBedroomsRaw != "" {
+				v, err2 := strconv.ParseInt(minBedroomsRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("minBedrooms", minBedroomsRaw, "integer"))
+				}
+				minBedrooms = int(v)
+			}
+		}
+		if minBedrooms < 0 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("minBedrooms", minBedrooms, 0, true))
+		}
+		if minBedrooms > 3 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("minBedrooms", minBedrooms, 3, false))
+		}
+		{
+			maxBedroomsRaw := r.URL.Query().Get("maxBedrooms")
+			if maxBedroomsRaw == "" {
+				maxBedrooms = 3
+			} else {
+				v, err2 := strconv.ParseInt(maxBedroomsRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("maxBedrooms", maxBedroomsRaw, "integer"))
+				}
+				maxBedrooms = int(v)
+			}
+		}
+		if maxBedrooms < 0 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("maxBedrooms", maxBedrooms, 0, true))
+		}
+		if maxBedrooms > 3 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("maxBedrooms", maxBedrooms, 3, false))
+		}
+		{
+			minBedsRaw := r.URL.Query().Get("minBeds")
+			if minBedsRaw == "" {
+				minBeds = 2
+			} else {
+				v, err2 := strconv.ParseInt(minBedsRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("minBeds", minBedsRaw, "integer"))
+				}
+				minBeds = int(v)
+			}
+		}
+		if minBeds < 2 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("minBeds", minBeds, 2, true))
+		}
+		if minBeds > 6 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("minBeds", minBeds, 6, false))
+		}
+		{
+			maxBedsRaw := r.URL.Query().Get("maxBeds")
+			if maxBedsRaw == "" {
+				maxBeds = 6
+			} else {
+				v, err2 := strconv.ParseInt(maxBedsRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("maxBeds", maxBedsRaw, "integer"))
+				}
+				maxBeds = int(v)
+			}
+		}
+		if maxBeds < 2 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("maxBeds", maxBeds, 2, true))
+		}
+		if maxBeds > 6 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("maxBeds", maxBeds, 6, false))
+		}
+		if err != nil {
+			return nil, err
+		}
+		payload := NewQueryStayStay(from, to, includeResorts, excludeResorts, minSleeps, maxSleeps, minBedrooms, maxBedrooms, minBeds, maxBeds)
+
+		return payload, nil
+	}
+}
+
+// EncodeQueryStayError returns an encoder for errors returned by the QueryStay
+// Points endpoint.
+func EncodeQueryStayError(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder, formatter func(err error) goahttp.Statuser) func(context.Context, http.ResponseWriter, error) error {
+	encodeError := goahttp.ErrorEncoder(encoder, formatter)
+	return func(ctx context.Context, w http.ResponseWriter, v error) error {
+		var en ErrorNamer
+		if !errors.As(v, &en) {
+			return encodeError(ctx, w, v)
+		}
+		switch en.ErrorName() {
+		case "invalid_input":
+			var res *goa.ServiceError
+			errors.As(v, &res)
+			enc := encoder(ctx, w)
+			var body interface{}
+			if formatter != nil {
+				body = formatter(res)
+			} else {
+				body = NewQueryStayInvalidInputResponseBody(res)
+			}
+			w.Header().Set("goa-error", res.ErrorName())
+			w.WriteHeader(http.StatusBadRequest)
+			return enc.Encode(body)
+		default:
+			return encodeError(ctx, w, v)
+		}
+	}
+}
+
 // marshalPointsviewsResortResultViewToResortResultResponse builds a value of
 // type *ResortResultResponse from a value of type
 // *pointsviews.ResortResultView.
@@ -291,11 +474,11 @@ func marshalPointsviewsRoomTypeViewToRoomTypeResponse(v *pointsviews.RoomTypeVie
 		return nil
 	}
 	res := &RoomTypeResponse{
-		Code:     v.Code,
-		Name:     v.Name,
-		Sleeps:   v.Sleeps,
-		Bedrooms: v.Bedrooms,
-		Beds:     v.Beds,
+		Code:     *v.Code,
+		Name:     *v.Name,
+		Sleeps:   *v.Sleeps,
+		Bedrooms: *v.Bedrooms,
+		Beds:     *v.Beds,
 	}
 
 	return res
@@ -331,11 +514,11 @@ func marshalPointsviewsRoomTypeViewToRoomTypeResponseBody(v *pointsviews.RoomTyp
 		return nil
 	}
 	res := &RoomTypeResponseBody{
-		Code:     v.Code,
-		Name:     v.Name,
-		Sleeps:   v.Sleeps,
-		Bedrooms: v.Bedrooms,
-		Beds:     v.Beds,
+		Code:     *v.Code,
+		Name:     *v.Name,
+		Sleeps:   *v.Sleeps,
+		Bedrooms: *v.Bedrooms,
+		Beds:     *v.Beds,
 	}
 
 	return res
@@ -344,9 +527,6 @@ func marshalPointsviewsRoomTypeViewToRoomTypeResponseBody(v *pointsviews.RoomTyp
 // marshalPointsRoomTypeToRoomTypeResponseBody builds a value of type
 // *RoomTypeResponseBody from a value of type *points.RoomType.
 func marshalPointsRoomTypeToRoomTypeResponseBody(v *points.RoomType) *RoomTypeResponseBody {
-	if v == nil {
-		return nil
-	}
 	res := &RoomTypeResponseBody{
 		Code:     v.Code,
 		Name:     v.Name,
@@ -361,9 +541,6 @@ func marshalPointsRoomTypeToRoomTypeResponseBody(v *points.RoomType) *RoomTypeRe
 // marshalPointsTierToTierResponseBody builds a value of type *TierResponseBody
 // from a value of type *points.Tier.
 func marshalPointsTierToTierResponseBody(v *points.Tier) *TierResponseBody {
-	if v == nil {
-		return nil
-	}
 	res := &TierResponseBody{}
 	if v.DateRanges != nil {
 		res.DateRanges = make([]*TierDateRangeResponseBody, len(v.DateRanges))
@@ -385,9 +562,6 @@ func marshalPointsTierToTierResponseBody(v *points.Tier) *TierResponseBody {
 // marshalPointsTierDateRangeToTierDateRangeResponseBody builds a value of type
 // *TierDateRangeResponseBody from a value of type *points.TierDateRange.
 func marshalPointsTierDateRangeToTierDateRangeResponseBody(v *points.TierDateRange) *TierDateRangeResponseBody {
-	if v == nil {
-		return nil
-	}
 	res := &TierDateRangeResponseBody{
 		StartDate: v.StartDate,
 		EndDate:   v.EndDate,
@@ -400,9 +574,6 @@ func marshalPointsTierDateRangeToTierDateRangeResponseBody(v *points.TierDateRan
 // value of type *TierRoomTypePointsResponseBody from a value of type
 // *points.TierRoomTypePoints.
 func marshalPointsTierRoomTypePointsToTierRoomTypePointsResponseBody(v *points.TierRoomTypePoints) *TierRoomTypePointsResponseBody {
-	if v == nil {
-		return nil
-	}
 	res := &TierRoomTypePointsResponseBody{
 		Weekday: v.Weekday,
 		Weekend: v.Weekend,

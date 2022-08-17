@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type TierDate time.Time
+type TierDate string
 
 func ParseTierDate(dateStr string) (TierDate, error) {
 	var tierDate TierDate
@@ -24,12 +24,12 @@ func ParseTierDate(dateStr string) (TierDate, error) {
 	if err != nil {
 		return tierDate, fmt.Errorf("malformed tier date: %s - expected a numeric day component: %s", dateStr, parts[1])
 	}
-	tierDate = TierDate(time.Date(time.Now().Year(), time.Month(month), day, 0, 0, 0, 0, time.UTC))
+	tierDate = TierDate(fmt.Sprintf("%d-%d", month, day))
 	return tierDate, nil
 }
 
 func (t TierDate) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf("\"%02d-%02d\"", t.Month(), t.Day())), nil
+	return []byte("\"" + t + "\""), nil
 }
 
 func (t *TierDate) UnmarshalJSON(date []byte) error {
@@ -47,23 +47,37 @@ func (t *TierDate) UnmarshalJSON(date []byte) error {
 }
 
 func (t TierDate) Month() time.Month {
-	return time.Time(t).Month()
+	parts := strings.Split(string(t), "-")
+	month, _ := strconv.Atoi(parts[0])
+	return time.Month(month)
 }
 
 func (t TierDate) Day() int {
-	return time.Time(t).Day()
+	parts := strings.Split(string(t), "-")
+	day, _ := strconv.Atoi(parts[1])
+	return day
 }
 
 func (t TierDate) Before(s TierDate) bool {
-	return time.Time(t).Before(time.Time(s))
+	tmonth := t.Month()
+	smonth := s.Month()
+	return tmonth < smonth || (tmonth == smonth && t.Day() < s.Day())
+}
+
+func (t TierDate) AsTime() time.Time {
+	return time.Date(time.Now().Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.UTC)
+}
+
+func FromTime(t time.Time) TierDate {
+	return TierDate(fmt.Sprintf("%d-%d", t.Month(), t.Day()))
 }
 
 func (t TierDate) Add(d time.Duration) TierDate {
-	return TierDate(time.Time(t).Add(d).Truncate(time.Hour * 24))
+	return FromTime(t.AsTime().Add(d).Truncate(time.Hour * 24))
 }
 
 func (t TierDate) String() string {
-	return time.Time(t).Format("01-02")
+	return string(t)
 }
 
 type DateRange struct {

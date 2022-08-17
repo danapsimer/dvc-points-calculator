@@ -10,7 +10,6 @@ import (
 )
 
 type Points struct {
-	points.Service
 	// Implements the points.Service interface
 	// The function definitions are is other files within this package.
 }

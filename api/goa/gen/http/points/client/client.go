@@ -34,6 +34,10 @@ type Client struct {
 	// GetPointChart endpoint.
 	GetPointChartDoer goahttp.Doer
 
+	// QueryStay Doer is the HTTP client used to make requests to the QueryStay
+	// endpoint.
+	QueryStayDoer goahttp.Doer
+
 	// RestoreResponseBody controls whether the response bodies are reset after
 	// decoding so they can be read again.
 	RestoreResponseBody bool
@@ -58,6 +62,7 @@ func NewClient(
 		GetResortDoer:       doer,
 		GetResortYearDoer:   doer,
 		GetPointChartDoer:   doer,
+		QueryStayDoer:       doer,
 		RestoreResponseBody: restoreBody,
 		scheme:              scheme,
 		host:                host,
@@ -137,6 +142,30 @@ func (c *Client) GetPointChart() goa.Endpoint {
 		resp, err := c.GetPointChartDoer.Do(req)
 		if err != nil {
 			return nil, goahttp.ErrRequestError("Points", "GetPointChart", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// QueryStay returns an endpoint that makes HTTP requests to the Points service
+// QueryStay server.
+func (c *Client) QueryStay() goa.Endpoint {
+	var (
+		encodeRequest  = EncodeQueryStayRequest(c.encoder)
+		decodeResponse = DecodeQueryStayResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v interface{}) (interface{}, error) {
+		req, err := c.BuildQueryStayRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.QueryStayDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("Points", "QueryStay", err)
 		}
 		return decodeResponse(resp)
 	}

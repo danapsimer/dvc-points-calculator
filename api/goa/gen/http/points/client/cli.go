@@ -9,6 +9,7 @@
 package client
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -104,6 +105,181 @@ func BuildGetPointChartPayload(pointsGetPointChartResortCode string, pointsGetPo
 	v := &points.GetPointChartPayload{}
 	v.ResortCode = resortCode
 	v.Year = year
+
+	return v, nil
+}
+
+// BuildQueryStayPayload builds the payload for the Points QueryStay endpoint
+// from CLI flags.
+func BuildQueryStayPayload(pointsQueryStayFrom string, pointsQueryStayTo string, pointsQueryStayIncludeResorts string, pointsQueryStayExcludeResorts string, pointsQueryStayMinSleeps string, pointsQueryStayMaxSleeps string, pointsQueryStayMinBedrooms string, pointsQueryStayMaxBedrooms string, pointsQueryStayMinBeds string, pointsQueryStayMaxBeds string) (*points.Stay, error) {
+	var err error
+	var from string
+	{
+		from = pointsQueryStayFrom
+		err = goa.MergeErrors(err, goa.ValidateFormat("from", from, goa.FormatDate))
+
+		if err != nil {
+			return nil, err
+		}
+	}
+	var to string
+	{
+		to = pointsQueryStayTo
+		err = goa.MergeErrors(err, goa.ValidateFormat("to", to, goa.FormatDate))
+
+		if err != nil {
+			return nil, err
+		}
+	}
+	var includeResorts []string
+	{
+		if pointsQueryStayIncludeResorts != "" {
+			err = json.Unmarshal([]byte(pointsQueryStayIncludeResorts), &includeResorts)
+			if err != nil {
+				return nil, fmt.Errorf("invalid JSON for includeResorts, \nerror: %s, \nexample of valid JSON:\n%s", err, "'[\n      \"Exercitationem qui expedita perferendis consequuntur.\",\n      \"Eum nulla accusamus.\",\n      \"Qui et dolorem veniam molestias aut autem.\"\n   ]'")
+			}
+		}
+	}
+	var excludeResorts []string
+	{
+		if pointsQueryStayExcludeResorts != "" {
+			err = json.Unmarshal([]byte(pointsQueryStayExcludeResorts), &excludeResorts)
+			if err != nil {
+				return nil, fmt.Errorf("invalid JSON for excludeResorts, \nerror: %s, \nexample of valid JSON:\n%s", err, "'[\n      \"Veniam vel.\",\n      \"Tempore commodi quis dicta et libero rerum.\"\n   ]'")
+			}
+		}
+	}
+	var minSleeps int
+	{
+		if pointsQueryStayMinSleeps != "" {
+			var v int64
+			v, err = strconv.ParseInt(pointsQueryStayMinSleeps, 10, strconv.IntSize)
+			minSleeps = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for minSleeps, must be INT")
+			}
+			if minSleeps < 1 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("minSleeps", minSleeps, 1, true))
+			}
+			if minSleeps > 12 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("minSleeps", minSleeps, 12, false))
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	var maxSleeps int
+	{
+		if pointsQueryStayMaxSleeps != "" {
+			var v int64
+			v, err = strconv.ParseInt(pointsQueryStayMaxSleeps, 10, strconv.IntSize)
+			maxSleeps = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for maxSleeps, must be INT")
+			}
+			if maxSleeps < 1 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("maxSleeps", maxSleeps, 1, true))
+			}
+			if maxSleeps > 12 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("maxSleeps", maxSleeps, 12, false))
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	var minBedrooms int
+	{
+		if pointsQueryStayMinBedrooms != "" {
+			var v int64
+			v, err = strconv.ParseInt(pointsQueryStayMinBedrooms, 10, strconv.IntSize)
+			minBedrooms = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for minBedrooms, must be INT")
+			}
+			if minBedrooms < 0 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("minBedrooms", minBedrooms, 0, true))
+			}
+			if minBedrooms > 3 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("minBedrooms", minBedrooms, 3, false))
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	var maxBedrooms int
+	{
+		if pointsQueryStayMaxBedrooms != "" {
+			var v int64
+			v, err = strconv.ParseInt(pointsQueryStayMaxBedrooms, 10, strconv.IntSize)
+			maxBedrooms = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for maxBedrooms, must be INT")
+			}
+			if maxBedrooms < 0 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("maxBedrooms", maxBedrooms, 0, true))
+			}
+			if maxBedrooms > 3 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("maxBedrooms", maxBedrooms, 3, false))
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	var minBeds int
+	{
+		if pointsQueryStayMinBeds != "" {
+			var v int64
+			v, err = strconv.ParseInt(pointsQueryStayMinBeds, 10, strconv.IntSize)
+			minBeds = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for minBeds, must be INT")
+			}
+			if minBeds < 2 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("minBeds", minBeds, 2, true))
+			}
+			if minBeds > 6 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("minBeds", minBeds, 6, false))
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	var maxBeds int
+	{
+		if pointsQueryStayMaxBeds != "" {
+			var v int64
+			v, err = strconv.ParseInt(pointsQueryStayMaxBeds, 10, strconv.IntSize)
+			maxBeds = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for maxBeds, must be INT")
+			}
+			if maxBeds < 2 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("maxBeds", maxBeds, 2, true))
+			}
+			if maxBeds > 6 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("maxBeds", maxBeds, 6, false))
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	v := &points.Stay{}
+	v.From = from
+	v.To = to
+	v.IncludeResorts = includeResorts
+	v.ExcludeResorts = excludeResorts
+	v.MinSleeps = minSleeps
+	v.MaxSleeps = maxSleeps
+	v.MinBedrooms = minBedrooms
+	v.MaxBedrooms = maxBedrooms
+	v.MinBeds = minBeds
+	v.MaxBeds = maxBeds
 
 	return v, nil
 }

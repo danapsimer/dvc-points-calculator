@@ -75,11 +75,11 @@ func TestTierDate_MarshalJSON(t *testing.T) {
 		expected any
 	}{
 		{
-			Test{TierDate(time.Date(2022, 01, 01, 0, 0, 0, 0, time.UTC))},
-			"{\"date\":\"01-01\"}",
+			Test{TierDate("1-1")},
+			"{\"date\":\"1-1\"}",
 		},
 		{
-			Test{TierDate(time.Date(2023, 12, 15, 0, 0, 0, 0, time.UTC))},
+			Test{TierDate("12-15")},
 			"{\"date\":\"12-15\"}",
 		},
 	}
@@ -102,11 +102,11 @@ func TestTierDate_UnmarshalJSON(t *testing.T) {
 		input    string
 	}{
 		{
-			Test{TierDate(time.Date(2022, 01, 01, 0, 0, 0, 0, time.UTC))},
-			"{\"date\":\"01-01\"}",
+			Test{TierDate("1-1")},
+			"{\"date\":\"1-1\"}",
 		},
 		{
-			Test{TierDate(time.Date(2022, 12, 15, 0, 0, 0, 0, time.UTC))},
+			Test{TierDate("12-15")},
 			"{\"date\":\"12-15\"}",
 		},
 		{
@@ -129,12 +129,12 @@ func TestTierDate_UnmarshalJSON(t *testing.T) {
 
 func TestTierDate_Day(t *testing.T) {
 	now := time.Now()
-	assert.Equal(t, now.Day(), TierDate(now).Day())
+	assert.Equal(t, now.Day(), FromTime(now).Day())
 }
 
 func TestTierDate_Month(t *testing.T) {
 	now := time.Now()
-	assert.Equal(t, now.Month(), TierDate(now).Month())
+	assert.Equal(t, now.Month(), FromTime(now).Month())
 }
 
 func TestParseTierDate(t *testing.T) {
@@ -143,11 +143,11 @@ func TestParseTierDate(t *testing.T) {
 		input    string
 	}{
 		{
-			TierDate(time.Date(2022, 01, 01, 0, 0, 0, 0, time.UTC)),
+			FromTime(time.Date(2022, 01, 01, 0, 0, 0, 0, time.UTC)),
 			"01-01",
 		},
 		{
-			TierDate(time.Date(2022, 12, 15, 0, 0, 0, 0, time.UTC)),
+			FromTime(time.Date(2022, 12, 15, 0, 0, 0, 0, time.UTC)),
 			"12-15",
 		},
 		{

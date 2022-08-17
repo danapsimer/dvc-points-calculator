@@ -20,6 +20,7 @@ type Endpoints struct {
 	GetResort     goa.Endpoint
 	GetResortYear goa.Endpoint
 	GetPointChart goa.Endpoint
+	QueryStay     goa.Endpoint
 }
 
 // NewEndpoints wraps the methods of the "Points" service with endpoints.
@@ -29,6 +30,7 @@ func NewEndpoints(s Service) *Endpoints {
 		GetResort:     NewGetResortEndpoint(s),
 		GetResortYear: NewGetResortYearEndpoint(s),
 		GetPointChart: NewGetPointChartEndpoint(s),
+		QueryStay:     NewQueryStayEndpoint(s),
 	}
 }
 
@@ -38,6 +40,7 @@ func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
 	e.GetResort = m(e.GetResort)
 	e.GetResortYear = m(e.GetResortYear)
 	e.GetPointChart = m(e.GetPointChart)
+	e.QueryStay = m(e.QueryStay)
 }
 
 // NewGetResortsEndpoint returns an endpoint function that calls the method
@@ -87,5 +90,14 @@ func NewGetPointChartEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		p := req.(*GetPointChartPayload)
 		return s.GetPointChart(ctx, p)
+	}
+}
+
+// NewQueryStayEndpoint returns an endpoint function that calls the method
+// "QueryStay" of service "Points".
+func NewQueryStayEndpoint(s Service) goa.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*Stay)
+		return s.QueryStay(ctx, p)
 	}
 }

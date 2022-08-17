@@ -231,6 +231,21 @@ func ValidateResortResultViewResortUpdate(result *ResortResultView) (err error) 
 
 // ValidateRoomTypeView runs the validations defined on RoomTypeView.
 func ValidateRoomTypeView(result *RoomTypeView) (err error) {
+	if result.Code == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("code", "result"))
+	}
+	if result.Name == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("name", "result"))
+	}
+	if result.Sleeps == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("sleeps", "result"))
+	}
+	if result.Bedrooms == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("bedrooms", "result"))
+	}
+	if result.Beds == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("beds", "result"))
+	}
 	if result.Code != nil {
 		err = goa.MergeErrors(err, goa.ValidatePattern("result.code", *result.Code, "[a-z0-9]{3}"))
 	}

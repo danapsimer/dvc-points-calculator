@@ -12,6 +12,7 @@ import (
 	"context"
 
 	pointsviews "github.com/danapsimer/dvc-points-calculator/api/goa/gen/points/views"
+	"github.com/danapsimer/dvc-points-calculator/model"
 	goa "goa.design/goa/v3/pkg"
 )
 
@@ -33,6 +34,8 @@ type Service interface {
 	GetResortYear(context.Context, *GetResortYearPayload) (res *ResortYearResult, err error)
 	// GetPointChart implements GetPointChart.
 	GetPointChart(context.Context, *GetPointChartPayload) (res *PointChart, err error)
+	// QueryStay implements QueryStay.
+	QueryStay(context.Context, *Stay) (res *StayResult, err error)
 }
 
 // ServiceName is the name of the service as defined in the design. This is the
@@ -43,7 +46,7 @@ const ServiceName = "Points"
 // MethodNames lists the service method names as defined in the design. These
 // are the same values that are set in the endpoint request contexts under the
 // MethodKey key.
-var MethodNames = [4]string{"GetResorts", "GetResort", "GetResortYear", "GetPointChart"}
+var MethodNames = [5]string{"GetResorts", "GetResort", "GetResortYear", "GetPointChart", "QueryStay"}
 
 // GetPointChartPayload is the payload type of the Points service GetPointChart
 // method.
@@ -72,9 +75,9 @@ type GetResortYearPayload struct {
 // PointChart is the result type of the Points service GetPointChart method.
 type PointChart struct {
 	// resort's code
-	Code *string
+	Code string
 	// resort's code
-	Resort    *string
+	Resort    string
 	RoomTypes []*RoomType
 	Tiers     []*Tier
 }
@@ -106,15 +109,64 @@ type ResortYearResult struct {
 
 type RoomType struct {
 	// room type's code
-	Code *string
+	Code string
 	// room type's name
-	Name *string
+	Name string
 	// max room capacity
-	Sleeps *int
+	Sleeps int
 	// number of bedrooms
-	Bedrooms *int
+	Bedrooms int
 	// number of beds
-	Beds *int
+	Beds int
+}
+
+// Stay is the payload type of the Points service QueryStay method.
+type Stay struct {
+	// Check-in Date
+	From string
+	// Check-in Date
+	To string
+	// resorts to include in the search
+	IncludeResorts []string
+	// resorts to exclude from the search
+	ExcludeResorts []string
+	// the minimum capacity of room types to include
+	MinSleeps int
+	// the maximum capacity of room types to include
+	MaxSleeps int
+	// the minimum number of bedrooms of room types to include
+	MinBedrooms int
+	// the maximum number of bedrooms of room types to include
+	MaxBedrooms int
+	// the minimum number of beds of room types to include
+	MinBeds int
+	// the maximum number of beds of room types to include
+	MaxBeds int
+}
+
+// StayResult is the result type of the Points service QueryStay method.
+type StayResult struct {
+	Rooms map[string]map[string]int
+	// Check-in Date
+	From string
+	// Check-in Date
+	To string
+	// resorts to include in the search
+	IncludeResorts []string
+	// resorts to exclude from the search
+	ExcludeResorts []string
+	// the minimum capacity of room types to include
+	MinSleeps int
+	// the maximum capacity of room types to include
+	MaxSleeps int
+	// the minimum number of bedrooms of room types to include
+	MinBedrooms int
+	// the maximum number of bedrooms of room types to include
+	MaxBedrooms int
+	// the minimum number of beds of room types to include
+	MinBeds int
+	// the maximum number of beds of room types to include
+	MaxBeds int
 }
 
 type Tier struct {
@@ -124,21 +176,26 @@ type Tier struct {
 
 type TierDateRange struct {
 	// start date
-	StartDate *string
+	StartDate model.TierDate
 	// end date
-	EndDate *string
+	EndDate model.TierDate
 }
 
 type TierRoomTypePoints struct {
 	// points for Sunday - Thursday
-	Weekday *int
+	Weekday int
 	// points for Friday - Saturday
-	Weekend *int
+	Weekend int
 }
 
 // MakeNotFound builds a goa.ServiceError from an error.
 func MakeNotFound(err error) *goa.ServiceError {
 	return goa.NewServiceError(err, "not_found", false, false, false)
+}
+
+// MakeInvalidInput builds a goa.ServiceError from an error.
+func MakeInvalidInput(err error) *goa.ServiceError {
+	return goa.NewServiceError(err, "invalid_input", false, false, false)
 }
 
 // NewResortResultCollection initializes result type ResortResultCollection
@@ -394,11 +451,11 @@ func transformPointsviewsRoomTypeViewToRoomType(v *pointsviews.RoomTypeView) *Ro
 		return nil
 	}
 	res := &RoomType{
-		Code:     v.Code,
-		Name:     v.Name,
-		Sleeps:   v.Sleeps,
-		Bedrooms: v.Bedrooms,
-		Beds:     v.Beds,
+		Code:     *v.Code,
+		Name:     *v.Name,
+		Sleeps:   *v.Sleeps,
+		Bedrooms: *v.Bedrooms,
+		Beds:     *v.Beds,
 	}
 
 	return res
@@ -411,11 +468,11 @@ func transformRoomTypeToPointsviewsRoomTypeView(v *RoomType) *pointsviews.RoomTy
 		return nil
 	}
 	res := &pointsviews.RoomTypeView{
-		Code:     v.Code,
-		Name:     v.Name,
-		Sleeps:   v.Sleeps,
-		Bedrooms: v.Bedrooms,
-		Beds:     v.Beds,
+		Code:     &v.Code,
+		Name:     &v.Name,
+		Sleeps:   &v.Sleeps,
+		Bedrooms: &v.Bedrooms,
+		Beds:     &v.Beds,
 	}
 
 	return res

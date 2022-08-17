@@ -23,7 +23,7 @@ import (
 //
 //	command (subcommand1|subcommand2|...)
 func UsageCommands() string {
-	return `points (get-resorts|get-resort|get-resort-year|get-point-chart)
+	return `points (get-resorts|get-resort|get-resort-year|get-point-chart|query-stay)
 `
 }
 
@@ -57,12 +57,25 @@ func ParseEndpoint(
 		pointsGetPointChartFlags          = flag.NewFlagSet("get-point-chart", flag.ExitOnError)
 		pointsGetPointChartResortCodeFlag = pointsGetPointChartFlags.String("resort-code", "REQUIRED", "the resort's code")
 		pointsGetPointChartYearFlag       = pointsGetPointChartFlags.String("year", "REQUIRED", "the year")
+
+		pointsQueryStayFlags              = flag.NewFlagSet("query-stay", flag.ExitOnError)
+		pointsQueryStayFromFlag           = pointsQueryStayFlags.String("from", "REQUIRED", "Check-in Date")
+		pointsQueryStayToFlag             = pointsQueryStayFlags.String("to", "REQUIRED", "Check-in Date")
+		pointsQueryStayIncludeResortsFlag = pointsQueryStayFlags.String("include-resorts", "", "")
+		pointsQueryStayExcludeResortsFlag = pointsQueryStayFlags.String("exclude-resorts", "", "")
+		pointsQueryStayMinSleepsFlag      = pointsQueryStayFlags.String("min-sleeps", "1", "")
+		pointsQueryStayMaxSleepsFlag      = pointsQueryStayFlags.String("max-sleeps", "12", "")
+		pointsQueryStayMinBedroomsFlag    = pointsQueryStayFlags.String("min-bedrooms", "", "")
+		pointsQueryStayMaxBedroomsFlag    = pointsQueryStayFlags.String("max-bedrooms", "3", "")
+		pointsQueryStayMinBedsFlag        = pointsQueryStayFlags.String("min-beds", "2", "")
+		pointsQueryStayMaxBedsFlag        = pointsQueryStayFlags.String("max-beds", "6", "")
 	)
 	pointsFlags.Usage = pointsUsage
 	pointsGetResortsFlags.Usage = pointsGetResortsUsage
 	pointsGetResortFlags.Usage = pointsGetResortUsage
 	pointsGetResortYearFlags.Usage = pointsGetResortYearUsage
 	pointsGetPointChartFlags.Usage = pointsGetPointChartUsage
+	pointsQueryStayFlags.Usage = pointsQueryStayUsage
 
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
@@ -110,6 +123,9 @@ func ParseEndpoint(
 			case "get-point-chart":
 				epf = pointsGetPointChartFlags
 
+			case "query-stay":
+				epf = pointsQueryStayFlags
+
 			}
 
 		}
@@ -147,6 +163,9 @@ func ParseEndpoint(
 			case "get-point-chart":
 				endpoint = c.GetPointChart()
 				data, err = pointsc.BuildGetPointChartPayload(*pointsGetPointChartResortCodeFlag, *pointsGetPointChartYearFlag)
+			case "query-stay":
+				endpoint = c.QueryStay()
+				data, err = pointsc.BuildQueryStayPayload(*pointsQueryStayFromFlag, *pointsQueryStayToFlag, *pointsQueryStayIncludeResortsFlag, *pointsQueryStayExcludeResortsFlag, *pointsQueryStayMinSleepsFlag, *pointsQueryStayMaxSleepsFlag, *pointsQueryStayMinBedroomsFlag, *pointsQueryStayMaxBedroomsFlag, *pointsQueryStayMinBedsFlag, *pointsQueryStayMaxBedsFlag)
 			}
 		}
 	}
@@ -168,6 +187,7 @@ COMMAND:
     get-resort: GetResort implements GetResort.
     get-resort-year: GetResortYear implements GetResortYear.
     get-point-chart: GetPointChart implements GetPointChart.
+    query-stay: QueryStay implements QueryStay.
 
 Additional help:
     %[1]s points COMMAND --help
@@ -202,7 +222,7 @@ GetResortYear implements GetResortYear.
     -year INT: the year
 
 Example:
-    %[1]s points get-resort-year --resort-code "ssr" --year 2045
+    %[1]s points get-resort-year --resort-code "ssr" --year 2024
 `, os.Args[0])
 }
 
@@ -214,6 +234,33 @@ GetPointChart implements GetPointChart.
     -year INT: the year
 
 Example:
-    %[1]s points get-point-chart --resort-code "ssr" --year 2098
+    %[1]s points get-point-chart --resort-code "ssr" --year 2019
+`, os.Args[0])
+}
+
+func pointsQueryStayUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] points query-stay -from STRING -to STRING -include-resorts JSON -exclude-resorts JSON -min-sleeps INT -max-sleeps INT -min-bedrooms INT -max-bedrooms INT -min-beds INT -max-beds INT
+
+QueryStay implements QueryStay.
+    -from STRING: Check-in Date
+    -to STRING: Check-in Date
+    -include-resorts JSON: 
+    -exclude-resorts JSON: 
+    -min-sleeps INT: 
+    -max-sleeps INT: 
+    -min-bedrooms INT: 
+    -max-bedrooms INT: 
+    -min-beds INT: 
+    -max-beds INT: 
+
+Example:
+    %[1]s points query-stay --from "1994-03-23" --to "2015-10-23" --include-resorts '[
+      "Exercitationem qui expedita perferendis consequuntur.",
+      "Eum nulla accusamus.",
+      "Qui et dolorem veniam molestias aut autem."
+   ]' --exclude-resorts '[
+      "Veniam vel.",
+      "Tempore commodi quis dicta et libero rerum."
+   ]' --min-sleeps 5 --max-sleeps 5 --min-bedrooms 1 --max-bedrooms 1 --min-beds 2 --max-beds 2
 `, os.Args[0])
 }

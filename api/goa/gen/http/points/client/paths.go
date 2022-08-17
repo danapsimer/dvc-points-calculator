@@ -31,3 +31,8 @@ func GetResortYearPointsPath(resortCode string, year int) string {
 func GetPointChartPointsPath(resortCode string, year int) string {
 	return fmt.Sprintf("/chart/%v/%v", resortCode, year)
 }
+
+// QueryStayPointsPath returns the URL path to the Points service QueryStay HTTP endpoint.
+func QueryStayPointsPath(from string, to string) string {
+	return fmt.Sprintf("/stay/%v/%v", from, to)
+}

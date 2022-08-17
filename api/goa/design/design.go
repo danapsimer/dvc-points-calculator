@@ -3,6 +3,7 @@ package design
 import (
 	"github.com/danapsimer/dvc-points-calculator/model"
 	. "goa.design/goa/v3/dsl"
+	"net/http"
 )
 
 var _ = API("Points", func() {
@@ -61,6 +62,7 @@ var RoomType = Type("RoomType", func() {
 	Attribute("sleeps", Int, "max room capacity", Sleeps)
 	Attribute("bedrooms", Int, "number of bedrooms", Bedrooms)
 	Attribute("beds", Int, "number of beds", Beds)
+	Required("code", "name", "sleeps", "bedrooms", "beds")
 	ConvertTo(model.RoomType{})
 	CreateFrom(model.RoomType{})
 })
@@ -78,34 +80,48 @@ var ResortResponse = ResultType("application/vnd.dvc.point.calculator.resort", "
 		Attribute("code")
 		Attribute("name")
 		Attribute("roomTypes")
+		Required("code", "name", "roomTypes")
 	})
 	View("resortOnly", func() {
 		Attribute("code")
 		Attribute("name")
+		Required("code", "name")
 	})
 	View("resortUpdate", func() {
 		Attribute("name")
+		Required("name")
 	})
 	CreateFrom(model.Resort{})
 })
 
 func MonthDay() {
-	Pattern("\\d{1,2}-\\d{1,2}")
+	Pattern("(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12)-(0?1|0?2|0?3|0?4|0?5|0?6|0?7|0?8|0?9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)")
+	Meta("struct:field:type", "model.TierDate", "github.com/danapsimer/dvc-points-calculator/model")
+	Example("1-15")
 }
 
 var TierDateRange = Type("TierDateRange", func() {
 	Attribute("startDate", String, "start date", MonthDay)
 	Attribute("endDate", String, "end date", MonthDay)
+	Required("startDate", "endDate")
+	ConvertTo(model.DateRange{})
+	CreateFrom(model.DateRange{})
 })
 
 var TierRoomTypePoints = Type("TierRoomTypePoints", func() {
 	Attribute("weekday", Int, "points for Sunday - Thursday")
 	Attribute("weekend", Int, "points for Friday - Saturday")
+	Required("weekday", "weekend")
+	ConvertTo(model.Points{})
+	CreateFrom(model.Points{})
 })
 
 var Tier = Type("Tier", func() {
 	Attribute("dateRanges", ArrayOf(TierDateRange))
 	Attribute("roomTypePoints", MapOf(String, TierRoomTypePoints))
+	Required("dateRanges", "roomTypePoints")
+	ConvertTo(model.Tier{})
+	CreateFrom(model.Tier{})
 })
 
 var PointChart = Type("PointChart", func() {
@@ -113,6 +129,9 @@ var PointChart = Type("PointChart", func() {
 	Attribute("resort", String, "resort's code", ResortName)
 	Attribute("roomTypes", ArrayOf(RoomType))
 	Attribute("tiers", ArrayOf(Tier))
+	Required("code", "resort", "roomTypes", "tiers")
+	ConvertTo(model.PointChart{})
+	CreateFrom(model.PointChart{})
 })
 
 var ResortYearResponse = ResultType("application/vnd.dvc.point.calculator.resortYear", "ResortYearResult", func() {
@@ -123,11 +142,55 @@ var ResortYearResponse = ResultType("application/vnd.dvc.point.calculator.resort
 		Attribute("name")
 		Attribute("year")
 		Attribute("roomTypes")
+		Required("code", "name", "year", "roomTypes")
 	})
 })
 
 var ListResorts = CollectionOf(ResortResponse, func() {
 	View("resortOnly")
+})
+
+func StayDate() {
+	Format(FormatDate)
+
+}
+
+var Stay = Type("Stay", func() {
+	Attribute("from", String, "Check-in Date", StayDate)
+	Attribute("to", String, "Check-in Date", StayDate)
+	Required("from", "to")
+	Attribute("includeResorts", ArrayOf(String), "resorts to include in the search")
+	Attribute("excludeResorts", ArrayOf(String), "resorts to exclude from the search")
+	Attribute("minSleeps", Int, "the minimum capacity of room types to include", func() {
+		Sleeps()
+		Default(1)
+	})
+	Attribute("maxSleeps", Int, "the maximum capacity of room types to include", func() {
+		Sleeps()
+		Default(12)
+	})
+	Attribute("minBedrooms", Int, "the minimum number of bedrooms of room types to include", func() {
+		Bedrooms()
+		Default(0)
+	})
+	Attribute("maxBedrooms", Int, "the maximum number of bedrooms of room types to include", func() {
+		Bedrooms()
+		Default(3)
+	})
+	Attribute("minBeds", Int, "the minimum number of beds of room types to include", func() {
+		Beds()
+		Default(2)
+	})
+	Attribute("maxBeds", Int, "the maximum number of beds of room types to include", func() {
+		Beds()
+		Default(6)
+	})
+})
+
+var StayResult = Type("StayResult", func() {
+	Extend(Stay)
+	Attribute("Rooms", MapOf(String, MapOf(String, Int)))
+	Required("Rooms")
 })
 
 var _ = Service("Points", func() {
@@ -175,9 +238,29 @@ var _ = Service("Points", func() {
 		})
 		Error("not_found")
 		HTTP(func() {
-			GET("chart/{resortCode}/{year}")
+			GET("/chart/{resortCode}/{year}")
 			Response(StatusOK)
 			Response("not_found", StatusNotFound)
+		})
+	})
+	Method("QueryStay", func() {
+		Result(StayResult)
+		Payload(Stay)
+		Error("invalid_input")
+		HTTP(func() {
+			GET("/stay/{from}/{to}")
+			Params(func() {
+				Param("includeResorts")
+				Param("excludeResorts")
+				Param("minSleeps")
+				Param("maxSleeps")
+				Param("minBedrooms")
+				Param("maxBedrooms")
+				Param("minBeds")
+				Param("maxBeds")
+			})
+			Response(StatusOK)
+			Response("invalid_input", http.StatusBadRequest)
 		})
 	})
 })
