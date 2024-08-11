@@ -18,16 +18,18 @@ import (
 type Client struct {
 	GetResortsEndpoint    goa.Endpoint
 	GetResortEndpoint     goa.Endpoint
+	PutResortEndpoint     goa.Endpoint
 	GetResortYearEndpoint goa.Endpoint
 	GetPointChartEndpoint goa.Endpoint
 	QueryStayEndpoint     goa.Endpoint
 }
 
 // NewClient initializes a "Points" service client given the endpoints.
-func NewClient(getResorts, getResort, getResortYear, getPointChart, queryStay goa.Endpoint) *Client {
+func NewClient(getResorts, getResort, putResort, getResortYear, getPointChart, queryStay goa.Endpoint) *Client {
 	return &Client{
 		GetResortsEndpoint:    getResorts,
 		GetResortEndpoint:     getResort,
+		PutResortEndpoint:     putResort,
 		GetResortYearEndpoint: getResortYear,
 		GetPointChartEndpoint: getPointChart,
 		QueryStayEndpoint:     queryStay,
@@ -45,12 +47,19 @@ func (c *Client) GetResorts(ctx context.Context) (res ResortResultCollection, er
 }
 
 // GetResort calls the "GetResort" endpoint of the "Points" service.
-// GetResort may return the following errors:
-//   - "not_found" (type *goa.ServiceError)
-//   - error: internal error
 func (c *Client) GetResort(ctx context.Context, p *GetResortPayload) (res *ResortResult, err error) {
 	var ires interface{}
 	ires, err = c.GetResortEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*ResortResult), nil
+}
+
+// PutResort calls the "PutResort" endpoint of the "Points" service.
+func (c *Client) PutResort(ctx context.Context, p *PutResortPayload) (res *ResortResult, err error) {
+	var ires interface{}
+	ires, err = c.PutResortEndpoint(ctx, p)
 	if err != nil {
 		return
 	}

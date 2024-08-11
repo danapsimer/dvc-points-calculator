@@ -35,6 +35,33 @@ func BuildGetResortPayload(pointsGetResortResortCode string) (*points.GetResortP
 	return v, nil
 }
 
+// BuildPutResortPayload builds the payload for the Points PutResort endpoint
+// from CLI flags.
+func BuildPutResortPayload(pointsPutResortBody string, pointsPutResortResortCode string) (*points.PutResortPayload, error) {
+	var err error
+	var body PutResortRequestBody
+	{
+		err = json.Unmarshal([]byte(pointsPutResortBody), &body)
+		if err != nil {
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"name\": \"Disney\\'s Saratoga Springs Resort \\u0026 Spa\"\n   }'")
+		}
+	}
+	var resortCode string
+	{
+		resortCode = pointsPutResortResortCode
+		err = goa.MergeErrors(err, goa.ValidatePattern("resortCode", resortCode, "[a-z]{3}"))
+		if err != nil {
+			return nil, err
+		}
+	}
+	v := &points.PutResortPayload{
+		Name: body.Name,
+	}
+	v.ResortCode = resortCode
+
+	return v, nil
+}
+
 // BuildGetResortYearPayload builds the payload for the Points GetResortYear
 // endpoint from CLI flags.
 func BuildGetResortYearPayload(pointsGetResortYearResortCode string, pointsGetResortYearYear string) (*points.GetResortYearPayload, error) {
@@ -136,7 +163,13 @@ func BuildQueryStayPayload(pointsQueryStayFrom string, pointsQueryStayTo string,
 		if pointsQueryStayIncludeResorts != "" {
 			err = json.Unmarshal([]byte(pointsQueryStayIncludeResorts), &includeResorts)
 			if err != nil {
-				return nil, fmt.Errorf("invalid JSON for includeResorts, \nerror: %s, \nexample of valid JSON:\n%s", err, "'[\n      \"Exercitationem qui expedita perferendis consequuntur.\",\n      \"Eum nulla accusamus.\",\n      \"Qui et dolorem veniam molestias aut autem.\"\n   ]'")
+				return nil, fmt.Errorf("invalid JSON for includeResorts, \nerror: %s, \nexample of valid JSON:\n%s", err, "'[\n      \"blt\",\n      \"ssr\",\n      \"akv\"\n   ]'")
+			}
+			for _, e := range includeResorts {
+				err = goa.MergeErrors(err, goa.ValidatePattern("includeResorts[*]", e, "[a-z]{3}"))
+			}
+			if err != nil {
+				return nil, err
 			}
 		}
 	}
@@ -145,7 +178,13 @@ func BuildQueryStayPayload(pointsQueryStayFrom string, pointsQueryStayTo string,
 		if pointsQueryStayExcludeResorts != "" {
 			err = json.Unmarshal([]byte(pointsQueryStayExcludeResorts), &excludeResorts)
 			if err != nil {
-				return nil, fmt.Errorf("invalid JSON for excludeResorts, \nerror: %s, \nexample of valid JSON:\n%s", err, "'[\n      \"Veniam vel.\",\n      \"Tempore commodi quis dicta et libero rerum.\"\n   ]'")
+				return nil, fmt.Errorf("invalid JSON for excludeResorts, \nerror: %s, \nexample of valid JSON:\n%s", err, "'[\n      \"blt\",\n      \"ssr\",\n      \"akv\"\n   ]'")
+			}
+			for _, e := range excludeResorts {
+				err = goa.MergeErrors(err, goa.ValidatePattern("excludeResorts[*]", e, "[a-z]{3}"))
+			}
+			if err != nil {
+				return nil, err
 			}
 		}
 	}

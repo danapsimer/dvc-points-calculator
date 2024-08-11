@@ -24,13 +24,29 @@ func (s *Points) GetResorts(ctx context.Context) (res points.ResortResultCollect
 	return
 }
 
-func (s *Points) GetResort(ctx context.Context, payload *points.GetResortPayload) (res *points.ResortResult, view string, err error) {
-	view = "resortOnly"
-	res = new(points.ResortResult)
+func (s *Points) GetResort(ctx context.Context, payload *points.GetResortPayload) (res *points.ResortResult, err error) {
 	resort, err := db.GetResort(ctx, string(payload.ResortCode))
 	if err != nil {
 		return
 	} else if resort != nil {
+		res = new(points.ResortResult)
+		res.CreateFromResort(resort)
+	} else {
+		err = points.MakeNotFound(fmt.Errorf("no such resort: %s", payload.ResortCode))
+	}
+	return
+}
+
+func (s *Points) PutResort(ctx context.Context, payload *points.PutResortPayload) (res *points.ResortResult, err error) {
+	resort, err := db.GetResort(ctx, string(payload.ResortCode))
+	if err != nil {
+		return
+	} else if resort != nil {
+		resort.Name = payload.Name
+		if resort, err = db.UpdateResort(ctx, resort); err != nil {
+			return
+		}
+		res = new(points.ResortResult)
 		res.CreateFromResort(resort)
 	} else {
 		err = points.MakeNotFound(fmt.Errorf("no such resort: %s", payload.ResortCode))

@@ -134,7 +134,7 @@ func DecodeGetResortResponse(decoder func(*http.Response) goahttp.Decoder, resto
 				return nil, goahttp.ErrDecodingError("Points", "GetResort", err)
 			}
 			p := NewGetResortResortResultOK(&body)
-			view := resp.Header.Get("goa-view")
+			view := "resortOnly"
 			vres := &pointsviews.ResortResult{Projected: p, View: view}
 			if err = pointsviews.ValidateResortResult(vres); err != nil {
 				return nil, goahttp.ErrValidationError("Points", "GetResort", err)
@@ -158,6 +158,106 @@ func DecodeGetResortResponse(decoder func(*http.Response) goahttp.Decoder, resto
 		default:
 			body, _ := io.ReadAll(resp.Body)
 			return nil, goahttp.ErrInvalidResponse("Points", "GetResort", resp.StatusCode, string(body))
+		}
+	}
+}
+
+// BuildPutResortRequest instantiates a HTTP request object with method and
+// path set to call the "Points" service "PutResort" endpoint
+func (c *Client) BuildPutResortRequest(ctx context.Context, v interface{}) (*http.Request, error) {
+	var (
+		resortCode string
+	)
+	{
+		p, ok := v.(*points.PutResortPayload)
+		if !ok {
+			return nil, goahttp.ErrInvalidType("Points", "PutResort", "*points.PutResortPayload", v)
+		}
+		resortCode = p.ResortCode
+	}
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: PutResortPointsPath(resortCode)}
+	req, err := http.NewRequest("PUT", u.String(), nil)
+	if err != nil {
+		return nil, goahttp.ErrInvalidURL("Points", "PutResort", u.String(), err)
+	}
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
+
+	return req, nil
+}
+
+// EncodePutResortRequest returns an encoder for requests sent to the Points
+// PutResort server.
+func EncodePutResortRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, interface{}) error {
+	return func(req *http.Request, v interface{}) error {
+		p, ok := v.(*points.PutResortPayload)
+		if !ok {
+			return goahttp.ErrInvalidType("Points", "PutResort", "*points.PutResortPayload", v)
+		}
+		body := NewPutResortRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("Points", "PutResort", err)
+		}
+		return nil
+	}
+}
+
+// DecodePutResortResponse returns a decoder for responses returned by the
+// Points PutResort endpoint. restoreBody controls whether the response body
+// should be restored after having been read.
+// DecodePutResortResponse may return the following errors:
+//   - "not_found" (type *goa.ServiceError): http.StatusNotFound
+//   - error: internal error
+func DecodePutResortResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (interface{}, error) {
+	return func(resp *http.Response) (interface{}, error) {
+		if restoreBody {
+			b, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			resp.Body = io.NopCloser(bytes.NewBuffer(b))
+			defer func() {
+				resp.Body = io.NopCloser(bytes.NewBuffer(b))
+			}()
+		} else {
+			defer resp.Body.Close()
+		}
+		switch resp.StatusCode {
+		case http.StatusOK:
+			var (
+				body PutResortResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("Points", "PutResort", err)
+			}
+			p := NewPutResortResortResultOK(&body)
+			view := "resortOnly"
+			vres := &pointsviews.ResortResult{Projected: p, View: view}
+			if err = pointsviews.ValidateResortResult(vres); err != nil {
+				return nil, goahttp.ErrValidationError("Points", "PutResort", err)
+			}
+			res := points.NewResortResult(vres)
+			return res, nil
+		case http.StatusNotFound:
+			var (
+				body PutResortNotFoundResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("Points", "PutResort", err)
+			}
+			err = ValidatePutResortNotFoundResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("Points", "PutResort", err)
+			}
+			return nil, NewPutResortNotFound(&body)
+		default:
+			body, _ := io.ReadAll(resp.Body)
+			return nil, goahttp.ErrInvalidResponse("Points", "PutResort", resp.StatusCode, string(body))
 		}
 	}
 }

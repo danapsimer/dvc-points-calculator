@@ -25,11 +25,9 @@ type Service interface {
 	//	- "resortUpdate"
 	GetResorts(context.Context) (res ResortResultCollection, view string, err error)
 	// GetResort implements GetResort.
-	// The "view" return value must have one of the following views
-	//	- "default"
-	//	- "resortOnly"
-	//	- "resortUpdate"
-	GetResort(context.Context, *GetResortPayload) (res *ResortResult, view string, err error)
+	GetResort(context.Context, *GetResortPayload) (res *ResortResult, err error)
+	// PutResort implements PutResort.
+	PutResort(context.Context, *PutResortPayload) (res *ResortResult, err error)
 	// GetResortYear implements GetResortYear.
 	GetResortYear(context.Context, *GetResortYearPayload) (res *ResortYearResult, err error)
 	// GetPointChart implements GetPointChart.
@@ -46,7 +44,7 @@ const ServiceName = "Points"
 // MethodNames lists the service method names as defined in the design. These
 // are the same values that are set in the endpoint request contexts under the
 // MethodKey key.
-var MethodNames = [5]string{"GetResorts", "GetResort", "GetResortYear", "GetPointChart", "QueryStay"}
+var MethodNames = [6]string{"GetResorts", "GetResort", "PutResort", "GetResortYear", "GetPointChart", "QueryStay"}
 
 // GetPointChartPayload is the payload type of the Points service GetPointChart
 // method.
@@ -80,6 +78,14 @@ type PointChart struct {
 	Resort    string
 	RoomTypes []*RoomType
 	Tiers     []*Tier
+}
+
+// PutResortPayload is the payload type of the Points service PutResort method.
+type PutResortPayload struct {
+	// the resort's code
+	ResortCode string
+	// The resort's name
+	Name string
 }
 
 // ResortResult is the result type of the Points service GetResort method.

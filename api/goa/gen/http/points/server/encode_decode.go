@@ -11,6 +11,7 @@ package server
 import (
 	"context"
 	"errors"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -46,17 +47,8 @@ func EncodeGetResortsResponse(encoder func(context.Context, http.ResponseWriter)
 func EncodeGetResortResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
 	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
 		res := v.(*pointsviews.ResortResult)
-		w.Header().Set("goa-view", res.View)
 		enc := encoder(ctx, w)
-		var body interface{}
-		switch res.View {
-		case "default", "":
-			body = NewGetResortResponseBody(res.Projected)
-		case "resortOnly":
-			body = NewGetResortResponseBodyResortOnly(res.Projected)
-		case "resortUpdate":
-			body = NewGetResortResponseBodyResortUpdate(res.Projected)
-		}
+		body := NewGetResortResponseBodyResortOnly(res.Projected)
 		w.WriteHeader(http.StatusOK)
 		return enc.Encode(body)
 	}
@@ -102,6 +94,83 @@ func EncodeGetResortError(encoder func(context.Context, http.ResponseWriter) goa
 				body = formatter(res)
 			} else {
 				body = NewGetResortNotFoundResponseBody(res)
+			}
+			w.Header().Set("goa-error", res.ErrorName())
+			w.WriteHeader(http.StatusNotFound)
+			return enc.Encode(body)
+		default:
+			return encodeError(ctx, w, v)
+		}
+	}
+}
+
+// EncodePutResortResponse returns an encoder for responses returned by the
+// Points PutResort endpoint.
+func EncodePutResortResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		res := v.(*pointsviews.ResortResult)
+		enc := encoder(ctx, w)
+		body := NewPutResortResponseBodyResortOnly(res.Projected)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodePutResortRequest returns a decoder for requests sent to the Points
+// PutResort endpoint.
+func DecodePutResortRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (interface{}, error) {
+	return func(r *http.Request) (interface{}, error) {
+		var (
+			body PutResortRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidatePutResortRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+
+		var (
+			resortCode string
+
+			params = mux.Vars(r)
+		)
+		resortCode = params["resortCode"]
+		err = goa.MergeErrors(err, goa.ValidatePattern("resortCode", resortCode, "[a-z]{3}"))
+		if err != nil {
+			return nil, err
+		}
+		payload := NewPutResortPayload(&body, resortCode)
+
+		return payload, nil
+	}
+}
+
+// EncodePutResortError returns an encoder for errors returned by the PutResort
+// Points endpoint.
+func EncodePutResortError(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder, formatter func(err error) goahttp.Statuser) func(context.Context, http.ResponseWriter, error) error {
+	encodeError := goahttp.ErrorEncoder(encoder, formatter)
+	return func(ctx context.Context, w http.ResponseWriter, v error) error {
+		var en ErrorNamer
+		if !errors.As(v, &en) {
+			return encodeError(ctx, w, v)
+		}
+		switch en.ErrorName() {
+		case "not_found":
+			var res *goa.ServiceError
+			errors.As(v, &res)
+			enc := encoder(ctx, w)
+			var body interface{}
+			if formatter != nil {
+				body = formatter(res)
+			} else {
+				body = NewPutResortNotFoundResponseBody(res)
 			}
 			w.Header().Set("goa-error", res.ErrorName())
 			w.WriteHeader(http.StatusNotFound)
@@ -304,7 +373,13 @@ func DecodeQueryStayRequest(mux goahttp.Muxer, decoder func(*http.Request) goaht
 		err = goa.MergeErrors(err, goa.ValidateFormat("to", to, goa.FormatDate))
 
 		includeResorts = r.URL.Query()["includeResorts"]
+		for _, e := range includeResorts {
+			err = goa.MergeErrors(err, goa.ValidatePattern("includeResorts[*]", e, "[a-z]{3}"))
+		}
 		excludeResorts = r.URL.Query()["excludeResorts"]
+		for _, e := range excludeResorts {
+			err = goa.MergeErrors(err, goa.ValidatePattern("excludeResorts[*]", e, "[a-z]{3}"))
+		}
 		{
 			minSleepsRaw := r.URL.Query().Get("minSleeps")
 			if minSleepsRaw == "" {

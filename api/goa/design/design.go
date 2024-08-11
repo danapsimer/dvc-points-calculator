@@ -109,8 +109,12 @@ var TierDateRange = Type("TierDateRange", func() {
 })
 
 var TierRoomTypePoints = Type("TierRoomTypePoints", func() {
-	Attribute("weekday", Int, "points for Sunday - Thursday")
-	Attribute("weekend", Int, "points for Friday - Saturday")
+	Attribute("weekday", Int, "points for Sunday - Thursday", func() {
+		Example(12)
+	})
+	Attribute("weekend", Int, "points for Friday - Saturday", func() {
+		Example(17)
+	})
 	Required("weekday", "weekend")
 	ConvertTo(model.Points{})
 	CreateFrom(model.Points{})
@@ -118,7 +122,9 @@ var TierRoomTypePoints = Type("TierRoomTypePoints", func() {
 
 var Tier = Type("Tier", func() {
 	Attribute("dateRanges", ArrayOf(TierDateRange))
-	Attribute("roomTypePoints", MapOf(String, TierRoomTypePoints))
+	Attribute("roomTypePoints", MapOf(String, TierRoomTypePoints), func() {
+		Key(RoomCode)
+	})
 	Required("dateRanges", "roomTypePoints")
 	ConvertTo(model.Tier{})
 	CreateFrom(model.Tier{})
@@ -152,15 +158,25 @@ var ListResorts = CollectionOf(ResortResponse, func() {
 
 func StayDate() {
 	Format(FormatDate)
+	Example("2022-01-15")
+}
 
+func ResortCodeList() {
+	Example([]string{"blt", "ssr", "akv"})
 }
 
 var Stay = Type("Stay", func() {
-	Attribute("from", String, "Check-in Date", StayDate)
-	Attribute("to", String, "Check-in Date", StayDate)
+	Attribute("from", String, "Check-in Date", func() {
+		StayDate()
+		Example("2022-05-05")
+	})
+	Attribute("to", String, "Check-in Date", func() {
+		StayDate()
+		Example("2022-05-12")
+	})
 	Required("from", "to")
-	Attribute("includeResorts", ArrayOf(String), "resorts to include in the search")
-	Attribute("excludeResorts", ArrayOf(String), "resorts to exclude from the search")
+	Attribute("includeResorts", ArrayOf(String, ResortCode), "resorts to include in the search", ResortCodeList)
+	Attribute("excludeResorts", ArrayOf(String, ResortCode), "resorts to exclude from the search", ResortCodeList)
 	Attribute("minSleeps", Int, "the minimum capacity of room types to include", func() {
 		Sleeps()
 		Default(1)
@@ -189,12 +205,24 @@ var Stay = Type("Stay", func() {
 
 var StayResult = Type("StayResult", func() {
 	Extend(Stay)
-	Attribute("Rooms", MapOf(String, MapOf(String, Int)))
+	Attribute("Rooms", MapOf(String, MapOf(String, Int)), func() {
+		Example(map[string]map[string]int{
+			"blt": {
+				"dss": 12,
+				"dsp": 15,
+				"1bs": 20,
+				"1bp": 25,
+				"2bs": 30,
+				"2bp": 35,
+			},
+		})
+	})
 	Required("Rooms")
 })
 
 var _ = Service("Points", func() {
 	Description("provides resources for manipulating resorts, point charts, and querying stays")
+	Error("not_found")
 	Method("GetResorts", func() {
 		Result(ListResorts)
 		HTTP(func() {
@@ -203,14 +231,30 @@ var _ = Service("Points", func() {
 		})
 	})
 	Method("GetResort", func() {
-		Result(ResortResponse)
+		Result(ResortResponse, func() {
+			View("resortOnly")
+		})
 		Payload(func() {
 			Attribute("resortCode", String, "the resort's code", ResortCode)
 			Required("resortCode")
 		})
-		Error("not_found")
 		HTTP(func() {
 			GET("/resort/{resortCode}")
+			Response(StatusOK)
+			Response("not_found", StatusNotFound)
+		})
+	})
+	Method("PutResort", func() {
+		Result(ResortResponse, func() {
+			View("resortOnly")
+		})
+		Payload(func() {
+			Attribute("resortCode", String, "the resort's code", ResortCode)
+			Attribute("name", String, "The resort's name", ResortName)
+			Required("resortCode", "name")
+		})
+		HTTP(func() {
+			PUT("/resort/{resortCode}")
 			Response(StatusOK)
 			Response("not_found", StatusNotFound)
 		})

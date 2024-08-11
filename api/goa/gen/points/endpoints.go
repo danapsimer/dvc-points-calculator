@@ -18,6 +18,7 @@ import (
 type Endpoints struct {
 	GetResorts    goa.Endpoint
 	GetResort     goa.Endpoint
+	PutResort     goa.Endpoint
 	GetResortYear goa.Endpoint
 	GetPointChart goa.Endpoint
 	QueryStay     goa.Endpoint
@@ -28,6 +29,7 @@ func NewEndpoints(s Service) *Endpoints {
 	return &Endpoints{
 		GetResorts:    NewGetResortsEndpoint(s),
 		GetResort:     NewGetResortEndpoint(s),
+		PutResort:     NewPutResortEndpoint(s),
 		GetResortYear: NewGetResortYearEndpoint(s),
 		GetPointChart: NewGetPointChartEndpoint(s),
 		QueryStay:     NewQueryStayEndpoint(s),
@@ -38,6 +40,7 @@ func NewEndpoints(s Service) *Endpoints {
 func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
 	e.GetResorts = m(e.GetResorts)
 	e.GetResort = m(e.GetResort)
+	e.PutResort = m(e.PutResort)
 	e.GetResortYear = m(e.GetResortYear)
 	e.GetPointChart = m(e.GetPointChart)
 	e.QueryStay = m(e.QueryStay)
@@ -61,11 +64,25 @@ func NewGetResortsEndpoint(s Service) goa.Endpoint {
 func NewGetResortEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		p := req.(*GetResortPayload)
-		res, view, err := s.GetResort(ctx, p)
+		res, err := s.GetResort(ctx, p)
 		if err != nil {
 			return nil, err
 		}
-		vres := NewViewedResortResult(res, view)
+		vres := NewViewedResortResult(res, "resortOnly")
+		return vres, nil
+	}
+}
+
+// NewPutResortEndpoint returns an endpoint function that calls the method
+// "PutResort" of service "Points".
+func NewPutResortEndpoint(s Service) goa.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		p := req.(*PutResortPayload)
+		res, err := s.PutResort(ctx, p)
+		if err != nil {
+			return nil, err
+		}
+		vres := NewViewedResortResult(res, "resortOnly")
 		return vres, nil
 	}
 }

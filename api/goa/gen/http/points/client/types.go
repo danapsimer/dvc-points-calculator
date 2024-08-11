@@ -15,6 +15,13 @@ import (
 	goa "goa.design/goa/v3/pkg"
 )
 
+// PutResortRequestBody is the type of the "Points" service "PutResort"
+// endpoint HTTP request body.
+type PutResortRequestBody struct {
+	// The resort's name
+	Name string `form:"name" json:"name" xml:"name"`
+}
+
 // GetResortsResponseBody is the type of the "Points" service "GetResorts"
 // endpoint HTTP response body.
 type GetResortsResponseBody []*ResortResultResponse
@@ -22,6 +29,16 @@ type GetResortsResponseBody []*ResortResultResponse
 // GetResortResponseBody is the type of the "Points" service "GetResort"
 // endpoint HTTP response body.
 type GetResortResponseBody struct {
+	// resort's code
+	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
+	// resort's name
+	Name      *string                 `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	RoomTypes []*RoomTypeResponseBody `form:"roomTypes,omitempty" json:"roomTypes,omitempty" xml:"roomTypes,omitempty"`
+}
+
+// PutResortResponseBody is the type of the "Points" service "PutResort"
+// endpoint HTTP response body.
+type PutResortResponseBody struct {
 	// resort's code
 	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// resort's name
@@ -81,6 +98,24 @@ type QueryStayResponseBody struct {
 // GetResortNotFoundResponseBody is the type of the "Points" service
 // "GetResort" endpoint HTTP response body for the "not_found" error.
 type GetResortNotFoundResponseBody struct {
+	// Name is the name of this class of errors.
+	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	// ID is a unique identifier for this particular occurrence of the problem.
+	ID *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Message is a human-readable explanation specific to this occurrence of the
+	// problem.
+	Message *string `form:"message,omitempty" json:"message,omitempty" xml:"message,omitempty"`
+	// Is the error temporary?
+	Temporary *bool `form:"temporary,omitempty" json:"temporary,omitempty" xml:"temporary,omitempty"`
+	// Is the error a timeout?
+	Timeout *bool `form:"timeout,omitempty" json:"timeout,omitempty" xml:"timeout,omitempty"`
+	// Is the error a server-side fault?
+	Fault *bool `form:"fault,omitempty" json:"fault,omitempty" xml:"fault,omitempty"`
+}
+
+// PutResortNotFoundResponseBody is the type of the "Points" service
+// "PutResort" endpoint HTTP response body for the "not_found" error.
+type PutResortNotFoundResponseBody struct {
 	// Name is the name of this class of errors.
 	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 	// ID is a unique identifier for this particular occurrence of the problem.
@@ -210,6 +245,15 @@ type TierRoomTypePointsResponseBody struct {
 	Weekend *int `form:"weekend,omitempty" json:"weekend,omitempty" xml:"weekend,omitempty"`
 }
 
+// NewPutResortRequestBody builds the HTTP request body from the payload of the
+// "PutResort" endpoint of the "Points" service.
+func NewPutResortRequestBody(p *points.PutResortPayload) *PutResortRequestBody {
+	body := &PutResortRequestBody{
+		Name: p.Name,
+	}
+	return body
+}
+
 // NewGetResortsResortResultCollectionOK builds a "Points" service "GetResorts"
 // endpoint result from a HTTP "OK" response.
 func NewGetResortsResortResultCollectionOK(body GetResortsResponseBody) pointsviews.ResortResultCollectionView {
@@ -241,6 +285,38 @@ func NewGetResortResortResultOK(body *GetResortResponseBody) *pointsviews.Resort
 // NewGetResortNotFound builds a Points service GetResort endpoint not_found
 // error.
 func NewGetResortNotFound(body *GetResortNotFoundResponseBody) *goa.ServiceError {
+	v := &goa.ServiceError{
+		Name:      *body.Name,
+		ID:        *body.ID,
+		Message:   *body.Message,
+		Temporary: *body.Temporary,
+		Timeout:   *body.Timeout,
+		Fault:     *body.Fault,
+	}
+
+	return v
+}
+
+// NewPutResortResortResultOK builds a "Points" service "PutResort" endpoint
+// result from a HTTP "OK" response.
+func NewPutResortResortResultOK(body *PutResortResponseBody) *pointsviews.ResortResultView {
+	v := &pointsviews.ResortResultView{
+		Code: body.Code,
+		Name: body.Name,
+	}
+	if body.RoomTypes != nil {
+		v.RoomTypes = make([]*pointsviews.RoomTypeView, len(body.RoomTypes))
+		for i, val := range body.RoomTypes {
+			v.RoomTypes[i] = unmarshalRoomTypeResponseBodyToPointsviewsRoomTypeView(val)
+		}
+	}
+
+	return v
+}
+
+// NewPutResortNotFound builds a Points service PutResort endpoint not_found
+// error.
+func NewPutResortNotFound(body *PutResortNotFoundResponseBody) *goa.ServiceError {
 	v := &goa.ServiceError{
 		Name:      *body.Name,
 		ID:        *body.ID,
@@ -458,6 +534,12 @@ func ValidateQueryStayResponseBody(body *QueryStayResponseBody) (err error) {
 	if body.To != nil {
 		err = goa.MergeErrors(err, goa.ValidateFormat("body.to", *body.To, goa.FormatDate))
 	}
+	for _, e := range body.IncludeResorts {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.includeResorts[*]", e, "[a-z]{3}"))
+	}
+	for _, e := range body.ExcludeResorts {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.excludeResorts[*]", e, "[a-z]{3}"))
+	}
 	if body.MinSleeps != nil {
 		if *body.MinSleeps < 1 {
 			err = goa.MergeErrors(err, goa.InvalidRangeError("body.minSleeps", *body.MinSleeps, 1, true))
@@ -524,6 +606,30 @@ func ValidateQueryStayResponseBody(body *QueryStayResponseBody) (err error) {
 // ValidateGetResortNotFoundResponseBody runs the validations defined on
 // GetResort_not_found_Response_Body
 func ValidateGetResortNotFoundResponseBody(body *GetResortNotFoundResponseBody) (err error) {
+	if body.Name == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("name", "body"))
+	}
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
+	if body.Message == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("message", "body"))
+	}
+	if body.Temporary == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("temporary", "body"))
+	}
+	if body.Timeout == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("timeout", "body"))
+	}
+	if body.Fault == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("fault", "body"))
+	}
+	return
+}
+
+// ValidatePutResortNotFoundResponseBody runs the validations defined on
+// PutResort_not_found_Response_Body
+func ValidatePutResortNotFoundResponseBody(body *PutResortNotFoundResponseBody) (err error) {
 	if body.Name == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("name", "body"))
 	}
@@ -755,7 +861,8 @@ func ValidateTierResponseBody(body *TierResponseBody) (err error) {
 			}
 		}
 	}
-	for _, v := range body.RoomTypePoints {
+	for k, v := range body.RoomTypePoints {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.roomTypePoints.key", k, "[a-z0-9]{3}"))
 		if v != nil {
 			if err2 := ValidateTierRoomTypePointsResponseBody(v); err2 != nil {
 				err = goa.MergeErrors(err, err2)

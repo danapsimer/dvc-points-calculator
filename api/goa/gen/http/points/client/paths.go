@@ -22,6 +22,11 @@ func GetResortPointsPath(resortCode string) string {
 	return fmt.Sprintf("/resort/%v", resortCode)
 }
 
+// PutResortPointsPath returns the URL path to the Points service PutResort HTTP endpoint.
+func PutResortPointsPath(resortCode string) string {
+	return fmt.Sprintf("/resort/%v", resortCode)
+}
+
 // GetResortYearPointsPath returns the URL path to the Points service GetResortYear HTTP endpoint.
 func GetResortYearPointsPath(resortCode string, year int) string {
 	return fmt.Sprintf("/resort/%v/year/%v", resortCode, year)

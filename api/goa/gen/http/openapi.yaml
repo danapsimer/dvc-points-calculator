@@ -79,11 +79,41 @@ paths:
                 "200":
                     description: OK response.
                     schema:
-                        $ref: '#/definitions/PointsGetResortResponseBody'
+                        $ref: '#/definitions/PointsGetResortResponseBodyResortOnly'
                 "404":
                     description: Not Found response.
                     schema:
                         $ref: '#/definitions/PointsGetResortNotFoundResponseBody'
+            schemes:
+                - http
+        put:
+            tags:
+                - Points
+            summary: PutResort Points
+            operationId: Points#PutResort
+            parameters:
+                - name: resortCode
+                  in: path
+                  description: the resort's code
+                  required: true
+                  type: string
+                  pattern: '[a-z]{3}'
+                - name: PutResortRequestBody
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/PointsPutResortRequestBody'
+                    required:
+                        - name
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/PointsPutResortResponseBodyResortOnly'
+                "404":
+                    description: Not Found response.
+                    schema:
+                        $ref: '#/definitions/PointsPutResortNotFoundResponseBody'
             schemes:
                 - http
     /resort/{resortCode}/year/{year}:
@@ -131,6 +161,7 @@ paths:
                   type: array
                   items:
                     type: string
+                    pattern: '[a-z]{3}'
                   collectionFormat: multi
                 - name: excludeResorts
                   in: query
@@ -139,6 +170,7 @@ paths:
                   type: array
                   items:
                     type: string
+                    pattern: '[a-z]{3}'
                   collectionFormat: multi
                 - name: minSleeps
                   in: query
@@ -251,7 +283,7 @@ definitions:
             message: parameter 'p' must be an integer
             name: bad_request
             temporary: true
-            timeout: true
+            timeout: false
         required:
             - name
             - id
@@ -287,6 +319,11 @@ definitions:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
             tiers:
                 type: array
                 items:
@@ -299,18 +336,10 @@ definitions:
                           startDate: 1-15
                         - endDate: 1-15
                           startDate: 1-15
-                        - endDate: 1-15
-                          startDate: 1-15
                       roomTypePoints:
-                        Ab quaerat delectus amet.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Blanditiis eos.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Dicta ipsum.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
+                        1bp:
+                            weekday: 12
+                            weekend: 17
                     - dateRanges:
                         - endDate: 1-15
                           startDate: 1-15
@@ -318,18 +347,10 @@ definitions:
                           startDate: 1-15
                         - endDate: 1-15
                           startDate: 1-15
-                        - endDate: 1-15
-                          startDate: 1-15
                       roomTypePoints:
-                        Ab quaerat delectus amet.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Blanditiis eos.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Dicta ipsum.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
+                        1bp:
+                            weekday: 12
+                            weekend: 17
         example:
             code: ssr
             resort: Disney's Saratoga Springs Resort & Spa
@@ -344,6 +365,16 @@ definitions:
                   code: 1bp
                   name: One Bedroom Villa (Preferred View)
                   sleeps: 5
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
             tiers:
                 - dateRanges:
                     - endDate: 1-15
@@ -352,18 +383,10 @@ definitions:
                       startDate: 1-15
                     - endDate: 1-15
                       startDate: 1-15
-                    - endDate: 1-15
-                      startDate: 1-15
                   roomTypePoints:
-                    Ab quaerat delectus amet.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
-                    Blanditiis eos.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
-                    Dicta ipsum.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
+                    1bp:
+                        weekday: 12
+                        weekend: 17
                 - dateRanges:
                     - endDate: 1-15
                       startDate: 1-15
@@ -371,18 +394,21 @@ definitions:
                       startDate: 1-15
                     - endDate: 1-15
                       startDate: 1-15
+                  roomTypePoints:
+                    1bp:
+                        weekday: 12
+                        weekend: 17
+                - dateRanges:
+                    - endDate: 1-15
+                      startDate: 1-15
+                    - endDate: 1-15
+                      startDate: 1-15
                     - endDate: 1-15
                       startDate: 1-15
                   roomTypePoints:
-                    Ab quaerat delectus amet.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
-                    Blanditiis eos.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
-                    Dicta ipsum.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
+                    1bp:
+                        weekday: 12
+                        weekend: 17
         required:
             - code
             - resort
@@ -395,7 +421,7 @@ definitions:
             fault:
                 type: boolean
                 description: Is the error a server-side fault?
-                example: false
+                example: true
             id:
                 type: string
                 description: ID is a unique identifier for this particular occurrence of the problem.
@@ -415,15 +441,15 @@ definitions:
             timeout:
                 type: boolean
                 description: Is the error a timeout?
-                example: false
+                example: true
         description: GetResort_not_found_Response_Body result type (default view)
         example:
-            fault: false
+            fault: true
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
-            temporary: true
-            timeout: false
+            temporary: false
+            timeout: true
         required:
             - name
             - id
@@ -431,8 +457,8 @@ definitions:
             - temporary
             - timeout
             - fault
-    PointsGetResortResponseBody:
-        title: 'Mediatype identifier: application/vnd.dvc.point.calculator.resort; view=default'
+    PointsGetResortResponseBodyResortOnly:
+        title: 'Mediatype identifier: application/vnd.dvc.point.calculator.resort; view=resortOnly'
         type: object
         properties:
             code:
@@ -444,41 +470,10 @@ definitions:
                 type: string
                 description: resort's name
                 example: Disney's Saratoga Springs Resort & Spa
-            roomTypes:
-                type: array
-                items:
-                    $ref: '#/definitions/RoomTypeResponseBody'
-                example:
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-        description: GetResortResponseBody result type (default view)
+        description: GetResortResponseBody result type (resortOnly view) (default view)
         example:
             code: ssr
             name: Disney's Saratoga Springs Resort & Spa
-            roomTypes:
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
     PointsGetResortYearNotFoundResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object
@@ -502,19 +497,19 @@ definitions:
             temporary:
                 type: boolean
                 description: Is the error temporary?
-                example: true
+                example: false
             timeout:
                 type: boolean
                 description: Is the error a timeout?
-                example: false
+                example: true
         description: GetResortYear_not_found_Response_Body result type (default view)
         example:
-            fault: false
+            fault: true
             id: 123abc
             message: parameter 'p' must be an integer
             name: bad_request
             temporary: true
-            timeout: true
+            timeout: false
         required:
             - name
             - id
@@ -558,7 +553,7 @@ definitions:
             year:
                 type: integer
                 description: the year the resort info is for.
-                example: 2087
+                example: 1997
                 minimum: 1990
                 maximum: 2100
         description: GetResortYearResponseBody result type (default view)
@@ -576,7 +571,89 @@ definitions:
                   code: 1bp
                   name: One Bedroom Villa (Preferred View)
                   sleeps: 5
-            year: 2091
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
+            year: 2024
+    PointsPutResortNotFoundResponseBody:
+        title: 'Mediatype identifier: application/vnd.goa.error; view=default'
+        type: object
+        properties:
+            fault:
+                type: boolean
+                description: Is the error a server-side fault?
+                example: false
+            id:
+                type: string
+                description: ID is a unique identifier for this particular occurrence of the problem.
+                example: 123abc
+            message:
+                type: string
+                description: Message is a human-readable explanation specific to this occurrence of the problem.
+                example: parameter 'p' must be an integer
+            name:
+                type: string
+                description: Name is the name of this class of errors.
+                example: bad_request
+            temporary:
+                type: boolean
+                description: Is the error temporary?
+                example: true
+            timeout:
+                type: boolean
+                description: Is the error a timeout?
+                example: true
+        description: PutResort_not_found_Response_Body result type (default view)
+        example:
+            fault: true
+            id: 123abc
+            message: parameter 'p' must be an integer
+            name: bad_request
+            temporary: true
+            timeout: false
+        required:
+            - name
+            - id
+            - message
+            - temporary
+            - timeout
+            - fault
+    PointsPutResortRequestBody:
+        title: PointsPutResortRequestBody
+        type: object
+        properties:
+            name:
+                type: string
+                description: The resort's name
+                example: Disney's Saratoga Springs Resort & Spa
+        example:
+            name: Disney's Saratoga Springs Resort & Spa
+        required:
+            - name
+    PointsPutResortResponseBodyResortOnly:
+        title: 'Mediatype identifier: application/vnd.dvc.point.calculator.resort; view=resortOnly'
+        type: object
+        properties:
+            code:
+                type: string
+                description: resort's code
+                example: ssr
+                pattern: '[a-z]{3}'
+            name:
+                type: string
+                description: resort's name
+                example: Disney's Saratoga Springs Resort & Spa
+        description: PutResortResponseBody result type (resortOnly view) (default view)
+        example:
+            code: ssr
+            name: Disney's Saratoga Springs Resort & Spa
     PointsQueryStayInvalidInputResponseBody:
         title: 'Mediatype identifier: application/vnd.goa.error; view=default'
         type: object
@@ -600,11 +677,11 @@ definitions:
             temporary:
                 type: boolean
                 description: Is the error temporary?
-                example: false
+                example: true
             timeout:
                 type: boolean
                 description: Is the error a timeout?
-                example: true
+                example: false
         description: QueryStay_invalid_input_Response_Body result type (default view)
         example:
             fault: true
@@ -612,7 +689,7 @@ definitions:
             message: parameter 'p' must be an integer
             name: bad_request
             temporary: true
-            timeout: false
+            timeout: true
         required:
             - name
             - id
@@ -627,46 +704,49 @@ definitions:
             Rooms:
                 type: object
                 example:
-                    Eius ut incidunt nesciunt hic quibusdam.:
-                        Deserunt eos ratione architecto sed totam consectetur.: 4272375574989711216
-                        Soluta est eligendi eum sunt qui.: 2334412238377471837
-                    Necessitatibus quis soluta.:
-                        Assumenda earum nobis amet veritatis consectetur.: 6744637038513867021
-                        Est et dolorem.: 3117364866476888461
+                    blt:
+                        1bp: 25
+                        1bs: 20
+                        2bp: 35
+                        2bs: 30
+                        dsp: 15
+                        dss: 12
                 additionalProperties:
                     type: object
                     example:
-                        Dolor assumenda et deleniti.: 7137171991713911461
-                        Nostrum eaque animi.: 4296606376424092045
+                        Accusantium id voluptas qui pariatur.: 4279317927492618650
+                        Labore blanditiis maiores omnis rerum qui.: 244224858719284966
                     additionalProperties:
                         type: integer
-                        example: 3195416189495381961
+                        example: 4919755634042695143
                         format: int64
             excludeResorts:
                 type: array
                 items:
                     type: string
-                    example: Officia facere qui nesciunt harum cumque cupiditate.
+                    example: ssr
+                    pattern: '[a-z]{3}'
                 description: resorts to exclude from the search
                 example:
-                    - Numquam dolorem unde.
-                    - Repellendus ut repellat est est aut maxime.
+                    - blt
+                    - ssr
+                    - akv
             from:
                 type: string
                 description: Check-in Date
-                example: "1987-04-08"
+                example: "2022-05-05"
                 format: date
             includeResorts:
                 type: array
                 items:
                     type: string
-                    example: Voluptatem dolor earum qui modi.
+                    example: ssr
+                    pattern: '[a-z]{3}'
                 description: resorts to include in the search
                 example:
-                    - Et eum et dolores qui.
-                    - Consequatur fuga in.
-                    - Omnis vero.
-                    - Commodi molestiae sunt perferendis harum iste.
+                    - blt
+                    - ssr
+                    - akv
             maxBedrooms:
                 type: integer
                 description: the maximum number of bedrooms of room types to include
@@ -712,29 +792,33 @@ definitions:
             to:
                 type: string
                 description: Check-in Date
-                example: "1978-01-27"
+                example: "2022-05-12"
                 format: date
         example:
             Rooms:
-                Et corporis voluptates.:
-                    Et nihil vitae.: 6645776767288152107
-                    Rerum molestias ullam et occaecati nisi.: 3145849629962948048
+                blt:
+                    1bp: 25
+                    1bs: 20
+                    2bp: 35
+                    2bs: 30
+                    dsp: 15
+                    dss: 12
             excludeResorts:
-                - Quam est fugit ratione magnam.
-                - Nisi eaque.
-                - Quisquam unde vel iste qui error sit.
-            from: "1977-03-21"
+                - blt
+                - ssr
+                - akv
+            from: "2022-05-05"
             includeResorts:
-                - Occaecati fugiat distinctio rerum consequatur magnam.
-                - Sunt exercitationem eum.
-                - Et nesciunt aut in.
+                - blt
+                - ssr
+                - akv
             maxBedrooms: 1
             maxBeds: 2
             maxSleeps: 5
             minBedrooms: 1
             minBeds: 2
             minSleeps: 5
-            to: "1980-11-22"
+            to: "2022-05-12"
         required:
             - Rooms
             - from
@@ -746,52 +830,6 @@ definitions:
             $ref: '#/definitions/ResortResultResponse'
         description: GetResortsResponseBody is the result type for an array of ResortResultResponse (default view)
         example:
-            - code: ssr
-              name: Disney's Saratoga Springs Resort & Spa
-              roomTypes:
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
-            - code: ssr
-              name: Disney's Saratoga Springs Resort & Spa
-              roomTypes:
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
-                - bedrooms: 1
-                  beds: 2
-                  code: 1bp
-                  name: One Bedroom Villa (Preferred View)
-                  sleeps: 5
             - code: ssr
               name: Disney's Saratoga Springs Resort & Spa
               roomTypes:
@@ -871,16 +909,21 @@ definitions:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
         description: ResortResultResponse result type (default view)
         example:
             code: ssr
             name: Disney's Saratoga Springs Resort & Spa
             roomTypes:
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
+                - bedrooms: 1
+                  beds: 2
+                  code: 1bp
+                  name: One Bedroom Villa (Preferred View)
+                  sleeps: 5
                 - bedrooms: 1
                   beds: 2
                   code: 1bp
@@ -1017,9 +1060,9 @@ definitions:
             roomTypePoints:
                 type: object
                 example:
-                    Aliquam sint voluptates dicta maiores ullam est.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
+                    1bp:
+                        weekday: 12
+                        weekend: 17
                 additionalProperties:
                     $ref: '#/definitions/TierRoomTypePointsResponseBody'
         example:
@@ -1028,15 +1071,10 @@ definitions:
                   startDate: 1-15
                 - endDate: 1-15
                   startDate: 1-15
-                - endDate: 1-15
-                  startDate: 1-15
             roomTypePoints:
-                Neque nulla et.:
-                    weekday: 6454418589515295321
-                    weekend: 3368857188488503470
-                Vel eveniet ea quibusdam velit.:
-                    weekday: 6454418589515295321
-                    weekend: 3368857188488503470
+                1bp:
+                    weekday: 12
+                    weekend: 17
         required:
             - dateRanges
             - roomTypePoints
@@ -1047,16 +1085,16 @@ definitions:
             weekday:
                 type: integer
                 description: points for Sunday - Thursday
-                example: 7371879081197435314
+                example: 12
                 format: int64
             weekend:
                 type: integer
                 description: points for Friday - Saturday
-                example: 3215908680558838877
+                example: 17
                 format: int64
         example:
-            weekday: 6837028636257374756
-            weekend: 287311464615699291
+            weekday: 12
+            weekend: 17
         required:
             - weekday
             - weekend

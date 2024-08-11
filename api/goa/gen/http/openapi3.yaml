@@ -30,10 +30,10 @@ paths:
                   schema:
                     type: integer
                     description: the year
-                    example: 2019
+                    example: 2064
                     minimum: 1990
                     maximum: 2100
-                  example: 2094
+                  example: 2072
             responses:
                 "200":
                     description: OK response.
@@ -63,18 +63,10 @@ paths:
                                           startDate: 1-15
                                         - endDate: 1-15
                                           startDate: 1-15
-                                        - endDate: 1-15
-                                          startDate: 1-15
                                       roomTypePoints:
-                                        Ab quaerat delectus amet.:
-                                            weekday: 6454418589515295321
-                                            weekend: 3368857188488503470
-                                        Blanditiis eos.:
-                                            weekday: 6454418589515295321
-                                            weekend: 3368857188488503470
-                                        Dicta ipsum.:
-                                            weekday: 6454418589515295321
-                                            weekend: 3368857188488503470
+                                        1bp:
+                                            weekday: 12
+                                            weekend: 17
                                     - dateRanges:
                                         - endDate: 1-15
                                           startDate: 1-15
@@ -82,18 +74,21 @@ paths:
                                           startDate: 1-15
                                         - endDate: 1-15
                                           startDate: 1-15
+                                      roomTypePoints:
+                                        1bp:
+                                            weekday: 12
+                                            weekend: 17
+                                    - dateRanges:
+                                        - endDate: 1-15
+                                          startDate: 1-15
+                                        - endDate: 1-15
+                                          startDate: 1-15
                                         - endDate: 1-15
                                           startDate: 1-15
                                       roomTypePoints:
-                                        Ab quaerat delectus amet.:
-                                            weekday: 6454418589515295321
-                                            weekend: 3368857188488503470
-                                        Blanditiis eos.:
-                                            weekday: 6454418589515295321
-                                            weekend: 3368857188488503470
-                                        Dicta ipsum.:
-                                            weekday: 6454418589515295321
-                                            weekend: 3368857188488503470
+                                        1bp:
+                                            weekday: 12
+                                            weekend: 17
                 "404":
                     description: 'not_found: Not Found response.'
                     content:
@@ -164,32 +159,50 @@ paths:
                     content:
                         application/json:
                             schema:
-                                description: 'Response body may alternatively be one of #/components/schemas/ResortResultResponseResortOnly or #/components/schemas/ResortResultResponseResortUpdate'
-                                $ref: '#/components/schemas/ResortResult'
+                                $ref: '#/components/schemas/ResortResultResponseResortOnly'
                             example:
                                 code: ssr
                                 name: Disney's Saratoga Springs Resort & Spa
-                                roomTypes:
-                                    - bedrooms: 1
-                                      beds: 2
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 2
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 2
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 2
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
+                "404":
+                    description: 'not_found: Not Found response.'
+                    content:
+                        application/vnd.goa.error:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+        put:
+            tags:
+                - Points
+            summary: PutResort Points
+            operationId: Points#PutResort
+            parameters:
+                - name: resortCode
+                  in: path
+                  description: the resort's code
+                  required: true
+                  schema:
+                    type: string
+                    description: the resort's code
+                    example: ssr
+                    pattern: '[a-z]{3}'
+                  example: ssr
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PutResortRequestBody'
+                        example:
+                            name: Disney's Saratoga Springs Resort & Spa
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ResortResultResponseResortOnly'
+                            example:
+                                code: ssr
+                                name: Disney's Saratoga Springs Resort & Spa
                 "404":
                     description: 'not_found: Not Found response.'
                     content:
@@ -220,10 +233,10 @@ paths:
                   schema:
                     type: integer
                     description: the year
-                    example: 2034
+                    example: 1994
                     minimum: 1990
                     maximum: 2100
-                  example: 2011
+                  example: 2098
             responses:
                 "200":
                     description: OK response.
@@ -245,17 +258,7 @@ paths:
                                       code: 1bp
                                       name: One Bedroom Villa (Preferred View)
                                       sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 2
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                    - bedrooms: 1
-                                      beds: 2
-                                      code: 1bp
-                                      name: One Bedroom Villa (Preferred View)
-                                      sleeps: 5
-                                year: 2068
+                                year: 2023
                 "404":
                     description: 'not_found: Not Found response.'
                     content:
@@ -277,16 +280,17 @@ paths:
                     type: array
                     items:
                         type: string
-                        example: Laborum qui.
+                        example: ssr
+                        pattern: '[a-z]{3}'
                     description: resorts to include in the search
                     example:
-                        - Tenetur ut illo.
-                        - Et quas nihil ab.
+                        - blt
+                        - ssr
+                        - akv
                   example:
-                    - Optio dolores minima aut ea.
-                    - Sed aliquam.
-                    - Delectus deserunt.
-                    - Molestiae ipsa et natus et repudiandae dolor.
+                    - blt
+                    - ssr
+                    - akv
                 - name: excludeResorts
                   in: query
                   description: resorts to exclude from the search
@@ -295,16 +299,17 @@ paths:
                     type: array
                     items:
                         type: string
-                        example: Illum quia ullam ut rerum dignissimos sed.
+                        example: ssr
+                        pattern: '[a-z]{3}'
                     description: resorts to exclude from the search
                     example:
-                        - Officia cumque.
-                        - Sit autem est iste distinctio.
-                        - Sed qui qui autem fugit vero similique.
-                        - Magnam accusantium.
+                        - blt
+                        - ssr
+                        - akv
                   example:
-                    - Non accusamus placeat est nostrum asperiores laboriosam.
-                    - Aspernatur velit distinctio provident.
+                    - blt
+                    - ssr
+                    - akv
                 - name: minSleeps
                   in: query
                   description: the minimum capacity of room types to include
@@ -384,9 +389,12 @@ paths:
                   schema:
                     type: string
                     description: Check-in Date
-                    example: "2003-03-17"
+                    example: "2022-05-05"
                     format: date
-                  example: "2009-08-25"
+                  examples:
+                    default:
+                        summary: default
+                        value: "2022-05-05"
                 - name: to
                   in: path
                   description: Check-in Date
@@ -394,9 +402,12 @@ paths:
                   schema:
                     type: string
                     description: Check-in Date
-                    example: "1979-10-06"
+                    example: "2022-05-12"
                     format: date
-                  example: "2005-02-08"
+                  examples:
+                    default:
+                        summary: default
+                        value: "2022-05-12"
             responses:
                 "200":
                     description: OK response.
@@ -406,28 +417,29 @@ paths:
                                 $ref: '#/components/schemas/StayResult'
                             example:
                                 Rooms:
-                                    Natus dolore.:
-                                        Consequatur iure ad voluptas.: 8574616182601461648
-                                        Dolor ipsa excepturi ipsam.: 6388531504808450497
-                                        Sapiente incidunt maxime.: 8072956163745422818
-                                    Neque omnis qui unde temporibus.:
-                                        Maxime enim.: 8117318412957450039
-                                        Porro soluta.: 5930516599835123592
+                                    blt:
+                                        1bp: 25
+                                        1bs: 20
+                                        2bp: 35
+                                        2bs: 30
+                                        dsp: 15
+                                        dss: 12
                                 excludeResorts:
-                                    - Vero tempora facere facere doloremque nulla velit.
-                                    - Aut fugit consectetur et dolorem corporis commodi.
-                                    - Autem provident architecto magnam qui.
-                                from: "1980-11-20"
+                                    - blt
+                                    - ssr
+                                    - akv
+                                from: "2022-05-05"
                                 includeResorts:
-                                    - Eligendi fugiat.
-                                    - Voluptates ab voluptatibus.
+                                    - blt
+                                    - ssr
+                                    - akv
                                 maxBedrooms: 1
                                 maxBeds: 2
                                 maxSleeps: 5
                                 minBedrooms: 1
                                 minBeds: 2
                                 minSleeps: 5
-                                to: "2010-02-05"
+                                to: "2022-05-12"
                 "400":
                     description: 'invalid_input: Bad Request response.'
                     content:
@@ -442,7 +454,7 @@ components:
                 fault:
                     type: boolean
                     description: Is the error a server-side fault?
-                    example: false
+                    example: true
                 id:
                     type: string
                     description: ID is a unique identifier for this particular occurrence of the problem.
@@ -458,7 +470,7 @@ components:
                 temporary:
                     type: boolean
                     description: Is the error temporary?
-                    example: false
+                    example: true
                 timeout:
                     type: boolean
                     description: Is the error a timeout?
@@ -506,11 +518,6 @@ components:
                           code: 1bp
                           name: One Bedroom Villa (Preferred View)
                           sleeps: 5
-                        - bedrooms: 1
-                          beds: 2
-                          code: 1bp
-                          name: One Bedroom Villa (Preferred View)
-                          sleeps: 5
                 tiers:
                     type: array
                     items:
@@ -523,18 +530,10 @@ components:
                               startDate: 1-15
                             - endDate: 1-15
                               startDate: 1-15
-                            - endDate: 1-15
-                              startDate: 1-15
                           roomTypePoints:
-                            Ab quaerat delectus amet.:
-                                weekday: 6454418589515295321
-                                weekend: 3368857188488503470
-                            Blanditiis eos.:
-                                weekday: 6454418589515295321
-                                weekend: 3368857188488503470
-                            Dicta ipsum.:
-                                weekday: 6454418589515295321
-                                weekend: 3368857188488503470
+                            1bp:
+                                weekday: 12
+                                weekend: 17
                         - dateRanges:
                             - endDate: 1-15
                               startDate: 1-15
@@ -542,18 +541,32 @@ components:
                               startDate: 1-15
                             - endDate: 1-15
                               startDate: 1-15
+                          roomTypePoints:
+                            1bp:
+                                weekday: 12
+                                weekend: 17
+                        - dateRanges:
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
                             - endDate: 1-15
                               startDate: 1-15
                           roomTypePoints:
-                            Ab quaerat delectus amet.:
-                                weekday: 6454418589515295321
-                                weekend: 3368857188488503470
-                            Blanditiis eos.:
-                                weekday: 6454418589515295321
-                                weekend: 3368857188488503470
-                            Dicta ipsum.:
-                                weekday: 6454418589515295321
-                                weekend: 3368857188488503470
+                            1bp:
+                                weekday: 12
+                                weekend: 17
+                        - dateRanges:
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
+                            - endDate: 1-15
+                              startDate: 1-15
+                          roomTypePoints:
+                            1bp:
+                                weekday: 12
+                                weekend: 17
             example:
                 code: ssr
                 resort: Disney's Saratoga Springs Resort & Spa
@@ -568,6 +581,11 @@ components:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
+                    - bedrooms: 1
+                      beds: 2
+                      code: 1bp
+                      name: One Bedroom Villa (Preferred View)
+                      sleeps: 5
                 tiers:
                     - dateRanges:
                         - endDate: 1-15
@@ -576,18 +594,10 @@ components:
                           startDate: 1-15
                         - endDate: 1-15
                           startDate: 1-15
-                        - endDate: 1-15
-                          startDate: 1-15
                       roomTypePoints:
-                        Ab quaerat delectus amet.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Blanditiis eos.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Dicta ipsum.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
+                        1bp:
+                            weekday: 12
+                            weekend: 17
                     - dateRanges:
                         - endDate: 1-15
                           startDate: 1-15
@@ -595,23 +605,48 @@ components:
                           startDate: 1-15
                         - endDate: 1-15
                           startDate: 1-15
+                      roomTypePoints:
+                        1bp:
+                            weekday: 12
+                            weekend: 17
+                    - dateRanges:
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
                         - endDate: 1-15
                           startDate: 1-15
                       roomTypePoints:
-                        Ab quaerat delectus amet.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Blanditiis eos.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Dicta ipsum.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
+                        1bp:
+                            weekday: 12
+                            weekend: 17
+                    - dateRanges:
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                        - endDate: 1-15
+                          startDate: 1-15
+                      roomTypePoints:
+                        1bp:
+                            weekday: 12
+                            weekend: 17
             required:
                 - code
                 - resort
                 - roomTypes
                 - tiers
+        PutResortRequestBody:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: The resort's name
+                    example: Disney's Saratoga Springs Resort & Spa
+            example:
+                name: Disney's Saratoga Springs Resort & Spa
+            required:
+                - name
         ResortResult:
             type: object
             properties:
@@ -778,7 +813,7 @@ components:
                 year:
                     type: integer
                     description: the year the resort info is for.
-                    example: 2095
+                    example: 2027
                     minimum: 1990
                     maximum: 2100
             example:
@@ -795,17 +830,7 @@ components:
                       code: 1bp
                       name: One Bedroom Villa (Preferred View)
                       sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                    - bedrooms: 1
-                      beds: 2
-                      code: 1bp
-                      name: One Bedroom Villa (Preferred View)
-                      sleeps: 5
-                year: 2040
+                year: 2012
         RoomType:
             type: object
             properties:
@@ -854,44 +879,48 @@ components:
                 Rooms:
                     type: object
                     example:
-                        Iste culpa autem sequi et.:
-                            Consequatur tempore est et aliquam dolor labore.: 1637162125649141113
-                            Ut perferendis omnis eligendi unde ea.: 7988137997357595204
+                        blt:
+                            1bp: 25
+                            1bs: 20
+                            2bp: 35
+                            2bs: 30
+                            dsp: 15
+                            dss: 12
                     additionalProperties:
                         type: object
                         example:
-                            Qui distinctio recusandae.: 7119910758436254995
-                            Qui nostrum.: 3402487506901643424
-                            Repudiandae occaecati quod consequatur.: 4004922119701619658
+                            Aut porro sint vero fugit doloremque nulla.: 588806261722744009
                         additionalProperties:
                             type: integer
-                            example: 2672335852095110826
+                            example: 3666331970814872696
                             format: int64
                 excludeResorts:
                     type: array
                     items:
                         type: string
-                        example: Voluptatibus assumenda est.
+                        example: ssr
+                        pattern: '[a-z]{3}'
                     description: resorts to exclude from the search
                     example:
-                        - Officia vitae molestiae aspernatur aut.
-                        - Eveniet sequi dolorem et.
-                        - Dolores esse enim atque.
-                        - Cumque laudantium.
+                        - blt
+                        - ssr
+                        - akv
                 from:
                     type: string
                     description: Check-in Date
-                    example: "1988-06-22"
+                    example: "2022-05-05"
                     format: date
                 includeResorts:
                     type: array
                     items:
                         type: string
-                        example: Consequuntur officiis quia sunt.
+                        example: ssr
+                        pattern: '[a-z]{3}'
                     description: resorts to include in the search
                     example:
-                        - Sed et optio quasi.
-                        - Nihil debitis maxime.
+                        - blt
+                        - ssr
+                        - akv
                 maxBedrooms:
                     type: integer
                     description: the maximum number of bedrooms of room types to include
@@ -937,30 +966,33 @@ components:
                 to:
                     type: string
                     description: Check-in Date
-                    example: "1988-02-23"
+                    example: "2022-05-12"
                     format: date
             example:
                 Rooms:
-                    Voluptatibus est quo repellendus voluptate.:
-                        Cumque voluptas quia ratione.: 5472818650291812284
-                        Qui iusto quisquam mollitia fugiat rerum.: 883091948163607100
-                        Quis quos distinctio numquam.: 5788899565541549409
+                    blt:
+                        1bp: 25
+                        1bs: 20
+                        2bp: 35
+                        2bs: 30
+                        dsp: 15
+                        dss: 12
                 excludeResorts:
-                    - Corporis voluptate.
-                    - Placeat modi alias ad iusto eum.
-                    - Perferendis officia inventore.
-                from: "2011-05-01"
+                    - blt
+                    - ssr
+                    - akv
+                from: "2022-05-05"
                 includeResorts:
-                    - Et est asperiores omnis dolor tenetur odio.
-                    - Officiis natus similique.
-                    - Velit id.
+                    - blt
+                    - ssr
+                    - akv
                 maxBedrooms: 1
                 maxBeds: 2
                 maxSleeps: 5
                 minBedrooms: 1
                 minBeds: 2
                 minSleeps: 5
-                to: "2006-10-02"
+                to: "2022-05-12"
             required:
                 - Rooms
                 - from
@@ -984,12 +1016,9 @@ components:
                 roomTypePoints:
                     type: object
                     example:
-                        Dolor vel exercitationem mollitia nihil.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
-                        Dolore adipisci occaecati quas est.:
-                            weekday: 6454418589515295321
-                            weekend: 3368857188488503470
+                        1bp:
+                            weekday: 12
+                            weekend: 17
                     additionalProperties:
                         $ref: '#/components/schemas/TierRoomTypePoints'
             example:
@@ -1001,12 +1030,9 @@ components:
                     - endDate: 1-15
                       startDate: 1-15
                 roomTypePoints:
-                    In quas reiciendis commodi nemo velit.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
-                    Sed sunt ut totam in.:
-                        weekday: 6454418589515295321
-                        weekend: 3368857188488503470
+                    1bp:
+                        weekday: 12
+                        weekend: 17
             required:
                 - dateRanges
                 - roomTypePoints
@@ -1035,16 +1061,16 @@ components:
                 weekday:
                     type: integer
                     description: points for Sunday - Thursday
-                    example: 8269340996442861983
+                    example: 12
                     format: int64
                 weekend:
                     type: integer
                     description: points for Friday - Saturday
-                    example: 7265516665358861442
+                    example: 17
                     format: int64
             example:
-                weekday: 6258824316793245125
-                weekend: 1278897184106417632
+                weekday: 12
+                weekend: 17
             required:
                 - weekday
                 - weekend

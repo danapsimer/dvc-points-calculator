@@ -23,7 +23,7 @@ import (
 //
 //	command (subcommand1|subcommand2|...)
 func UsageCommands() string {
-	return `points (get-resorts|get-resort|get-resort-year|get-point-chart|query-stay)
+	return `points (get-resorts|get-resort|put-resort|get-resort-year|get-point-chart|query-stay)
 `
 }
 
@@ -50,6 +50,10 @@ func ParseEndpoint(
 		pointsGetResortFlags          = flag.NewFlagSet("get-resort", flag.ExitOnError)
 		pointsGetResortResortCodeFlag = pointsGetResortFlags.String("resort-code", "REQUIRED", "the resort's code")
 
+		pointsPutResortFlags          = flag.NewFlagSet("put-resort", flag.ExitOnError)
+		pointsPutResortBodyFlag       = pointsPutResortFlags.String("body", "REQUIRED", "")
+		pointsPutResortResortCodeFlag = pointsPutResortFlags.String("resort-code", "REQUIRED", "the resort's code")
+
 		pointsGetResortYearFlags          = flag.NewFlagSet("get-resort-year", flag.ExitOnError)
 		pointsGetResortYearResortCodeFlag = pointsGetResortYearFlags.String("resort-code", "REQUIRED", "the resort's code")
 		pointsGetResortYearYearFlag       = pointsGetResortYearFlags.String("year", "REQUIRED", "the year")
@@ -73,6 +77,7 @@ func ParseEndpoint(
 	pointsFlags.Usage = pointsUsage
 	pointsGetResortsFlags.Usage = pointsGetResortsUsage
 	pointsGetResortFlags.Usage = pointsGetResortUsage
+	pointsPutResortFlags.Usage = pointsPutResortUsage
 	pointsGetResortYearFlags.Usage = pointsGetResortYearUsage
 	pointsGetPointChartFlags.Usage = pointsGetPointChartUsage
 	pointsQueryStayFlags.Usage = pointsQueryStayUsage
@@ -117,6 +122,9 @@ func ParseEndpoint(
 			case "get-resort":
 				epf = pointsGetResortFlags
 
+			case "put-resort":
+				epf = pointsPutResortFlags
+
 			case "get-resort-year":
 				epf = pointsGetResortYearFlags
 
@@ -157,6 +165,9 @@ func ParseEndpoint(
 			case "get-resort":
 				endpoint = c.GetResort()
 				data, err = pointsc.BuildGetResortPayload(*pointsGetResortResortCodeFlag)
+			case "put-resort":
+				endpoint = c.PutResort()
+				data, err = pointsc.BuildPutResortPayload(*pointsPutResortBodyFlag, *pointsPutResortResortCodeFlag)
 			case "get-resort-year":
 				endpoint = c.GetResortYear()
 				data, err = pointsc.BuildGetResortYearPayload(*pointsGetResortYearResortCodeFlag, *pointsGetResortYearYearFlag)
@@ -185,6 +196,7 @@ Usage:
 COMMAND:
     get-resorts: GetResorts implements GetResorts.
     get-resort: GetResort implements GetResort.
+    put-resort: PutResort implements PutResort.
     get-resort-year: GetResortYear implements GetResortYear.
     get-point-chart: GetPointChart implements GetPointChart.
     query-stay: QueryStay implements QueryStay.
@@ -214,6 +226,20 @@ Example:
 `, os.Args[0])
 }
 
+func pointsPutResortUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] points put-resort -body JSON -resort-code STRING
+
+PutResort implements PutResort.
+    -body JSON: 
+    -resort-code STRING: the resort's code
+
+Example:
+    %[1]s points put-resort --body '{
+      "name": "Disney\'s Saratoga Springs Resort \u0026 Spa"
+   }' --resort-code "ssr"
+`, os.Args[0])
+}
+
 func pointsGetResortYearUsage() {
 	fmt.Fprintf(os.Stderr, `%[1]s [flags] points get-resort-year -resort-code STRING -year INT
 
@@ -222,7 +248,7 @@ GetResortYear implements GetResortYear.
     -year INT: the year
 
 Example:
-    %[1]s points get-resort-year --resort-code "ssr" --year 2024
+    %[1]s points get-resort-year --resort-code "ssr" --year 2040
 `, os.Args[0])
 }
 
@@ -234,7 +260,7 @@ GetPointChart implements GetPointChart.
     -year INT: the year
 
 Example:
-    %[1]s points get-point-chart --resort-code "ssr" --year 2019
+    %[1]s points get-point-chart --resort-code "ssr" --year 2085
 `, os.Args[0])
 }
 
@@ -254,13 +280,14 @@ QueryStay implements QueryStay.
     -max-beds INT: 
 
 Example:
-    %[1]s points query-stay --from "1994-03-23" --to "2015-10-23" --include-resorts '[
-      "Exercitationem qui expedita perferendis consequuntur.",
-      "Eum nulla accusamus.",
-      "Qui et dolorem veniam molestias aut autem."
+    %[1]s points query-stay --from "2022-05-05" --to "2022-05-12" --include-resorts '[
+      "blt",
+      "ssr",
+      "akv"
    ]' --exclude-resorts '[
-      "Veniam vel.",
-      "Tempore commodi quis dicta et libero rerum."
+      "blt",
+      "ssr",
+      "akv"
    ]' --min-sleeps 5 --max-sleeps 5 --min-bedrooms 1 --max-bedrooms 1 --min-beds 2 --max-beds 2
 `, os.Args[0])
 }

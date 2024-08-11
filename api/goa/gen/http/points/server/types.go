@@ -15,6 +15,13 @@ import (
 	goa "goa.design/goa/v3/pkg"
 )
 
+// PutResortRequestBody is the type of the "Points" service "PutResort"
+// endpoint HTTP request body.
+type PutResortRequestBody struct {
+	// The resort's name
+	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+}
+
 // ResortResultResponseCollection is the type of the "Points" service
 // "GetResorts" endpoint HTTP response body.
 type ResortResultResponseCollection []*ResortResultResponse
@@ -27,16 +34,6 @@ type ResortResultResponseResortOnlyCollection []*ResortResultResponseResortOnly
 // service "GetResorts" endpoint HTTP response body.
 type ResortResultResponseResortUpdateCollection []*ResortResultResponseResortUpdate
 
-// GetResortResponseBody is the type of the "Points" service "GetResort"
-// endpoint HTTP response body.
-type GetResortResponseBody struct {
-	// resort's code
-	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
-	// resort's name
-	Name      *string                 `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
-	RoomTypes []*RoomTypeResponseBody `form:"roomTypes,omitempty" json:"roomTypes,omitempty" xml:"roomTypes,omitempty"`
-}
-
 // GetResortResponseBodyResortOnly is the type of the "Points" service
 // "GetResort" endpoint HTTP response body.
 type GetResortResponseBodyResortOnly struct {
@@ -46,9 +43,11 @@ type GetResortResponseBodyResortOnly struct {
 	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 }
 
-// GetResortResponseBodyResortUpdate is the type of the "Points" service
-// "GetResort" endpoint HTTP response body.
-type GetResortResponseBodyResortUpdate struct {
+// PutResortResponseBodyResortOnly is the type of the "Points" service
+// "PutResort" endpoint HTTP response body.
+type PutResortResponseBodyResortOnly struct {
+	// resort's code
+	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// resort's name
 	Name *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 }
@@ -105,6 +104,24 @@ type QueryStayResponseBody struct {
 // GetResortNotFoundResponseBody is the type of the "Points" service
 // "GetResort" endpoint HTTP response body for the "not_found" error.
 type GetResortNotFoundResponseBody struct {
+	// Name is the name of this class of errors.
+	Name string `form:"name" json:"name" xml:"name"`
+	// ID is a unique identifier for this particular occurrence of the problem.
+	ID string `form:"id" json:"id" xml:"id"`
+	// Message is a human-readable explanation specific to this occurrence of the
+	// problem.
+	Message string `form:"message" json:"message" xml:"message"`
+	// Is the error temporary?
+	Temporary bool `form:"temporary" json:"temporary" xml:"temporary"`
+	// Is the error a timeout?
+	Timeout bool `form:"timeout" json:"timeout" xml:"timeout"`
+	// Is the error a server-side fault?
+	Fault bool `form:"fault" json:"fault" xml:"fault"`
+}
+
+// PutResortNotFoundResponseBody is the type of the "Points" service
+// "PutResort" endpoint HTTP response body for the "not_found" error.
+type PutResortNotFoundResponseBody struct {
 	// Name is the name of this class of errors.
 	Name string `form:"name" json:"name" xml:"name"`
 	// ID is a unique identifier for this particular occurrence of the problem.
@@ -280,22 +297,6 @@ func NewResortResultResponseResortUpdateCollection(res pointsviews.ResortResultC
 	return body
 }
 
-// NewGetResortResponseBody builds the HTTP response body from the result of
-// the "GetResort" endpoint of the "Points" service.
-func NewGetResortResponseBody(res *pointsviews.ResortResultView) *GetResortResponseBody {
-	body := &GetResortResponseBody{
-		Code: res.Code,
-		Name: res.Name,
-	}
-	if res.RoomTypes != nil {
-		body.RoomTypes = make([]*RoomTypeResponseBody, len(res.RoomTypes))
-		for i, val := range res.RoomTypes {
-			body.RoomTypes[i] = marshalPointsviewsRoomTypeViewToRoomTypeResponseBody(val)
-		}
-	}
-	return body
-}
-
 // NewGetResortResponseBodyResortOnly builds the HTTP response body from the
 // result of the "GetResort" endpoint of the "Points" service.
 func NewGetResortResponseBodyResortOnly(res *pointsviews.ResortResultView) *GetResortResponseBodyResortOnly {
@@ -306,10 +307,11 @@ func NewGetResortResponseBodyResortOnly(res *pointsviews.ResortResultView) *GetR
 	return body
 }
 
-// NewGetResortResponseBodyResortUpdate builds the HTTP response body from the
-// result of the "GetResort" endpoint of the "Points" service.
-func NewGetResortResponseBodyResortUpdate(res *pointsviews.ResortResultView) *GetResortResponseBodyResortUpdate {
-	body := &GetResortResponseBodyResortUpdate{
+// NewPutResortResponseBodyResortOnly builds the HTTP response body from the
+// result of the "PutResort" endpoint of the "Points" service.
+func NewPutResortResponseBodyResortOnly(res *pointsviews.ResortResultView) *PutResortResponseBodyResortOnly {
+	body := &PutResortResponseBodyResortOnly{
+		Code: res.Code,
 		Name: res.Name,
 	}
 	return body
@@ -445,6 +447,20 @@ func NewGetResortNotFoundResponseBody(res *goa.ServiceError) *GetResortNotFoundR
 	return body
 }
 
+// NewPutResortNotFoundResponseBody builds the HTTP response body from the
+// result of the "PutResort" endpoint of the "Points" service.
+func NewPutResortNotFoundResponseBody(res *goa.ServiceError) *PutResortNotFoundResponseBody {
+	body := &PutResortNotFoundResponseBody{
+		Name:      res.Name,
+		ID:        res.ID,
+		Message:   res.Message,
+		Temporary: res.Temporary,
+		Timeout:   res.Timeout,
+		Fault:     res.Fault,
+	}
+	return body
+}
+
 // NewGetResortYearNotFoundResponseBody builds the HTTP response body from the
 // result of the "GetResortYear" endpoint of the "Points" service.
 func NewGetResortYearNotFoundResponseBody(res *goa.ServiceError) *GetResortYearNotFoundResponseBody {
@@ -495,6 +511,16 @@ func NewGetResortPayload(resortCode string) *points.GetResortPayload {
 	return v
 }
 
+// NewPutResortPayload builds a Points service PutResort endpoint payload.
+func NewPutResortPayload(body *PutResortRequestBody, resortCode string) *points.PutResortPayload {
+	v := &points.PutResortPayload{
+		Name: *body.Name,
+	}
+	v.ResortCode = resortCode
+
+	return v
+}
+
 // NewGetResortYearPayload builds a Points service GetResortYear endpoint
 // payload.
 func NewGetResortYearPayload(resortCode string, year int) *points.GetResortYearPayload {
@@ -530,4 +556,13 @@ func NewQueryStayStay(from string, to string, includeResorts []string, excludeRe
 	v.MaxBeds = maxBeds
 
 	return v
+}
+
+// ValidatePutResortRequestBody runs the validations defined on
+// PutResortRequestBody
+func ValidatePutResortRequestBody(body *PutResortRequestBody) (err error) {
+	if body.Name == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("name", "body"))
+	}
+	return
 }

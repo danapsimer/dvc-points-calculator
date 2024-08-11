@@ -26,6 +26,10 @@ type Client struct {
 	// endpoint.
 	GetResortDoer goahttp.Doer
 
+	// PutResort Doer is the HTTP client used to make requests to the PutResort
+	// endpoint.
+	PutResortDoer goahttp.Doer
+
 	// GetResortYear Doer is the HTTP client used to make requests to the
 	// GetResortYear endpoint.
 	GetResortYearDoer goahttp.Doer
@@ -60,6 +64,7 @@ func NewClient(
 	return &Client{
 		GetResortsDoer:      doer,
 		GetResortDoer:       doer,
+		PutResortDoer:       doer,
 		GetResortYearDoer:   doer,
 		GetPointChartDoer:   doer,
 		QueryStayDoer:       doer,
@@ -104,6 +109,30 @@ func (c *Client) GetResort() goa.Endpoint {
 		resp, err := c.GetResortDoer.Do(req)
 		if err != nil {
 			return nil, goahttp.ErrRequestError("Points", "GetResort", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// PutResort returns an endpoint that makes HTTP requests to the Points service
+// PutResort server.
+func (c *Client) PutResort() goa.Endpoint {
+	var (
+		encodeRequest  = EncodePutResortRequest(c.encoder)
+		decodeResponse = DecodePutResortResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v interface{}) (interface{}, error) {
+		req, err := c.BuildPutResortRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.PutResortDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("Points", "PutResort", err)
 		}
 		return decodeResponse(resp)
 	}
